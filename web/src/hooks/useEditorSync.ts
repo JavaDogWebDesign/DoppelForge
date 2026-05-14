@@ -208,16 +208,16 @@ export function useFoldSync({
     }
   }, []);
 
-  const makeHandler = useCallback(
-    (which: "input" | "output") => (update: ViewUpdate) => {
+  const handleInputUpdate = useCallback(
+    (update: ViewUpdate) => {
       if (!linkedRef.current) return;
       if (suppressRef.current) return;
       const foldChanged = update.transactions.some((tr) =>
         tr.effects.some((e) => e.is(foldEffect) || e.is(unfoldEffect)),
       );
       if (!foldChanged) return;
-      const src = which === "input" ? inputViewRef.current : outputViewRef.current;
-      const dst = which === "input" ? outputViewRef.current : inputViewRef.current;
+      const src = inputViewRef.current;
+      const dst = outputViewRef.current;
       if (!src || !dst) return;
       suppressRef.current = true;
       syncFolds(src, dst);
@@ -228,8 +228,25 @@ export function useFoldSync({
     [syncFolds, inputViewRef, outputViewRef, linkedRef],
   );
 
-  const handleInputUpdate = useCallback(makeHandler("input"), [makeHandler]);
-  const handleOutputUpdate = useCallback(makeHandler("output"), [makeHandler]);
+  const handleOutputUpdate = useCallback(
+    (update: ViewUpdate) => {
+      if (!linkedRef.current) return;
+      if (suppressRef.current) return;
+      const foldChanged = update.transactions.some((tr) =>
+        tr.effects.some((e) => e.is(foldEffect) || e.is(unfoldEffect)),
+      );
+      if (!foldChanged) return;
+      const src = outputViewRef.current;
+      const dst = inputViewRef.current;
+      if (!src || !dst) return;
+      suppressRef.current = true;
+      syncFolds(src, dst);
+      requestAnimationFrame(() => {
+        suppressRef.current = false;
+      });
+    },
+    [syncFolds, inputViewRef, outputViewRef, linkedRef],
+  );
 
   return { handleInputUpdate, handleOutputUpdate };
 }
