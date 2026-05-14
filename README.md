@@ -156,7 +156,7 @@ Open source, MIT licensed. No paid tiers, no telemetry, no priority queue. The f
 
 ## Trademarks
 
-Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Recharge, Braintree, PayPal, Twilio, SendGrid, Salesforce, Auth0, Mailchimp, Square, Zendesk, Shippo, and ShipperHQ are trademarks of their respective owners. DoppelForge is independent and not affiliated with, endorsed by, or sponsored by any of them. See [TRADEMARKS.md](./TRADEMARKS.md).
+Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Recharge, Braintree, PayPal, Twilio, SendGrid, Salesforce, Auth0, Mailchimp, Square, Zendesk, Shippo, and ShipperHQ are trademarks of their respective owners. DoppelForge is independent and not affiliated with, endorsed by, or sponsored by any of them.
 
 ## License
 

@@ -1585,16 +1585,6 @@
     z-index: 110;
   }
 
-  /* Dim/blur the rest of the UI while the drawer is open. Click anywhere
-     outside the drawer (i.e., on the backdrop) to close it. Sits below the
-     sidebar/drawer (z-index 110) but above the workspace. */
-  .sidebar-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(8, 9, 12, 0.55);
-    backdrop-filter: blur(2px);
-  }
 
   .sidebar .sidebar-header,
   .sidebar.collapsed .sidebar-header {
@@ -1648,18 +1638,18 @@
     display: none;
   }
 
+  /* Full-screen menu below the header. The hamburger button stays visible
+     above (showing an X) so the user always has a clear way to close it. */
   .sidebar.menu-open .sidebar-drawer {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 52px;
     left: 0;
     right: 0;
-    max-height: calc(100vh - 52px);
+    bottom: 0;
     overflow-y: auto;
     background: var(--bg-elev);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
     z-index: 110;
   }
 
@@ -1719,17 +1709,20 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
+    padding-right: 12px;
   }
 
   /* Override the inline flexGrow / fixed-width styles applied by the resizer
-     code in Workspace.tsx and BatchWorkspace.tsx. */
+     code in Workspace.tsx and BatchWorkspace.tsx. Shorter than the original
+     70vh so the editor panes and the batch dropzone don't each eat the whole
+     viewport when stacked. */
   .panes > .pane,
   .panes > .fields-panel,
   .panes > .batch-right-pane,
   .panes > .batch-input-pane {
     flex: 0 0 auto !important;
     width: 100% !important;
-    height: 70vh;
+    height: 16vh;
     min-height: 360px;
   }
 
@@ -1776,5 +1769,40 @@
   .settings-bar .privacy-note {
     margin-left: 0;
     flex-basis: 100%;
+  }
+
+  /* Batch dropzone shrinks to a single compact row on mobile/tablet — touch
+     devices can't drag-and-drop anyway, so it's effectively a tap-to-browse
+     button. Hide the supplementary "processed in your browser" hint to save
+     vertical space; the privacy note in the footer covers that already. */
+  .batch-dropzone {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  /* Icon stays a fixed-size flex item on the left. */
+  .batch-dropzone > svg {
+    flex: 0 0 auto;
+  }
+
+  /* Label fills remaining row width and wraps its text internally instead
+     of becoming a wider-than-available flex item that pushes the icon onto
+     its own row above. min-width:0 lets it shrink below content width. */
+  .batch-dropzone-label {
+    font-size: 12px;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .batch-dropzone-hint {
+    display: none;
+  }
+
+  .batch-dropzone-skipped {
+    flex-basis: 100%;
+    margin-top: 0;
   }
 }

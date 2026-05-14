@@ -83,16 +83,10 @@ export function ProviderSidebar({
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </button>
       </header>
-      {menuOpen && (
-        <div
-          className="sidebar-backdrop"
-          onClick={closeMenu}
-          aria-hidden="true"
-        />
-      )}
       {/* `display: contents` on desktop so this wrapper is invisible to the
           flex layout. On mobile (in App.css media query) it becomes the
-          absolutely-positioned dropdown drawer toggled by the hamburger. */}
+          full-screen menu toggled by the hamburger — closed via the X
+          button in the header or the Esc key. */}
       <div className="sidebar-drawer">
         <ul className="provider-list">
           {providers.map((p) => {

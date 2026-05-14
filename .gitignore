@@ -28,11 +28,3 @@ build/
 *.log
 .cache/
 
-# Docs — kept local, withheld from the public GitHub repo until launch.
-# Restore by deleting the entries below and `git add`-ing the files back.
-/docs/
-/CONTRIBUTING.md
-/SECURITY.md
-/TRADEMARKS.md
-/web/README.md
-/.github/ISSUE_TEMPLATE/
