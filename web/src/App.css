@@ -51,6 +51,18 @@
   user-select: none;
 }
 
+/* On desktop the drawer wrapper is invisible to layout — provider-list and
+   sidebar-footer behave as direct children of .sidebar. The mobile media
+   query below promotes it to a real absolutely-positioned dropdown. */
+.sidebar-drawer {
+  display: contents;
+}
+
+/* Hamburger button is mobile-only; the media query reveals it. */
+.sidebar-hamburger {
+  display: none;
+}
+
 .sidebar-toggle {
   border: none;
   padding: 4px;
@@ -69,6 +81,17 @@
 
 .sidebar.collapsed .provider-item.active::before {
   left: 0;
+}
+
+/* Labels / logo are always in the DOM so the mobile horizontal-bar layout can
+   show them regardless of the collapsed flag. Hide them in the desktop
+   collapsed-rail state. The mobile media query at the bottom of this file
+   re-reveals them. */
+.sidebar.collapsed .brand-logo,
+.sidebar.collapsed .provider-name,
+.sidebar.collapsed .provider-item .endpoint-count,
+.sidebar.collapsed .sidebar-footer-link span {
+  display: none;
 }
 
 .provider-list {
@@ -1529,4 +1552,229 @@
 .batch-status-pending {
   color: var(--text-dim);
   flex: 0 0 auto;
+}
+
+/* ---------- Responsive: stack panes vertically on tablet / small screens ---------- */
+/* Below ~1100px (iPad landscape and down) the side-by-side three-pane layout
+   gets too cramped. We unstack into a single scrolling column: sidebar on top,
+   then mode tabs, endpoint badge, then each pane at a fixed viewport-relative
+   height. The drag-to-resize splitters are hidden because they only know how
+   to resize horizontally. */
+@media (max-width: 1100px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Sidebar becomes a compact horizontal bar on tablet/mobile:
+       [hamburger] [logo] [expand toggle — hidden]
+     Tapping the hamburger drops a vertical drawer below the bar with the
+     provider list and footer links. */
+  .sidebar,
+  .sidebar.collapsed {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    flex-direction: row;
+    align-items: stretch;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    min-height: 52px;
+    position: relative;
+    z-index: 110;
+  }
+
+  /* Dim/blur the rest of the UI while the drawer is open. Click anywhere
+     outside the drawer (i.e., on the backdrop) to close it. Sits below the
+     sidebar/drawer (z-index 110) but above the workspace. */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(8, 9, 12, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar .sidebar-header,
+  .sidebar.collapsed .sidebar-header {
+    flex: 1 1 auto;
+    padding: 8px 12px;
+    min-height: 0;
+    border-bottom: none;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  /* Desktop expand/collapse toggle has no meaning when sidebar is horizontal. */
+  .sidebar .sidebar-toggle {
+    display: none;
+  }
+
+  .sidebar .sidebar-hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--text-dim);
+    background: transparent;
+  }
+
+  .sidebar .sidebar-hamburger:hover {
+    color: var(--text-h);
+    border-color: var(--accent);
+  }
+
+  .sidebar .brand-logo {
+    height: 22px;
+  }
+
+  /* Override desktop-collapsed display:none so the logo always shows on mobile. */
+  .sidebar.collapsed .brand-logo {
+    display: block;
+  }
+
+  .sidebar.collapsed .provider-name,
+  .sidebar.collapsed .provider-item .endpoint-count {
+    display: inline;
+  }
+
+  /* Drawer: hidden by default, shown when menu-open. Drops below the header
+     as an absolutely-positioned panel so it overlays the workspace instead
+     of pushing it down. */
+  .sidebar .sidebar-drawer {
+    display: none;
+  }
+
+  .sidebar.menu-open .sidebar-drawer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 52px);
+    overflow-y: auto;
+    background: var(--bg-elev);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    z-index: 110;
+  }
+
+  .sidebar.menu-open .provider-list {
+    flex: 0 0 auto;
+    padding: 8px;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .sidebar.menu-open .provider-item,
+  .sidebar.menu-open.collapsed .provider-item {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .sidebar.menu-open .provider-item.active::before {
+    left: -8px;
+  }
+
+  .sidebar.menu-open .sidebar-footer,
+  .sidebar.menu-open.collapsed .sidebar-footer {
+    flex-direction: column;
+    align-items: stretch;
+    border-top: 1px solid var(--border);
+    padding: 8px;
+    gap: 2px;
+  }
+
+  .sidebar.menu-open .sidebar-footer-link,
+  .sidebar.menu-open.collapsed .sidebar-footer-link {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .sidebar.menu-open .sidebar-footer-link span {
+    display: inline;
+  }
+
+  .main {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .workspace,
+  .batch-workspace {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .panes,
+  .batch-panes {
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* Override the inline flexGrow / fixed-width styles applied by the resizer
+     code in Workspace.tsx and BatchWorkspace.tsx. */
+  .panes > .pane,
+  .panes > .fields-panel,
+  .panes > .batch-right-pane,
+  .panes > .batch-input-pane {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: 70vh;
+    min-height: 360px;
+  }
+
+  .panes > .splitter {
+    display: none;
+  }
+
+  .endpoint-badge {
+    flex-wrap: wrap;
+  }
+
+  .endpoint-badge select {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .badge-label {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  /* The link toggle controls scroll + cursor mirroring across panes. With
+     stacked panes we force scroll-sync off and keep the active-line mirror
+     always on, so the toggle would be misleading — hide it. */
+  .pane-actions .link-toggle {
+    display: none;
+  }
+
+  /* Settings bar at the bottom: on desktop everything fits on one row. On
+     mobile the buttons get squeezed until labels wrap word-by-word
+     ("Clear / cache", "Forget / everything"). Allow the row to wrap, give
+     each item room, and stop labels from breaking mid-text. */
+  .settings-bar {
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    padding: 10px 12px;
+  }
+
+  .settings-bar .setting-item,
+  .settings-bar button {
+    white-space: nowrap;
+  }
+
+  .settings-bar .privacy-note {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
 }

@@ -13,7 +13,11 @@ interface Props {
   onToggle: (path: string, enabled: boolean | undefined) => void;
   onSetValueOverride: (path: string, value: string | null) => void;
   onReset: () => void;
-  onHide: () => void;
+  // Optional: when omitted, the hide button is not rendered. Useful for
+  // contexts where hiding the panel doesn't make sense — batch mode (the
+  // panel is the only right-hand UI) and the stacked tablet/mobile layout
+  // (there is no "right" to hide into).
+  onHide?: () => void;
   style?: React.CSSProperties;
 }
 
@@ -100,9 +104,11 @@ export function FieldControlsPanel({
               <span className="btn-label">Reset {overrideCount}</span>
             </button>
           )}
-          <button onClick={onHide} title="Hide field controls panel" aria-label="Hide">
-            <PanelRightClose size={14} />
-          </button>
+          {onHide && (
+            <button onClick={onHide} title="Hide field controls panel" aria-label="Hide">
+              <PanelRightClose size={14} />
+            </button>
+          )}
         </div>
       </div>
       <div className="fields-search">

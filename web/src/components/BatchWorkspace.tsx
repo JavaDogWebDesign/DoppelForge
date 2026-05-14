@@ -261,9 +261,6 @@ export function BatchWorkspace({
             onToggle={batch.setOverride}
             onSetValueOverride={batch.setValueOverride}
             onReset={batch.resetOverrides}
-            onHide={() => {
-              /* batch mode keeps the panel pinned */
-            }}
           />
         </div>
       </div>

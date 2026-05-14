@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { safeStorage } from "../utils/safeStorage";
 
-const QUERY = "(max-width: 1200px)";
+const QUERY = "(max-width: 1100px)";
 const DISMISSED_KEY = "doppelforge.mobileWarning.dismissed";
 
 export function MobileWarning() {
@@ -31,11 +31,12 @@ export function MobileWarning() {
       <div className="mobile-warning-card">
         <h2 id="mobile-warning-title">Best viewed on desktop</h2>
         <p>
-          This tool uses a multi-panel layout with side-by-side code editors and a field
-          controls panel. It's very hard to use on a small screen.
+          This tool's three-panel layout is built for a desktop with horizontal space. The
+          tablet / mobile view stacks the panels vertically and tucks the provider list into
+          a hamburger menu, but it's still pretty cramped.
         </p>
         <p className="mobile-warning-hint">
-          For the best experience, please open this page on a desktop or laptop browser.
+          For the best experience, open this page on a laptop or desktop browser.
         </p>
         <button type="button" className="mobile-warning-continue" onClick={handleContinue}>
           Continue anyway

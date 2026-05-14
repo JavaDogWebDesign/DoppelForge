@@ -21,6 +21,7 @@ import {
   useScrollSync,
 } from "../hooks/useEditorSync";
 import { useGlobalSelectAll } from "../hooks/useGlobalSelectAll";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 import { SettingsDrawer } from "./SettingsDrawer";
 import {
   parseInput,
@@ -75,6 +76,11 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
   // session via the panel header button, but a refresh resets to visible.
   const [fieldsPaneVisible, setFieldsPaneVisible] = useState<boolean>(true);
   const [linked, setLinked] = useLocalStorageState(LINKED_KEY, true, boolCodec);
+  // When the layout switches to the stacked tablet/mobile view, mirroring the
+  // scroll position between the two now-vertical panes feels jarring — every
+  // scroll snaps both panes. Disable scroll sync at the stacked breakpoint
+  // but leave cursor sync running so the active-line highlight still mirrors.
+  const isStacked = useMediaQuery("(max-width: 1100px)");
   // Manual CSV delimiter override. null = use auto-detection from the header
   // row. Reset on paste and on Clear so a fresh payload re-runs detection.
   const [csvDelimiterOverride, setCsvDelimiterOverride] =
@@ -122,7 +128,7 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
   useScrollSync({
     inputViewRef,
     outputViewRef,
-    enabled: linked,
+    enabled: linked && !isStacked,
     rebindKey: outputText,
   });
   const { handleInputUpdate: cursorInputUpdate } = useCursorSync({
@@ -345,7 +351,7 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
           error={error}
           onRegenerate={newSeed}
           style={{ flexGrow: 1 - splitRatio }}
-          onShowFields={!fieldsPaneVisible ? () => setFieldsPaneVisible(true) : undefined}
+          onShowFields={!fieldsPaneVisible && !isStacked ? () => setFieldsPaneVisible(true) : undefined}
           onReady={handleOutputReady}
           onUpdate={handleOutputUpdate}
           linked={linked}
@@ -353,7 +359,7 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
           modifiedLines={modifiedLines}
           codegenSample={outputFormat === "json" ? (result?.output ?? null) : null}
         />
-        {fieldsPaneVisible && (
+        {(fieldsPaneVisible || isStacked) && (
           <>
             <Splitter
               containerRef={panesRef}
@@ -370,7 +376,7 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
               onToggle={setOverride}
               onSetValueOverride={setValueOverride}
               onReset={resetOverrides}
-              onHide={() => setFieldsPaneVisible(false)}
+              onHide={isStacked ? undefined : () => setFieldsPaneVisible(false)}
               style={{ flex: `0 0 ${fieldsPaneWidth}px` }}
             />
           </>

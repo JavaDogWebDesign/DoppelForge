@@ -115,8 +115,16 @@
       }
       .topnav a:hover { color: var(--text-h); }
       .topnav .brand {
+        display: inline-flex;
+        align-items: center;
         color: var(--text-h);
         font-weight: 600;
+        text-decoration: none;
+      }
+      .topnav .brand-logo {
+        height: 24px;
+        width: auto;
+        display: block;
       }
       h1 {
         color: var(--text-h);
@@ -225,18 +233,21 @@
   <body>
     <nav class="topnav" aria-label="Primary">
       <div class="topnav-inner">
-        <span class="brand">DoppelForge</span>
+        <a href="/" class="brand" aria-label="DoppelForge home">
+          <img src="/doppel-logo.svg" alt="DoppelForge" class="brand-logo" />
+        </a>
         <a href="/">Open the tool →</a>
       </div>
     </nav>
 
     <article class="page">
-      <h1>Forge identical twins of your API responses.</h1>
+      <h1>Obfuscate API Responses for LLMs</h1>
       <p class="lede">
-        Drop in a response from BigCommerce, Shopify, Piano, Stripe, or one
-        of seven other platforms. DoppelForge returns a doppelgänger -
-        identical structure, safe values - ready to paste into a blog post,
-        support ticket, Stack Overflow answer, or your favorite LLM.
+        Drop in a response from Shopify, Stripe, BigCommerce, Square,
+        PayPal, Mailchimp, Zendesk, or any of ten other platforms. DoppelForge
+        returns a doppelgänger - identical structure, safe values - ready to
+        paste into a blog post, support ticket, Stack Overflow answer, or
+        your favorite LLM.
       </p>
 
       <h2>Why this exists</h2>

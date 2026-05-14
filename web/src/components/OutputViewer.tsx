@@ -76,7 +76,7 @@ export function OutputViewer({
           <button
             onClick={onToggleLink}
             title={linked ? "Unlink panes (scroll/cursor independent)" : "Link panes (sync scroll + active line)"}
-            className={linked ? "linked" : ""}
+            className={`link-toggle${linked ? " linked" : ""}`}
           >
             {linked ? <Link2 size={14} /> : <Link2Off size={14} />}
             <span className="btn-label">{linked ? "Linked" : "Unlinked"}</span>

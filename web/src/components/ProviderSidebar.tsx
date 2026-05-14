@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ShoppingBag,
   ShoppingCart,
@@ -12,6 +13,8 @@ import {
   PanelLeftOpen,
   ShieldCheck,
   Bug,
+  Menu,
+  X,
 } from "lucide-react";
 import type { Provider } from "../engine/types";
 
@@ -42,12 +45,35 @@ export function ProviderSidebar({
   collapsed,
   onToggleCollapse,
 }: Props) {
+  // Mobile-only state. On desktop the drawer container is `display: contents`
+  // so this flag has no effect and the original sidebar layout is unchanged.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   return (
-    <nav className={`sidebar${collapsed ? " collapsed" : ""}`}>
+    <nav
+      className={`sidebar${collapsed ? " collapsed" : ""}${menuOpen ? " menu-open" : ""}`}
+    >
       <header className="sidebar-header">
-        {!collapsed && (
-          <img src="/doppel-logo.svg" alt="DoppelForge" className="brand-logo" />
-        )}
+        <button
+          className="sidebar-hamburger"
+          onClick={() => setMenuOpen((v) => !v)}
+          title={menuOpen ? "Close menu" : "Open menu"}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+        <img src="/doppel-logo.svg" alt="DoppelForge" className="brand-logo" />
         <button
           className="sidebar-toggle"
           onClick={onToggleCollapse}
@@ -57,61 +83,74 @@ export function ProviderSidebar({
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </button>
       </header>
-      <ul className="provider-list">
-        {providers.map((p) => {
-          const Icon = ICONS[p.manifest.icon] ?? Layers;
-          const active = p.manifest.id === selectedId;
-          return (
-            <li key={p.manifest.id}>
-              <button
-                className={`provider-item${active ? " active" : ""}`}
-                style={{ "--accent": p.manifest.color } as React.CSSProperties}
-                onClick={() => onSelect(p.manifest.id)}
-                title={collapsed ? p.manifest.name : undefined}
-              >
-                <Icon size={18} aria-hidden="true" />
-
-                {!collapsed && (
-                  <>
-                    <span>{p.manifest.name}</span>
-                    <span className="endpoint-count">{p.endpoints.length}</span>
-                  </>
-                )}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <footer className="sidebar-footer">
-        <a
-          href="/about"
-          className="sidebar-footer-link"
-          title={collapsed ? "About & Privacy" : undefined}
-        >
-          <ShieldCheck size={16} aria-hidden="true" />
-          {!collapsed && <span>About & Privacy</span>}
-        </a>
-        <a
-          href="https://github.com/javadogwebdesign/doppelforge"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="sidebar-footer-link"
-          title={collapsed ? "GitHub repo" : undefined}
-        >
-          <GitHubIcon />
-          {!collapsed && <span>GitHub repo</span>}
-        </a>
-        <a
-          href="https://github.com/javadogwebdesign/doppelforge/issues/new/choose"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="sidebar-footer-link"
-          title={collapsed ? "Report an issue" : undefined}
-        >
-          <Bug size={16} aria-hidden="true" />
-          {!collapsed && <span>Report an issue</span>}
-        </a>
-      </footer>
+      {menuOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+      )}
+      {/* `display: contents` on desktop so this wrapper is invisible to the
+          flex layout. On mobile (in App.css media query) it becomes the
+          absolutely-positioned dropdown drawer toggled by the hamburger. */}
+      <div className="sidebar-drawer">
+        <ul className="provider-list">
+          {providers.map((p) => {
+            const Icon = ICONS[p.manifest.icon] ?? Layers;
+            const active = p.manifest.id === selectedId;
+            return (
+              <li key={p.manifest.id}>
+                <button
+                  className={`provider-item${active ? " active" : ""}`}
+                  style={{ "--accent": p.manifest.color } as React.CSSProperties}
+                  onClick={() => {
+                    onSelect(p.manifest.id);
+                    closeMenu();
+                  }}
+                  title={collapsed ? p.manifest.name : undefined}
+                >
+                  <Icon size={18} aria-hidden="true" />
+                  <span className="provider-name">{p.manifest.name}</span>
+                  <span className="endpoint-count">{p.endpoints.length}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <footer className="sidebar-footer">
+          <a
+            href="/about"
+            className="sidebar-footer-link"
+            title="About & Privacy"
+            onClick={closeMenu}
+          >
+            <ShieldCheck size={16} aria-hidden="true" />
+            <span>About & Privacy</span>
+          </a>
+          <a
+            href="https://github.com/javadogwebdesign/doppelforge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sidebar-footer-link"
+            title="GitHub repo"
+            onClick={closeMenu}
+          >
+            <GitHubIcon />
+            <span>GitHub repo</span>
+          </a>
+          <a
+            href="https://github.com/javadogwebdesign/doppelforge/issues/new/choose"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sidebar-footer-link"
+            title="Report an issue"
+            onClick={closeMenu}
+          >
+            <Bug size={16} aria-hidden="true" />
+            <span>Report an issue</span>
+          </a>
+        </footer>
+      </div>
     </nav>
   );
 }
