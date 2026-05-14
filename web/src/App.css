@@ -1639,7 +1639,9 @@
   }
 
   /* Full-screen menu below the header. The hamburger button stays visible
-     above (showing an X) so the user always has a clear way to close it. */
+     above (showing an X) so the user always has a clear way to close it.
+     overscroll-behavior:contain stops the drawer's internal scroll from
+     chaining into the page underneath when it hits its end. */
   .sidebar.menu-open .sidebar-drawer {
     display: flex;
     flex-direction: column;
@@ -1649,6 +1651,7 @@
     right: 0;
     bottom: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--bg-elev);
     z-index: 110;
   }
@@ -1710,6 +1713,28 @@
     flex: 1 1 auto;
     min-height: 0;
     padding-right: 12px;
+    /* Match the pane-header / field-panel surface so the right gutter reads
+       as an extension of those bands rather than a distinct dark strip
+       against the page background. */
+    background: var(--bg-elev);
+  }
+
+  /* Bring back the pane title labels ("Real response" / "Obfuscated output"
+     / "Field controls"). They're hidden by the 1300px breakpoint above, but
+     on the stacked layout each pane needs its own clear title since they're
+     no longer side-by-side. */
+  .pane-label {
+    display: inline;
+  }
+
+  /* Extend the pane-header's bottom border across the full viewport width.
+     The .panes wrapper has padding-right: 12px, so each pane (and its
+     header) ends 12px before the right edge — the border line visibly cuts
+     short. Negative margin lets the header span into the gutter; matching
+     extra padding keeps its content positioned where it already was. */
+  .pane-header {
+    margin-right: -12px;
+    padding-right: 24px;
   }
 
   /* Override the inline flexGrow / fixed-width styles applied by the resizer

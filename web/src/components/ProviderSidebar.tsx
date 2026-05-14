@@ -59,6 +59,18 @@ export function ProviderSidebar({
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
+  // Lock body scroll while the full-screen menu is open. Without this,
+  // scrolling past the bottom of the drawer chains through to the workspace
+  // behind it (the page keeps scrolling underneath the menu).
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
   return (
     <nav
       className={`sidebar${collapsed ? " collapsed" : ""}${menuOpen ? " menu-open" : ""}`}
