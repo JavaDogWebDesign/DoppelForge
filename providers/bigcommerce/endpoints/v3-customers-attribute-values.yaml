@@ -1,0 +1,28 @@
+endpoint:
+  method: GET
+  path: /v3/customers/attribute-values
+  description: List customer attribute values (per-customer attribute data)
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/customer-attribute-values
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].attribute_id
+    - data[].attribute_value
+    - data[].customer_id
+    - meta.pagination.total
+  optional_paths: []
+
+fields:
+  "data[].id":                          { type: id, anchor: true }
+  "data[].attribute_id":                { type: id, anchor: true }
+  "data[].attribute_value":             { type: shortText }
+  "data[].customer_id":                 { type: id, anchor: true }
+  "data[].date_created":                { type: isoDate }
+  "data[].date_modified":               { type: isoDate }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "*": { type: auto }

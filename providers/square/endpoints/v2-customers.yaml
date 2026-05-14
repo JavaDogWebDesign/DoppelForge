@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /v2/customers
+  description: List customers
+  doc_url: https://developer.squareup.com/reference/square/customers-api/list-customers
+
+signature:
+  required_paths:
+    - customers[].id
+    - customers[].created_at
+    - customers[].version
+  optional_paths:
+    - cursor
+    - count
+    - customers[].email_address
+    - customers[].address
+
+fields:
+  "cursor":                          { type: id, anchor: true }
+  "count":                           { type: preserve }
+  "customers[].id":                  { type: id, anchor: true }
+  "customers[].created_at":          { type: isoDate }
+  "customers[].updated_at":          { type: isoDate }
+  "customers[].version":             { type: preserve }
+  "customers[].email_address":       { type: email, anchor: true }
+  "customers[].given_name":          { type: firstName }
+  "customers[].family_name":         { type: lastName }
+  "customers[].nickname":            { type: shortText }
+  "customers[].company_name":        { type: company }
+  "customers[].phone_number":        { type: phone }
+  "customers[].reference_id":        { type: id, anchor: true }
+  "customers[].note":                { type: shortText }
+  "customers[].birthday":            { type: isoDate }
+  "customers[].creation_source":     { type: preserve }
+  "customers[].group_ids":           { type: preserve }
+  "customers[].segment_ids":         { type: preserve }
+  "customers[].preferences.email_unsubscribed": { type: preserve }
+  "customers[].address.address_line_1": { type: street }
+  "customers[].address.address_line_2": { type: streetSecondary }
+  "customers[].address.locality":       { type: city }
+  "customers[].address.administrative_district_level_1": { type: stateOrProvince }
+  "customers[].address.postal_code":    { type: postalCode }
+  "customers[].address.country":        { type: countryCode }
+  "customers[].address.first_name":     { type: firstName }
+  "customers[].address.last_name":      { type: lastName }
+  "customers[].address.organization":   { type: company }
+  "*": { type: auto }

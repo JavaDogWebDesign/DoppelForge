@@ -1,0 +1,62 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/shipments
+  description: List shipments for an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-shipments
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].order_id"
+    - "[].customer_id"
+    - "[].tracking_number"
+    - "[].shipping_method"
+  optional_paths:
+    - "[].billing_address"
+    - "[].shipping_address"
+    - "[].items"
+
+fields:
+  "[].id":                                  { type: id, anchor: true }
+  "[].order_id":                            { type: id, anchor: true }
+  "[].customer_id":                         { type: id, anchor: true }
+  "[].order_address_id":                    { type: id, anchor: true }
+  "[].date_created":                        { type: isoDate }
+  "[].tracking_number":                     { type: id, anchor: true }
+  "[].merchant_shipping_cost":              { type: preserve }
+  "[].shipping_method":                     { type: shortText }
+  "[].shipping_provider":                   { type: preserve }
+  "[].tracking_carrier":                    { type: preserve }
+  "[].tracking_link":                       { type: url }
+  "[].generated_tracking_link":             { type: url }
+  "[].shipping_provider_display_name":      { type: company }
+  "[].comments":                            { type: shortText }
+  "[].billing_address.first_name":          { type: firstName }
+  "[].billing_address.last_name":           { type: lastName }
+  "[].billing_address.company":             { type: company }
+  "[].billing_address.street_1":            { type: street }
+  "[].billing_address.street_2":            { type: streetSecondary }
+  "[].billing_address.city":                { type: city }
+  "[].billing_address.state":               { type: stateOrProvince }
+  "[].billing_address.zip":                 { type: postalCode }
+  "[].billing_address.country":             { type: country }
+  "[].billing_address.country_iso2":        { type: countryCode }
+  "[].billing_address.phone":               { type: phone }
+  "[].billing_address.email":               { type: email, anchor: true }
+  "[].shipping_address.first_name":         { type: firstName }
+  "[].shipping_address.last_name":          { type: lastName }
+  "[].shipping_address.company":            { type: company }
+  "[].shipping_address.street_1":           { type: street }
+  "[].shipping_address.street_2":           { type: streetSecondary }
+  "[].shipping_address.city":               { type: city }
+  "[].shipping_address.state":              { type: stateOrProvince }
+  "[].shipping_address.zip":                { type: postalCode }
+  "[].shipping_address.country":            { type: country }
+  "[].shipping_address.country_iso2":       { type: countryCode }
+  "[].shipping_address.phone":              { type: phone }
+  "[].shipping_address.email":              { type: email, anchor: true }
+  "[].shipping_address.shipping_method":    { type: shortText }
+  "[].items[].order_product_id":            { type: id, anchor: true }
+  "[].items[].product_id":                  { type: id, anchor: true }
+  "[].items[].quantity":                    { type: preserve }
+  "*": { type: auto }

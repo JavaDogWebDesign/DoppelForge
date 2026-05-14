@@ -1,0 +1,57 @@
+endpoint:
+  method: GET
+  path: /api/v2/tickets/{ticket_id}/comments
+  description: List comments on a ticket
+  doc_url: https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_comments/#list-comments
+
+signature:
+  required_paths:
+    - comments[].id
+    - comments[].type
+    - comments[].author_id
+    - comments[].body
+    - count
+  optional_paths:
+    - next_page
+    - previous_page
+    - comments[].html_body
+    - comments[].via
+
+fields:
+  "count":         { type: preserve }
+  "next_page":     { type: url }
+  "previous_page": { type: url }
+  "comments[].id":              { type: id, anchor: true }
+  "comments[].type":            { type: preserve }
+  "comments[].author_id":       { type: id, anchor: true }
+  "comments[].body":            { type: longText }
+  "comments[].html_body":       { type: longText }
+  "comments[].plain_body":      { type: longText }
+  "comments[].public":          { type: preserve }
+  "comments[].created_at":      { type: isoDate }
+  "comments[].audit_id":        { type: id, anchor: true }
+  "comments[].metadata.system.client":      { type: shortText }
+  "comments[].metadata.system.ip_address":  { type: ipv4 }
+  "comments[].metadata.system.location":    { type: shortText }
+  "comments[].metadata.system.latitude":    { type: preserve }
+  "comments[].metadata.system.longitude":   { type: preserve }
+  "comments[].metadata.custom":             { type: auto }
+  "comments[].metadata.flags":              { type: preserve }
+  "comments[].metadata.flags_options":      { type: preserve }
+  "comments[].via.channel":     { type: preserve }
+  "comments[].via.source.from.address": { type: email, anchor: true }
+  "comments[].via.source.from.name":    { type: fullName }
+  "comments[].via.source.to.address":   { type: email, anchor: true }
+  "comments[].via.source.to.name":      { type: fullName }
+  "comments[].via.source.rel":  { type: preserve }
+  "comments[].attachments[].id":           { type: id, anchor: true }
+  "comments[].attachments[].file_name":    { type: shortText }
+  "comments[].attachments[].content_url":  { type: url }
+  "comments[].attachments[].mapped_content_url": { type: url }
+  "comments[].attachments[].content_type": { type: preserve }
+  "comments[].attachments[].size":         { type: preserve }
+  "comments[].attachments[].width":        { type: preserve }
+  "comments[].attachments[].height":       { type: preserve }
+  "comments[].attachments[].inline":       { type: preserve }
+  "comments[].uploads":         { type: preserve }
+  "*": { type: auto }

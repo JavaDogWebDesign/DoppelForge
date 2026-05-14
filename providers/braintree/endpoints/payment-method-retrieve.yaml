@@ -1,0 +1,89 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/payment_methods/{token}
+  description: Retrieve a payment method (CreditCard / PayPal / US bank / Venmo / Apple Pay / Android Pay)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/payment-method
+
+# Polymorphic — Braintree returns whichever instrument type is at this token.
+# Common fields plus per-type fields covered below.
+signature:
+  required_paths:
+    - token
+    - customer_id
+    - default
+  optional_paths:
+    - bin
+    - last_4
+
+fields:
+  "token":                       { type: id, anchor: true }
+  "customer_id":                 { type: id, anchor: true }
+  "default":                     { type: preserve }
+  "created_at":                  { type: isoDate }
+  "updated_at":                  { type: isoDate }
+  "image_url":                   { type: url }
+  "is_network_tokenized":        { type: preserve }
+  "verifications":               { type: preserve }
+  # Credit card fields
+  "bin":                         { type: id }
+  "last_4":                      { type: id }
+  "card_type":                   { type: preserve }
+  "cardholder_name":             { type: fullName }
+  "expiration_month":            { type: preserve }
+  "expiration_year":             { type: preserve }
+  "expiration_date":             { type: preserve }
+  "masked_number":               { type: id }
+  "unique_number_identifier":    { type: id, anchor: true }
+  "customer_location":           { type: preserve }
+  "prepaid":                     { type: preserve }
+  "healthcare":                  { type: preserve }
+  "durbin_regulated":            { type: preserve }
+  "debit":                       { type: preserve }
+  "commercial":                  { type: preserve }
+  "payroll":                     { type: preserve }
+  "business":                    { type: preserve }
+  "consumer":                    { type: preserve }
+  "corporate":                   { type: preserve }
+  "purchase":                    { type: preserve }
+  "country_of_issuance":         { type: country }
+  "issuing_bank":                { type: company }
+  "product_id":                  { type: id }
+  "account_type":                { type: preserve }
+  "billing_address.id":          { type: id, anchor: true }
+  "billing_address.first_name":  { type: firstName }
+  "billing_address.last_name":   { type: lastName }
+  "billing_address.company":     { type: company }
+  "billing_address.street_address": { type: street }
+  "billing_address.extended_address": { type: streetSecondary }
+  "billing_address.locality":    { type: city }
+  "billing_address.region":      { type: stateOrProvince }
+  "billing_address.postal_code": { type: postalCode }
+  "billing_address.country_name": { type: country }
+  "billing_address.country_code_alpha2": { type: countryCode }
+  "billing_address.phone_number": { type: phone }
+  # PayPal account fields
+  "email":                       { type: email, anchor: true }
+  "payer_id":                    { type: id, anchor: true }
+  "billing_agreement_id":        { type: id, anchor: true }
+  # US bank account fields
+  "routing_number":              { type: id }
+  "account_holder_name":         { type: fullName }
+  "bank_name":                   { type: company }
+  "business_name":               { type: company }
+  "ach_mandate.text":            { type: longText }
+  "ach_mandate.accepted_at":     { type: isoDate }
+  # Venmo
+  "username":                    { type: id, anchor: true }
+  "venmo_user_id":               { type: id, anchor: true }
+  # Apple/Google Pay
+  "source_card_last_4":          { type: id }
+  "virtual_card_last_4":         { type: id }
+  "source_card_type":            { type: preserve }
+  "virtual_card_type":           { type: preserve }
+  "source_description":          { type: shortText }
+  "google_transaction_id":       { type: id, anchor: true }
+  "subscriptions[].id":          { type: id, anchor: true }
+  "subscriptions[].plan_id":     { type: id, anchor: true }
+  "subscriptions[].status":      { type: preserve }
+  "subscriptions[].balance":     { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,49 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/orders/{order_id}/fulfillments.json
+  description: List fulfillments for an order
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/fulfillment
+
+signature:
+  required_paths:
+    - fulfillments[].id
+    - fulfillments[].order_id
+    - fulfillments[].admin_graphql_api_id
+  optional_paths:
+    - fulfillments[].tracking_number
+    - fulfillments[].line_items
+
+fields:
+  "fulfillments[].id":                       { type: id, anchor: true }
+  "fulfillments[].order_id":                 { type: id, anchor: true }
+  "fulfillments[].admin_graphql_api_id":     { type: preserve }
+  "fulfillments[].status":                   { type: preserve }
+  "fulfillments[].created_at":               { type: isoDate }
+  "fulfillments[].updated_at":               { type: isoDate }
+  "fulfillments[].service":                  { type: preserve }
+  "fulfillments[].shipment_status":          { type: preserve }
+  "fulfillments[].location_id":              { type: id, anchor: true }
+  "fulfillments[].name":                     { type: id, anchor: true }
+  "fulfillments[].notify_customer":          { type: preserve }
+  "fulfillments[].tracking_company":         { type: company }
+  "fulfillments[].tracking_number":          { type: id, anchor: true }
+  "fulfillments[].tracking_numbers":         { type: preserve }
+  "fulfillments[].tracking_url":             { type: url }
+  "fulfillments[].tracking_urls":            { type: preserve }
+  "fulfillments[].receipt.testcase":         { type: preserve }
+  "fulfillments[].receipt.authorization":    { type: id, anchor: true }
+  "fulfillments[].origin_address.address1":  { type: street }
+  "fulfillments[].origin_address.address2":  { type: streetSecondary }
+  "fulfillments[].origin_address.city":      { type: city }
+  "fulfillments[].origin_address.province_code": { type: stateOrProvince }
+  "fulfillments[].origin_address.country_code":  { type: countryCode }
+  "fulfillments[].origin_address.zip":       { type: postalCode }
+  "fulfillments[].line_items[].id":          { type: id, anchor: true }
+  "fulfillments[].line_items[].product_id":  { type: id, anchor: true }
+  "fulfillments[].line_items[].variant_id":  { type: id, anchor: true }
+  "fulfillments[].line_items[].title":       { type: productName }
+  "fulfillments[].line_items[].sku":         { type: sku, anchor: true }
+  "fulfillments[].line_items[].quantity":    { type: preserve }
+  "fulfillments[].line_items[].vendor":      { type: company }
+  "fulfillments[].line_items[].price":       { type: preserve }
+  "*": { type: auto }

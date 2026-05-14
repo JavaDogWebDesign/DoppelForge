@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}.json
+  description: Retrieve a single call
+  doc_url: https://www.twilio.com/docs/voice/api/call-resource
+
+signature:
+  required_paths:
+    - sid
+    - account_sid
+    - from
+    - to
+    - status
+  optional_paths:
+    - duration
+    - caller_name
+
+fields:
+  "sid":                    { type: id, anchor: true }
+  "account_sid":            { type: id, anchor: true }
+  "parent_call_sid":        { type: id, anchor: true }
+  "from":                   { type: phone }
+  "from_formatted":         { type: phone }
+  "to":                     { type: phone }
+  "to_formatted":           { type: phone }
+  "phone_number_sid":       { type: id, anchor: true }
+  "caller_name":            { type: fullName }
+  "status":                 { type: preserve }
+  "direction":              { type: preserve }
+  "answered_by":            { type: preserve }
+  "api_version":            { type: preserve }
+  "forwarded_from":         { type: phone }
+  "queue_time":             { type: preserve }
+  "trunk_sid":              { type: id, anchor: true }
+  "annotation":             { type: shortText }
+  "start_time":             { type: isoDate }
+  "end_time":               { type: isoDate }
+  "date_created":           { type: isoDate }
+  "date_updated":           { type: isoDate }
+  "duration":               { type: preserve }
+  "price":                  { type: preserve }
+  "price_unit":             { type: preserve }
+  "uri":                    { type: url }
+  "subresource_uris.recordings": { type: url }
+  "subresource_uris.notifications": { type: url }
+  "subresource_uris.events": { type: url }
+  "*": { type: auto }

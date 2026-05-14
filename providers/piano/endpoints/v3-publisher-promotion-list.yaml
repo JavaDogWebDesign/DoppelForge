@@ -1,0 +1,47 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/promotion/list
+  description: List promotions
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - promotions[].promotion_id
+    - promotions[].name
+    - total
+    - code
+  optional_paths:
+    - promotions[].discount_amount
+    - promotions[].percentage_discount
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "promotions[].promotion_id":          { type: id, anchor: true }
+  "promotions[].aid":                   { type: id, anchor: true }
+  "promotions[].name":                  { type: shortText }
+  "promotions[].description":           { type: shortText }
+  "promotions[].discount_amount":       { type: preserve }
+  "promotions[].discount_currency":     { type: preserve }
+  "promotions[].discount":              { type: preserve }
+  "promotions[].percentage_discount":   { type: preserve }
+  "promotions[].fixed_promotion_code":  { type: id }
+  "promotions[].unlimited_uses":        { type: preserve }
+  "promotions[].uses_allowed":          { type: preserve }
+  "promotions[].uses":                  { type: preserve }
+  "promotions[].new_customers_only":    { type: preserve }
+  "promotions[].never_allow_zero":      { type: preserve }
+  "promotions[].apply_to_all_billing_periods": { type: preserve }
+  "promotions[].billing_plan_periods":  { type: preserve }
+  "promotions[].discount_type":         { type: preserve }
+  "promotions[].status":                { type: preserve }
+  "promotions[].create_date":           { type: unixTimestamp }
+  "promotions[].update_date":           { type: unixTimestamp }
+  "promotions[].start_date":            { type: unixTimestamp }
+  "promotions[].end_date":              { type: unixTimestamp }
+  "promotions[].term_dependency_type":  { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,50 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Recordings.json
+  description: List call recordings
+  doc_url: https://www.twilio.com/docs/voice/api/recording
+
+signature:
+  required_paths:
+    - recordings[].sid
+    - recordings[].account_sid
+    - recordings[].call_sid
+  optional_paths:
+    - next_page_uri
+    - recordings[].duration
+
+fields:
+  "page":            { type: preserve }
+  "page_size":       { type: preserve }
+  "first_page_uri":  { type: url }
+  "next_page_uri":   { type: url }
+  "previous_page_uri": { type: url }
+  "uri":             { type: url }
+  "start":           { type: preserve }
+  "end":             { type: preserve }
+  "num_pages":       { type: preserve }
+  "total":           { type: preserve }
+  "recordings[].sid":                { type: id, anchor: true }
+  "recordings[].account_sid":        { type: id, anchor: true }
+  "recordings[].call_sid":           { type: id, anchor: true }
+  "recordings[].conference_sid":     { type: id, anchor: true }
+  "recordings[].api_version":        { type: preserve }
+  "recordings[].duration":           { type: preserve }
+  "recordings[].status":             { type: preserve }
+  "recordings[].source":             { type: preserve }
+  "recordings[].error_code":         { type: preserve }
+  "recordings[].price":              { type: preserve }
+  "recordings[].price_unit":         { type: preserve }
+  "recordings[].channels":           { type: preserve }
+  "recordings[].track":              { type: preserve }
+  "recordings[].encryption_details.encryption_public_key_sid": { type: id, anchor: true }
+  "recordings[].encryption_details.encryption_cek":            { type: redact }
+  "recordings[].encryption_details.encryption_iv":             { type: redact }
+  "recordings[].start_time":         { type: isoDate }
+  "recordings[].date_created":       { type: isoDate }
+  "recordings[].date_updated":       { type: isoDate }
+  "recordings[].uri":                { type: url }
+  "recordings[].subresource_uris.transcriptions": { type: url }
+  "recordings[].subresource_uris.add_on_results": { type: url }
+  "recordings[].media_url":          { type: url }
+  "*": { type: auto }

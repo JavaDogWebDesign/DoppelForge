@@ -1,0 +1,65 @@
+endpoint:
+  method: POST
+  path: /graphql (query site.cart)
+  description: BigCommerce Storefront GraphQL — site.cart (active shopping cart)
+  doc_url: https://developer.bigcommerce.com/docs/storefront/graphql/carts-checkout
+
+signature:
+  required_paths:
+    - data.site.cart.entityId
+    - data.site.cart.currencyCode
+    - data.site.cart.lineItems
+    - data.site.cart.amount.value
+  optional_paths:
+    - extensions.complexity
+    - data.site.cart.isTaxIncluded
+    - data.site.cart.locale
+
+fields:
+  "extensions.complexity":            { type: preserve }
+  "data.site.cart.entityId":          { type: id, anchor: true }
+  "data.site.cart.currencyCode":      { type: preserve }
+  "data.site.cart.isTaxIncluded":     { type: preserve }
+  "data.site.cart.baseAmount.value":  { type: priceAmount }
+  "data.site.cart.baseAmount.currencyCode": { type: preserve }
+  "data.site.cart.amount.value":      { type: priceAmount }
+  "data.site.cart.amount.currencyCode": { type: preserve }
+  "data.site.cart.discountedAmount.value": { type: priceAmount }
+  "data.site.cart.discountedAmount.currencyCode": { type: preserve }
+  "data.site.cart.locale":            { type: preserve }
+  "data.site.cart.createdAt.utc":     { type: isoDate }
+  "data.site.cart.updatedAt.utc":     { type: isoDate }
+  "data.site.cart.discounts[].entityId": { type: id, anchor: true }
+  "data.site.cart.discounts[].discountedAmount.value": { type: priceAmount }
+  "data.site.cart.lineItems.totalQuantity": { type: preserve }
+  "data.site.cart.lineItems.physicalItems[].entityId":      { type: id, anchor: true }
+  "data.site.cart.lineItems.physicalItems[].parentEntityId": { type: id, anchor: true }
+  "data.site.cart.lineItems.physicalItems[].productEntityId": { type: id, anchor: true }
+  "data.site.cart.lineItems.physicalItems[].variantEntityId": { type: id, anchor: true }
+  "data.site.cart.lineItems.physicalItems[].sku":           { type: sku, anchor: true }
+  "data.site.cart.lineItems.physicalItems[].name":          { type: productName }
+  "data.site.cart.lineItems.physicalItems[].url":           { type: url }
+  "data.site.cart.lineItems.physicalItems[].imageUrl":      { type: url }
+  "data.site.cart.lineItems.physicalItems[].brand":         { type: company }
+  "data.site.cart.lineItems.physicalItems[].quantity":      { type: preserve }
+  "data.site.cart.lineItems.physicalItems[].isTaxable":     { type: preserve }
+  "data.site.cart.lineItems.physicalItems[].listPrice.value":     { type: priceAmount }
+  "data.site.cart.lineItems.physicalItems[].originalPrice.value": { type: priceAmount }
+  "data.site.cart.lineItems.physicalItems[].salePrice.value":     { type: priceAmount }
+  "data.site.cart.lineItems.physicalItems[].extendedListPrice.value": { type: priceAmount }
+  "data.site.cart.lineItems.physicalItems[].extendedSalePrice.value": { type: priceAmount }
+  "data.site.cart.lineItems.physicalItems[].selectedOptions[].name":  { type: preserve }
+  "data.site.cart.lineItems.physicalItems[].selectedOptions[].value": { type: shortText }
+  "data.site.cart.lineItems.digitalItems[].entityId":       { type: id, anchor: true }
+  "data.site.cart.lineItems.digitalItems[].productEntityId": { type: id, anchor: true }
+  "data.site.cart.lineItems.digitalItems[].sku":            { type: sku, anchor: true }
+  "data.site.cart.lineItems.digitalItems[].name":           { type: productName }
+  "data.site.cart.lineItems.giftCertificates[].entityId":   { type: id, anchor: true }
+  "data.site.cart.lineItems.giftCertificates[].name":       { type: productName }
+  "data.site.cart.lineItems.giftCertificates[].amount.value": { type: priceAmount }
+  "data.site.cart.lineItems.giftCertificates[].recipient.email": { type: email, anchor: true }
+  "data.site.cart.lineItems.giftCertificates[].recipient.name": { type: fullName }
+  "data.site.cart.lineItems.giftCertificates[].sender.email": { type: email, anchor: true }
+  "data.site.cart.lineItems.giftCertificates[].sender.name": { type: fullName }
+  "data.site.cart.lineItems.giftCertificates[].message":    { type: longText }
+  "*": { type: auto }

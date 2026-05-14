@@ -1,0 +1,62 @@
+endpoint:
+  method: POST
+  path: payout.paid
+  kind: webhook
+  description: Stripe webhook — payout paid (funds arrived at bank)
+  doc_url: https://docs.stripe.com/api/events/types#event_types-payout.paid
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.arrival_date
+    - data.object.method
+    - data.object.source_type
+    - data.object.reconciliation_status
+  optional_paths:
+    - data.object.destination
+    - data.object.automatic
+    - data.object.statement_descriptor
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.amount":                              { type: preserve }
+  "data.object.application_fee":                     { type: id, anchor: true }
+  "data.object.application_fee_amount":              { type: preserve }
+  "data.object.arrival_date":                        { type: unixTimestamp }
+  "data.object.automatic":                           { type: preserve }
+  "data.object.balance_transaction":                 { type: id, anchor: true }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.currency":                            { type: preserve }
+  "data.object.description":                         { type: shortText }
+  "data.object.destination":                         { type: id, anchor: true }
+  "data.object.failure_balance_transaction":         { type: id, anchor: true }
+  "data.object.failure_code":                        { type: preserve }
+  "data.object.failure_message":                     { type: longText }
+  "data.object.livemode":                            { type: preserve }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.method":                              { type: preserve }
+  "data.object.original_payout":                     { type: id, anchor: true }
+  "data.object.payout_method":                       { type: id, anchor: true }
+  "data.object.reconciliation_status":               { type: preserve }
+  "data.object.reversed_by":                         { type: id, anchor: true }
+  "data.object.source_type":                         { type: preserve }
+  "data.object.statement_descriptor":                { type: shortText }
+  "data.object.status":                              { type: preserve }
+  "data.object.trace_id.status":                     { type: preserve }
+  "data.object.trace_id.value":                      { type: sku }
+  "data.object.type":                                { type: preserve }
+  "*": { type: auto }

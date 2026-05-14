@@ -1,0 +1,66 @@
+endpoint:
+  method: GET
+  path: /3.0/campaigns
+  description: List campaigns
+  doc_url: https://mailchimp.com/developer/marketing/api/campaigns/list-campaigns/
+
+signature:
+  required_paths:
+    - campaigns[].id
+    - campaigns[].type
+    - campaigns[].status
+    - campaigns[].create_time
+    - total_items
+  optional_paths:
+    - campaigns[].settings
+    - campaigns[].recipients
+
+fields:
+  "total_items":   { type: preserve }
+  "_links[].href":   { type: url }
+  "_links[].rel":    { type: preserve }
+  "_links[].method": { type: preserve }
+  "campaigns[].id":            { type: id, anchor: true }
+  "campaigns[].web_id":        { type: id, anchor: true }
+  "campaigns[].parent_campaign_id": { type: id, anchor: true }
+  "campaigns[].type":          { type: preserve }
+  "campaigns[].create_time":   { type: isoDate }
+  "campaigns[].archive_url":   { type: url }
+  "campaigns[].long_archive_url": { type: url }
+  "campaigns[].status":        { type: preserve }
+  "campaigns[].emails_sent":   { type: preserve }
+  "campaigns[].send_time":     { type: isoDate }
+  "campaigns[].content_type":  { type: preserve }
+  "campaigns[].needs_block_refresh": { type: preserve }
+  "campaigns[].resendable":    { type: preserve }
+  "campaigns[].recipients.list_id":      { type: id, anchor: true }
+  "campaigns[].recipients.list_is_active": { type: preserve }
+  "campaigns[].recipients.list_name":    { type: shortText }
+  "campaigns[].recipients.segment_text": { type: shortText }
+  "campaigns[].recipients.recipient_count": { type: preserve }
+  "campaigns[].settings.subject_line":    { type: shortText }
+  "campaigns[].settings.preview_text":    { type: shortText }
+  "campaigns[].settings.title":           { type: shortText }
+  "campaigns[].settings.from_name":       { type: fullName }
+  "campaigns[].settings.reply_to":        { type: email, anchor: true }
+  "campaigns[].settings.use_conversation": { type: preserve }
+  "campaigns[].settings.to_name":         { type: fullName }
+  "campaigns[].settings.folder_id":       { type: id, anchor: true }
+  "campaigns[].settings.authenticate":    { type: preserve }
+  "campaigns[].settings.auto_footer":     { type: preserve }
+  "campaigns[].settings.inline_css":      { type: preserve }
+  "campaigns[].settings.auto_tweet":      { type: preserve }
+  "campaigns[].settings.template_id":     { type: id, anchor: true }
+  "campaigns[].tracking.opens":           { type: preserve }
+  "campaigns[].tracking.html_clicks":     { type: preserve }
+  "campaigns[].tracking.text_clicks":     { type: preserve }
+  "campaigns[].tracking.goal_tracking":   { type: preserve }
+  "campaigns[].tracking.ecommerce360":    { type: preserve }
+  "campaigns[].report_summary.opens":     { type: preserve }
+  "campaigns[].report_summary.unique_opens": { type: preserve }
+  "campaigns[].report_summary.open_rate": { type: preserve }
+  "campaigns[].report_summary.clicks":    { type: preserve }
+  "campaigns[].report_summary.subscriber_clicks": { type: preserve }
+  "campaigns[].report_summary.click_rate": { type: preserve }
+  "campaigns[].delivery_status.enabled":  { type: preserve }
+  "*": { type: auto }

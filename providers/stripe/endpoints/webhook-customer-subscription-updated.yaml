@@ -1,0 +1,89 @@
+endpoint:
+  method: POST
+  path: customer.subscription.updated
+  kind: webhook
+  description: Stripe webhook — subscription updated
+  doc_url: https://docs.stripe.com/api/events/types#event_types-customer.subscription.updated
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.current_period_end
+    - data.object.items.data[].price.id
+    - data.previous_attributes
+  optional_paths:
+    - data.object.cancel_at_period_end
+    - data.object.latest_invoice
+    - data.object.current_period_start
+    - data.object.collection_method
+
+fields:
+  "id":                                          { type: id, anchor: true }
+  "object":                                      { type: preserve }
+  "api_version":                                 { type: preserve }
+  "created":                                     { type: unixTimestamp }
+  "livemode":                                    { type: preserve }
+  "pending_webhooks":                            { type: preserve }
+  "type":                                        { type: preserve }
+  "account":                                     { type: id, anchor: true }
+  "request.id":                                  { type: id, anchor: true }
+  "request.idempotency_key":                     { type: id, anchor: true }
+  "data.object.id":                              { type: id, anchor: true }
+  "data.object.object":                          { type: preserve }
+  "data.object.application":                     { type: id, anchor: true }
+  "data.object.billing_cycle_anchor":            { type: unixTimestamp }
+  "data.object.cancel_at":                       { type: unixTimestamp }
+  "data.object.cancel_at_period_end":            { type: preserve }
+  "data.object.canceled_at":                     { type: unixTimestamp }
+  "data.object.collection_method":               { type: preserve }
+  "data.object.created":                         { type: unixTimestamp }
+  "data.object.currency":                        { type: preserve }
+  "data.object.current_period_end":              { type: unixTimestamp }
+  "data.object.current_period_start":            { type: unixTimestamp }
+  "data.object.customer":                        { type: id, anchor: true }
+  "data.object.days_until_due":                  { type: preserve }
+  "data.object.default_payment_method":          { type: id, anchor: true }
+  "data.object.default_source":                  { type: id, anchor: true }
+  "data.object.description":                     { type: shortText }
+  "data.object.discount":                        { type: preserve }
+  "data.object.ended_at":                        { type: unixTimestamp }
+  "data.object.items.object":                    { type: preserve }
+  "data.object.items.data[].id":                 { type: id, anchor: true }
+  "data.object.items.data[].object":             { type: preserve }
+  "data.object.items.data[].created":            { type: unixTimestamp }
+  "data.object.items.data[].metadata":           { type: preserve }
+  "data.object.items.data[].plan.id":            { type: id, anchor: true }
+  "data.object.items.data[].plan.object":        { type: preserve }
+  "data.object.items.data[].plan.active":        { type: preserve }
+  "data.object.items.data[].plan.amount":        { type: preserve }
+  "data.object.items.data[].plan.currency":      { type: preserve }
+  "data.object.items.data[].plan.interval":      { type: preserve }
+  "data.object.items.data[].plan.product":       { type: id, anchor: true }
+  "data.object.items.data[].price.id":           { type: id, anchor: true }
+  "data.object.items.data[].price.object":       { type: preserve }
+  "data.object.items.data[].price.active":       { type: preserve }
+  "data.object.items.data[].price.currency":     { type: preserve }
+  "data.object.items.data[].price.product":      { type: id, anchor: true }
+  "data.object.items.data[].price.unit_amount":  { type: preserve }
+  "data.object.items.data[].quantity":           { type: preserve }
+  "data.object.items.data[].subscription":       { type: id, anchor: true }
+  "data.object.items.has_more":                  { type: preserve }
+  "data.object.items.url":                       { type: url }
+  "data.object.latest_invoice":                  { type: id, anchor: true }
+  "data.object.livemode":                        { type: preserve }
+  "data.object.metadata":                        { type: preserve }
+  "data.object.payment_settings":                { type: preserve }
+  "data.object.plan.id":                         { type: id, anchor: true }
+  "data.object.plan.product":                    { type: id, anchor: true }
+  "data.object.plan.amount":                     { type: preserve }
+  "data.object.plan.currency":                   { type: preserve }
+  "data.object.plan.interval":                   { type: preserve }
+  "data.object.start_date":                      { type: unixTimestamp }
+  "data.object.status":                          { type: preserve }
+  "data.object.trial_end":                       { type: unixTimestamp }
+  "data.object.trial_start":                     { type: unixTimestamp }
+  "data.previous_attributes":                    { type: auto }
+  "*": { type: auto }

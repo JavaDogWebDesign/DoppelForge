@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="DoppelForge — Forge identical twins of your API responses">
+  <title>DoppelForge — Forge identical twins of your API responses</title>
+  <defs>
+    <style>
+      .sans {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      }
+      .mono {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 138px;
+        letter-spacing: -3.5px;
+      }
+      .tagline {
+        font-weight: 600;
+        font-size: 44px;
+        letter-spacing: -1px;
+      }
+      .subtle {
+        font-weight: 500;
+        font-size: 30px;
+      }
+      .meta {
+        font-weight: 600;
+        font-size: 22px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .url {
+        font-weight: 500;
+        font-size: 26px;
+      }
+    </style>
+    <linearGradient id="border-glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a875e0" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#a875e0" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="1200" height="630" fill="#0d0e13" />
+
+  <!-- Subtle top accent bar -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#border-glow)" />
+
+  <!-- Inner card surface -->
+  <rect x="60" y="60" width="1080" height="510" rx="20" fill="#14151c" stroke="#2a2d39" stroke-width="1" />
+
+  <!-- DoppelForge wordmark — doubled / ghost treatment, echoing the logo -->
+  <g transform="translate(110, 260)">
+    <text x="0" y="0" class="sans brand" fill="#a875e0" fill-opacity="0.22">DoppelForge</text>
+    <text x="14" y="14" class="sans brand" fill="#a875e0">DoppelForge</text>
+  </g>
+
+  <!-- Tagline (primary, from brand guide) -->
+  <text x="110" y="380" class="sans tagline" fill="#d6d9e1">Forge identical twins of</text>
+  <text x="110" y="430" class="sans tagline" fill="#d6d9e1">your API responses.</text>
+
+  <!-- Sub-tagline -->
+  <text x="110" y="490" class="sans subtle" fill="#9197a4">Same shape. Safe values. Counterfeit, with consent.</text>
+
+  <!-- Footer meta strip -->
+  <text x="110" y="555" class="mono meta" fill="#a875e0">MIT  ·  Browser-only  ·  No telemetry</text>
+  <text x="1090" y="555" class="mono url" fill="#9197a4" text-anchor="end">doppelforge.com</text>
+</svg>

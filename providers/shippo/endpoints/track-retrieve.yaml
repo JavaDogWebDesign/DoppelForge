@@ -1,0 +1,55 @@
+endpoint:
+  method: GET
+  path: /tracks/{carrier}/{tracking_number}
+  description: Track a shipment
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Tracks
+
+signature:
+  required_paths:
+    - carrier
+    - tracking_number
+    - tracking_status.status
+    - tracking_history
+  optional_paths:
+    - address_from
+    - address_to
+    - servicelevel
+    - eta
+
+fields:
+  "carrier":         { type: preserve }
+  "tracking_number": { type: id, anchor: true }
+  "transaction":     { type: id, anchor: true }
+  "metadata":        { type: shortText }
+  "test":            { type: preserve }
+  "eta":             { type: isoDate }
+  "original_eta":    { type: isoDate }
+  "servicelevel.name":   { type: shortText }
+  "servicelevel.token":  { type: preserve }
+  "tracking_status.status":             { type: preserve }
+  "tracking_status.substatus.code":     { type: preserve }
+  "tracking_status.substatus.text":     { type: shortText }
+  "tracking_status.status_details":     { type: shortText }
+  "tracking_status.status_date":        { type: isoDate }
+  "tracking_status.location.city":      { type: city }
+  "tracking_status.location.state":     { type: stateOrProvince }
+  "tracking_status.location.zip":       { type: postalCode }
+  "tracking_status.location.country":   { type: countryCode }
+  "tracking_history[].status":          { type: preserve }
+  "tracking_history[].substatus.code":  { type: preserve }
+  "tracking_history[].substatus.text":  { type: shortText }
+  "tracking_history[].status_details":  { type: shortText }
+  "tracking_history[].status_date":     { type: isoDate }
+  "tracking_history[].location.city":   { type: city }
+  "tracking_history[].location.state":  { type: stateOrProvince }
+  "tracking_history[].location.zip":    { type: postalCode }
+  "tracking_history[].location.country": { type: countryCode }
+  "address_from.city":    { type: city }
+  "address_from.state":   { type: stateOrProvince }
+  "address_from.zip":     { type: postalCode }
+  "address_from.country": { type: countryCode }
+  "address_to.city":      { type: city }
+  "address_to.state":     { type: stateOrProvince }
+  "address_to.zip":       { type: postalCode }
+  "address_to.country":   { type: countryCode }
+  "*": { type: auto }

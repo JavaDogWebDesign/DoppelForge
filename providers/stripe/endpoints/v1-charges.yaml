@@ -1,0 +1,100 @@
+endpoint:
+  method: GET
+  path: /v1/charges
+  description: List charges
+  doc_url: https://docs.stripe.com/api/charges/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - has_more
+    - url
+  optional_paths:
+    - data[].payment_method_details
+    - data[].billing_details
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                                   { type: id, anchor: true }
+  "data[].object":                               { type: preserve }
+  "data[].amount":                               { type: preserve }
+  "data[].amount_captured":                      { type: preserve }
+  "data[].amount_refunded":                      { type: preserve }
+  "data[].application":                          { type: id, anchor: true }
+  "data[].application_fee":                      { type: id, anchor: true }
+  "data[].application_fee_amount":               { type: preserve }
+  "data[].balance_transaction":                  { type: id, anchor: true }
+  "data[].billing_details.address.city":         { type: city }
+  "data[].billing_details.address.country":      { type: countryCode }
+  "data[].billing_details.address.line1":        { type: street }
+  "data[].billing_details.address.line2":        { type: streetSecondary }
+  "data[].billing_details.address.postal_code":  { type: postalCode }
+  "data[].billing_details.address.state":        { type: stateOrProvince }
+  "data[].billing_details.email":                { type: email, anchor: true }
+  "data[].billing_details.name":                 { type: fullName }
+  "data[].billing_details.phone":                { type: phone }
+  "data[].calculated_statement_descriptor":      { type: preserve }
+  "data[].captured":                             { type: preserve }
+  "data[].created":                              { type: unixTimestamp }
+  "data[].currency":                             { type: preserve }
+  "data[].customer":                             { type: id, anchor: true }
+  "data[].description":                          { type: shortText }
+  "data[].disputed":                             { type: preserve }
+  "data[].failure_balance_transaction":          { type: id, anchor: true }
+  "data[].failure_code":                         { type: preserve }
+  "data[].failure_message":                      { type: shortText }
+  "data[].fraud_details":                        { type: preserve }
+  "data[].invoice":                              { type: id, anchor: true }
+  "data[].livemode":                             { type: preserve }
+  "data[].metadata":                             { type: preserve }
+  "data[].on_behalf_of":                         { type: id, anchor: true }
+  "data[].outcome.network_status":               { type: preserve }
+  "data[].outcome.reason":                       { type: preserve }
+  "data[].outcome.risk_level":                   { type: preserve }
+  "data[].outcome.risk_score":                   { type: preserve }
+  "data[].outcome.seller_message":               { type: shortText }
+  "data[].outcome.type":                         { type: preserve }
+  "data[].paid":                                 { type: preserve }
+  "data[].payment_intent":                       { type: id, anchor: true }
+  "data[].payment_method":                       { type: id, anchor: true }
+  "data[].payment_method_details.type":          { type: preserve }
+  "data[].payment_method_details.card.brand":    { type: preserve }
+  "data[].payment_method_details.card.country":  { type: countryCode }
+  "data[].payment_method_details.card.exp_month": { type: preserve }
+  "data[].payment_method_details.card.exp_year":  { type: preserve }
+  "data[].payment_method_details.card.fingerprint": { type: id, anchor: true }
+  "data[].payment_method_details.card.funding":  { type: preserve }
+  "data[].payment_method_details.card.last4":    { type: id }
+  "data[].payment_method_details.card.network":  { type: preserve }
+  "data[].payment_method_details.card.checks.address_line1_check": { type: preserve }
+  "data[].payment_method_details.card.checks.address_postal_code_check": { type: preserve }
+  "data[].payment_method_details.card.checks.cvc_check":           { type: preserve }
+  "data[].payment_method_details.card.iin":      { type: id }
+  "data[].payment_method_details.card.issuer":   { type: company }
+  "data[].receipt_email":                        { type: email, anchor: true }
+  "data[].receipt_number":                       { type: id, anchor: true }
+  "data[].receipt_url":                          { type: url }
+  "data[].refunded":                             { type: preserve }
+  "data[].review":                               { type: id, anchor: true }
+  "data[].shipping.address.city":         { type: city }
+  "data[].shipping.address.country":      { type: countryCode }
+  "data[].shipping.address.line1":        { type: street }
+  "data[].shipping.address.line2":        { type: streetSecondary }
+  "data[].shipping.address.postal_code":  { type: postalCode }
+  "data[].shipping.address.state":        { type: stateOrProvince }
+  "data[].shipping.name":                        { type: fullName }
+  "data[].shipping.phone":                       { type: phone }
+  "data[].shipping.tracking_number":             { type: id, anchor: true }
+  "data[].shipping.carrier":                     { type: company }
+  "data[].source_transfer":                      { type: id, anchor: true }
+  "data[].statement_descriptor":                 { type: preserve }
+  "data[].statement_descriptor_suffix":          { type: preserve }
+  "data[].status":                               { type: preserve }
+  "data[].transfer_data":                        { type: preserve }
+  "data[].transfer_group":                       { type: id }
+  "*": { type: auto }

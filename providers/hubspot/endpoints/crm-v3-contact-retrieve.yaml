@@ -1,0 +1,43 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/contacts/{contactId}
+  description: Retrieve a single contact
+  doc_url: https://developers.hubspot.com/docs/api/crm/contacts
+
+signature:
+  required_paths:
+    - id
+    - createdAt
+    - properties
+  optional_paths:
+    - properties.email
+    - archived
+
+fields:
+  "id":                                  { type: id, anchor: true }
+  "createdAt":                           { type: isoDate }
+  "updatedAt":                           { type: isoDate }
+  "archived":                            { type: preserve }
+  "archivedAt":                          { type: isoDate }
+  "properties.hs_object_id":             { type: id, anchor: true }
+  "properties.createdate":               { type: isoDate }
+  "properties.lastmodifieddate":         { type: isoDate }
+  "properties.email":                    { type: email, anchor: true }
+  "properties.firstname":                { type: firstName }
+  "properties.lastname":                 { type: lastName }
+  "properties.company":                  { type: company }
+  "properties.jobtitle":                 { type: shortText }
+  "properties.phone":                    { type: phone }
+  "properties.mobilephone":              { type: phone }
+  "properties.website":                  { type: url }
+  "properties.address":                  { type: street }
+  "properties.city":                     { type: city }
+  "properties.state":                    { type: stateOrProvince }
+  "properties.zip":                      { type: postalCode }
+  "properties.country":                  { type: country }
+  "properties.industry":                 { type: shortText }
+  "properties.lifecyclestage":           { type: preserve }
+  "properties.hs_lead_status":           { type: preserve }
+  "properties.hubspotscore":             { type: preserve }
+  "properties.hubspot_owner_id":         { type: id, anchor: true }
+  "*": { type: auto }

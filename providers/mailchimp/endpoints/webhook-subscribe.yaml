@@ -1,0 +1,54 @@
+endpoint:
+  method: POST
+  path: subscribe / unsubscribe / profile / cleaned / upemail
+  kind: webhook
+  description: Mailchimp webhook (form-encoded with bracket-notation keys)
+  doc_url: https://mailchimp.com/developer/marketing/guides/sync-audience-data-webhooks/
+
+# Mailchimp webhooks POST as application/x-www-form-urlencoded with PHP-style
+# bracket-notation keys: `data[email]=...`, `data[merges][FNAME]=...`.
+# URLSearchParams parses these as literal flat keys (the brackets stay in the
+# key name, no nesting happens), so field-map paths use the bracketed form
+# verbatim. `type` discriminates between subscribe/unsubscribe/profile/cleaned/
+# upemail/campaign — same body shape, one YAML covers them all.
+signature:
+  required_paths:
+    - type
+    - fired_at
+    - "data[id]"
+    - "data[email]"
+    - "data[list_id]"
+  optional_paths:
+    - "data[merges][EMAIL]"
+    - "data[merges][FNAME]"
+    - "data[ip_opt]"
+
+fields:
+  "type":                       { type: preserve }
+  "fired_at":                   { type: isoDate }
+  "data[id]":                   { type: id, anchor: true }
+  "data[list_id]":              { type: id, anchor: true }
+  "data[email]":                { type: email, anchor: true }
+  "data[email_type]":           { type: preserve }
+  "data[ip_opt]":               { type: ipv4 }
+  "data[ip_signup]":            { type: ipv4 }
+  "data[web_id]":               { type: id, anchor: true }
+  "data[reason]":               { type: preserve }
+  "data[campaign_id]":          { type: id, anchor: true }
+  "data[old_email]":            { type: email, anchor: true }
+  "data[new_email]":            { type: email, anchor: true }
+  "data[new_id]":               { type: id, anchor: true }
+  "data[merges][EMAIL]":        { type: email, anchor: true }
+  "data[merges][FNAME]":        { type: firstName }
+  "data[merges][LNAME]":        { type: lastName }
+  "data[merges][PHONE]":        { type: phone }
+  "data[merges][BIRTHDAY]":     { type: isoDate }
+  "data[merges][ADDRESS]":      { type: street }
+  "data[merges][ADDRESS][addr1]":   { type: street }
+  "data[merges][ADDRESS][addr2]":   { type: streetSecondary }
+  "data[merges][ADDRESS][city]":    { type: city }
+  "data[merges][ADDRESS][state]":   { type: stateOrProvince }
+  "data[merges][ADDRESS][zip]":     { type: postalCode }
+  "data[merges][ADDRESS][country]": { type: countryCode }
+  "data[merges][INTERESTS]":    { type: preserve }
+  "*": { type: auto }

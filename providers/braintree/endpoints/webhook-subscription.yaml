@@ -1,0 +1,64 @@
+endpoint:
+  method: POST
+  path: subscription_*
+  kind: webhook
+  description: Braintree webhook — subscription kinds (charged_successfully/_unsuccessfully/canceled/went_active/went_past_due share shape)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/general/webhooks/subscription
+
+signature:
+  required_paths:
+    - kind
+    - subject.subscription.id
+    - subject.subscription.status
+    - subject.subscription.plan-id
+    - subject.subscription.price
+  optional_paths:
+    - timestamp
+    - source-merchant-id
+    - subject.subscription.next-billing-date
+    - subject.subscription.transactions
+    - subject.subscription.payment-method-token
+
+fields:
+  "kind":                                                            { type: preserve }
+  "timestamp.#text":                                                 { type: isoDate }
+  "timestamp.@_type":                                                { type: preserve }
+  "source-merchant-id":                                              { type: id, anchor: true }
+  "subject.subscription.id":                                         { type: id, anchor: true }
+  "subject.subscription.plan-id":                                    { type: id, anchor: true }
+  "subject.subscription.status":                                     { type: preserve }
+  "subject.subscription.price":                                      { type: priceAmount }
+  "subject.subscription.balance":                                    { type: priceAmount }
+  "subject.subscription.next-bill-amount":                           { type: priceAmount }
+  "subject.subscription.next-billing-period-amount":                 { type: priceAmount }
+  "subject.subscription.next-billing-date":                          { type: isoDate }
+  "subject.subscription.paid-through-date":                          { type: isoDate }
+  "subject.subscription.first-billing-date":                         { type: isoDate }
+  "subject.subscription.billing-period-start-date":                  { type: isoDate }
+  "subject.subscription.billing-period-end-date":                    { type: isoDate }
+  "subject.subscription.created-at.#text":                           { type: isoDate }
+  "subject.subscription.created-at.@_type":                          { type: preserve }
+  "subject.subscription.updated-at.#text":                           { type: isoDate }
+  "subject.subscription.updated-at.@_type":                          { type: preserve }
+  "subject.subscription.number-of-billing-cycles":                   { type: preserve }
+  "subject.subscription.billing-day-of-month":                       { type: preserve }
+  "subject.subscription.current-billing-cycle":                      { type: preserve }
+  "subject.subscription.failure-count":                              { type: preserve }
+  "subject.subscription.never-expires":                              { type: preserve }
+  "subject.subscription.payment-method-token":                       { type: id, anchor: true }
+  "subject.subscription.merchant-account-id":                        { type: id, anchor: true }
+  "subject.subscription.trial-period":                               { type: preserve }
+  "subject.subscription.trial-duration":                             { type: preserve }
+  "subject.subscription.trial-duration-unit":                        { type: preserve }
+  "subject.subscription.transactions.@_type":                        { type: preserve }
+  "subject.subscription.transactions.transaction.id":                { type: id, anchor: true }
+  "subject.subscription.transactions.transaction.status":            { type: preserve }
+  "subject.subscription.transactions.transaction.amount":            { type: priceAmount }
+  "subject.subscription.transactions.transaction.currency-iso-code": { type: currency }
+  "subject.subscription.transactions.transaction.merchant-account-id": { type: id, anchor: true }
+  "subject.subscription.transactions.transaction.payment-instrument-type": { type: preserve }
+  "subject.subscription.transactions.transaction.processor-response-code": { type: preserve }
+  "subject.subscription.transactions.transaction.processor-response-text": { type: shortText }
+  "subject.subscription.add-ons.@_type":                             { type: preserve }
+  "subject.subscription.discounts.@_type":                           { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,6 @@
+id: recharge
+name: Recharge
+category: subscription
+icon: repeat
+color: "#00B988"
+docs: https://developer.rechargepayments.com/

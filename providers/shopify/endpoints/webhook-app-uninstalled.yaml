@@ -1,0 +1,73 @@
+endpoint:
+  method: POST
+  path: app/uninstalled
+  kind: webhook
+  description: Shopify webhook — shop body sent on app uninstall
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-10/resources/webhook
+
+signature:
+  required_paths:
+    - id
+    - myshopify_domain
+    - shop_owner
+    - plan_name
+    - iana_timezone
+  optional_paths:
+    - email
+    - domain
+    - currency
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "name":                     { type: company }
+  "email":                    { type: email, anchor: true }
+  "domain":                   { type: id, anchor: true }
+  "province":                 { type: stateOrProvince }
+  "country":                  { type: countryCode }
+  "address1":                 { type: street }
+  "zip":                      { type: postalCode }
+  "city":                     { type: city }
+  "source":                   { type: preserve }
+  "phone":                    { type: phone }
+  "latitude":                 { type: preserve }
+  "longitude":                { type: preserve }
+  "primary_locale":           { type: preserve }
+  "address2":                 { type: streetSecondary }
+  "created_at":               { type: isoDate }
+  "updated_at":               { type: isoDate }
+  "country_code":             { type: countryCode }
+  "country_name":             { type: country }
+  "currency":                 { type: preserve }
+  "customer_email":           { type: email, anchor: true }
+  "timezone":                 { type: preserve }
+  "iana_timezone":            { type: preserve }
+  "shop_owner":               { type: fullName }
+  "money_format":             { type: preserve }
+  "money_with_currency_format": { type: preserve }
+  "weight_unit":              { type: preserve }
+  "province_code":            { type: stateOrProvince }
+  "taxes_included":           { type: preserve }
+  "tax_shipping":             { type: preserve }
+  "county_taxes":             { type: preserve }
+  "plan_display_name":        { type: preserve }
+  "plan_name":                { type: preserve }
+  "has_discounts":            { type: preserve }
+  "has_gift_cards":            { type: preserve }
+  "myshopify_domain":         { type: id, anchor: true }
+  "google_apps_domain":       { type: id }
+  "google_apps_login_enabled": { type: preserve }
+  "money_in_emails_format":   { type: preserve }
+  "money_with_currency_in_emails_format": { type: preserve }
+  "eligible_for_payments":    { type: preserve }
+  "requires_extra_payments_agreement": { type: preserve }
+  "password_enabled":         { type: preserve }
+  "has_storefront":           { type: preserve }
+  "eligible_for_card_reader_giveaway": { type: preserve }
+  "finances":                 { type: preserve }
+  "primary_location_id":      { type: id, anchor: true }
+  "checkout_api_supported":   { type: preserve }
+  "multi_location_enabled":   { type: preserve }
+  "setup_required":           { type: preserve }
+  "pre_launch_enabled":       { type: preserve }
+  "enabled_presentment_currencies": { type: preserve }
+  "*": { type: auto }

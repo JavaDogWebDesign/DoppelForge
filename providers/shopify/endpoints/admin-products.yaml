@@ -1,0 +1,78 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/products.json
+  description: List products
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/product
+
+signature:
+  required_paths:
+    - products[].id
+    - products[].admin_graphql_api_id
+    - products[].title
+    - products[].handle
+  optional_paths:
+    - products[].variants
+    - products[].images
+
+fields:
+  "products[].id":                        { type: id, anchor: true }
+  "products[].admin_graphql_api_id":      { type: preserve }
+  "products[].title":                     { type: productName }
+  "products[].body_html":                 { type: longText }
+  "products[].vendor":                    { type: company }
+  "products[].product_type":              { type: shortText }
+  "products[].created_at":                { type: isoDate }
+  "products[].handle":                    { type: id, anchor: true }
+  "products[].updated_at":                { type: isoDate }
+  "products[].published_at":              { type: isoDate }
+  "products[].template_suffix":           { type: preserve }
+  "products[].status":                    { type: preserve }
+  "products[].published_scope":           { type: preserve }
+  "products[].tags":                      { type: preserve }
+  "products[].variants[].id":             { type: id, anchor: true }
+  "products[].variants[].product_id":     { type: id, anchor: true }
+  "products[].variants[].admin_graphql_api_id": { type: preserve }
+  "products[].variants[].title":          { type: productName }
+  "products[].variants[].price":          { type: preserve }
+  "products[].variants[].sku":            { type: sku, anchor: true }
+  "products[].variants[].position":       { type: preserve }
+  "products[].variants[].inventory_policy": { type: preserve }
+  "products[].variants[].compare_at_price": { type: preserve }
+  "products[].variants[].fulfillment_service": { type: preserve }
+  "products[].variants[].inventory_management": { type: preserve }
+  "products[].variants[].option1":        { type: preserve }
+  "products[].variants[].option2":        { type: preserve }
+  "products[].variants[].option3":        { type: preserve }
+  "products[].variants[].created_at":     { type: isoDate }
+  "products[].variants[].updated_at":     { type: isoDate }
+  "products[].variants[].taxable":        { type: preserve }
+  "products[].variants[].barcode":        { type: id }
+  "products[].variants[].grams":          { type: preserve }
+  "products[].variants[].image_id":       { type: id, anchor: true }
+  "products[].variants[].weight":         { type: preserve }
+  "products[].variants[].weight_unit":    { type: preserve }
+  "products[].variants[].inventory_item_id": { type: id, anchor: true }
+  "products[].variants[].inventory_quantity": { type: preserve }
+  "products[].variants[].old_inventory_quantity": { type: preserve }
+  "products[].variants[].requires_shipping": { type: preserve }
+  "products[].options[].id":              { type: id, anchor: true }
+  "products[].options[].product_id":      { type: id, anchor: true }
+  "products[].options[].name":            { type: preserve }
+  "products[].options[].position":        { type: preserve }
+  "products[].options[].values":          { type: preserve }
+  "products[].images[].id":               { type: id, anchor: true }
+  "products[].images[].product_id":       { type: id, anchor: true }
+  "products[].images[].admin_graphql_api_id": { type: preserve }
+  "products[].images[].position":         { type: preserve }
+  "products[].images[].alt":              { type: shortText }
+  "products[].images[].width":            { type: preserve }
+  "products[].images[].height":           { type: preserve }
+  "products[].images[].src":              { type: url }
+  "products[].images[].variant_ids":      { type: preserve }
+  "products[].images[].created_at":       { type: isoDate }
+  "products[].images[].updated_at":       { type: isoDate }
+  "products[].image.id":                  { type: id, anchor: true }
+  "products[].image.product_id":          { type: id, anchor: true }
+  "products[].image.src":                 { type: url }
+  "products[].image.alt":                 { type: shortText }
+  "*": { type: auto }

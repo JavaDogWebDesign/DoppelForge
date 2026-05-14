@@ -1,0 +1,44 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/products/{product_id}/variants.json
+  description: List a product's variants
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/product-variant
+
+signature:
+  required_paths:
+    - variants[].id
+    - variants[].product_id
+    - variants[].admin_graphql_api_id
+    - variants[].sku
+  optional_paths:
+    - variants[].inventory_item_id
+    - variants[].option1
+
+fields:
+  "variants[].id":                    { type: id, anchor: true }
+  "variants[].product_id":            { type: id, anchor: true }
+  "variants[].admin_graphql_api_id":  { type: preserve }
+  "variants[].title":                 { type: productName }
+  "variants[].price":                 { type: preserve }
+  "variants[].sku":                   { type: sku, anchor: true }
+  "variants[].position":              { type: preserve }
+  "variants[].inventory_policy":      { type: preserve }
+  "variants[].compare_at_price":      { type: preserve }
+  "variants[].fulfillment_service":   { type: preserve }
+  "variants[].inventory_management":  { type: preserve }
+  "variants[].option1":               { type: preserve }
+  "variants[].option2":               { type: preserve }
+  "variants[].option3":               { type: preserve }
+  "variants[].created_at":            { type: isoDate }
+  "variants[].updated_at":            { type: isoDate }
+  "variants[].taxable":               { type: preserve }
+  "variants[].barcode":               { type: id }
+  "variants[].grams":                 { type: preserve }
+  "variants[].image_id":              { type: id, anchor: true }
+  "variants[].weight":                { type: preserve }
+  "variants[].weight_unit":           { type: preserve }
+  "variants[].inventory_item_id":     { type: id, anchor: true }
+  "variants[].inventory_quantity":    { type: preserve }
+  "variants[].old_inventory_quantity": { type: preserve }
+  "variants[].requires_shipping":     { type: preserve }
+  "*": { type: auto }

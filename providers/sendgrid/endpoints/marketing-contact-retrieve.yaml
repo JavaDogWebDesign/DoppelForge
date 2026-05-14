@@ -1,0 +1,45 @@
+endpoint:
+  method: GET
+  path: /v3/marketing/contacts/{id}
+  description: Retrieve a Marketing Campaigns contact
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/contacts/get-contact-by-id
+
+signature:
+  required_paths:
+    - id
+    - email
+    - created_at
+    - updated_at
+    - list_ids
+  optional_paths:
+    - first_name
+    - last_name
+    - phone_number_id
+    - custom_fields
+    - _metadata
+
+fields:
+  "id":                { type: id, anchor: true }
+  "contact_id":        { type: id, anchor: true }
+  "email":             { type: email, anchor: true }
+  "alternate_emails":  { type: preserve }
+  "first_name":        { type: firstName }
+  "last_name":         { type: lastName }
+  "address_line_1":    { type: street }
+  "address_line_2":    { type: streetSecondary }
+  "city":              { type: city }
+  "state_province_region": { type: stateOrProvince }
+  "postal_code":       { type: postalCode }
+  "country":           { type: country }
+  "phone_number_id":   { type: phone }
+  "whatsapp":          { type: phone }
+  "line":              { type: id, anchor: true }
+  "facebook":          { type: id, anchor: true }
+  "unique_name":       { type: shortText }
+  "list_ids":          { type: preserve }
+  "segment_ids":       { type: preserve }
+  "created_at":        { type: isoDate }
+  "updated_at":        { type: isoDate }
+  "custom_fields":     { type: auto }
+  "_metadata.self":    { type: url }
+  "*": { type: auto }

@@ -1,0 +1,55 @@
+endpoint:
+  method: POST
+  path: zen:event-type:ticket.*
+  kind: webhook
+  description: Zendesk Events webhook — ticket.created / .updated / .closed share this shape
+  doc_url: https://developer.zendesk.com/documentation/event-connectors/events/
+
+# Zendesk Webhooks v2 (Events API) deliver a typed envelope with the changed
+# ticket inlined under `detail`. The `type` literal varies per event but the
+# body shape is identical, so one YAML covers them all (same approach as
+# BigCommerce/Braintree/HubSpot consolidations).
+signature:
+  required_paths:
+    - type
+    - id
+    - time
+    - zendesk_event_version
+    - detail.ticket.id
+  optional_paths:
+    - account_id
+    - subject
+    - detail.ticket.subject
+    - detail.ticket.requester_id
+
+fields:
+  "type":                    { type: preserve }
+  "id":                      { type: id, anchor: true }
+  "time":                    { type: isoDate }
+  "subject":                 { type: preserve }
+  "account_id":              { type: id, anchor: true }
+  "zendesk_event_version":   { type: preserve }
+  "detail.ticket.id":            { type: id, anchor: true }
+  "detail.ticket.url":           { type: url }
+  "detail.ticket.external_id":   { type: id, anchor: true }
+  "detail.ticket.subject":       { type: shortText }
+  "detail.ticket.description":   { type: longText }
+  "detail.ticket.priority":      { type: preserve }
+  "detail.ticket.status":        { type: preserve }
+  "detail.ticket.type":          { type: preserve }
+  "detail.ticket.recipient":     { type: email, anchor: true }
+  "detail.ticket.requester_id":  { type: id, anchor: true }
+  "detail.ticket.assignee_id":   { type: id, anchor: true }
+  "detail.ticket.submitter_id":  { type: id, anchor: true }
+  "detail.ticket.organization_id": { type: id, anchor: true }
+  "detail.ticket.group_id":      { type: id, anchor: true }
+  "detail.ticket.brand_id":      { type: id, anchor: true }
+  "detail.ticket.tags":          { type: preserve }
+  "detail.ticket.created_at":    { type: isoDate }
+  "detail.ticket.updated_at":    { type: isoDate }
+  "detail.ticket.due_at":        { type: isoDate }
+  "detail.ticket.via.channel":   { type: preserve }
+  "detail.ticket.via.source.from.address": { type: email, anchor: true }
+  "detail.ticket.via.source.from.name":    { type: fullName }
+  "event":                   { type: auto }
+  "*": { type: auto }

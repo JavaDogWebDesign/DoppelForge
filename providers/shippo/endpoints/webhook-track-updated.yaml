@@ -1,0 +1,59 @@
+endpoint:
+  method: POST
+  path: track_updated
+  kind: webhook
+  description: Shippo webhook — track_updated / transaction_created events (full resource body)
+  doc_url: https://docs.goshippo.com/docs/webhooks/
+
+# Shippo POSTs the resource body directly (no envelope) and the event type is
+# typically encoded in the user-configured webhook URL or query-string. The
+# body shape varies by which resource fired: tracks (carrier + tracking_*),
+# transactions (object_id + label_url + tracking_number + rate). This YAML
+# targets the track_updated shape (most common); transaction_created bodies
+# also route here because they share the tracking_number/carrier paths.
+signature:
+  required_paths:
+    - carrier
+    - tracking_number
+    - tracking_status
+    - tracking_history
+  optional_paths:
+    - address_from
+    - address_to
+    - eta
+
+fields:
+  "carrier":         { type: preserve }
+  "tracking_number": { type: id, anchor: true }
+  "transaction":     { type: id, anchor: true }
+  "metadata":        { type: shortText }
+  "test":            { type: preserve }
+  "eta":             { type: isoDate }
+  "original_eta":    { type: isoDate }
+  "servicelevel.name":   { type: shortText }
+  "servicelevel.token":  { type: preserve }
+  "tracking_status.status":             { type: preserve }
+  "tracking_status.substatus.code":     { type: preserve }
+  "tracking_status.substatus.text":     { type: shortText }
+  "tracking_status.status_details":     { type: shortText }
+  "tracking_status.status_date":        { type: isoDate }
+  "tracking_status.location.city":      { type: city }
+  "tracking_status.location.state":     { type: stateOrProvince }
+  "tracking_status.location.zip":       { type: postalCode }
+  "tracking_status.location.country":   { type: countryCode }
+  "tracking_history[].status":          { type: preserve }
+  "tracking_history[].status_details":  { type: shortText }
+  "tracking_history[].status_date":     { type: isoDate }
+  "tracking_history[].location.city":   { type: city }
+  "tracking_history[].location.state":  { type: stateOrProvince }
+  "tracking_history[].location.zip":    { type: postalCode }
+  "tracking_history[].location.country": { type: countryCode }
+  "address_from.city":    { type: city }
+  "address_from.state":   { type: stateOrProvince }
+  "address_from.zip":     { type: postalCode }
+  "address_from.country": { type: countryCode }
+  "address_to.city":      { type: city }
+  "address_to.state":     { type: stateOrProvince }
+  "address_to.zip":       { type: postalCode }
+  "address_to.country":   { type: countryCode }
+  "*": { type: auto }

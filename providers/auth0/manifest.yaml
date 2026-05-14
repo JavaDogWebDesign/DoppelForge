@@ -1,0 +1,6 @@
+id: auth0
+name: Auth0
+category: auth
+icon: shield-check
+color: "#EB5424"
+docs: https://auth0.com/docs/api/management/v2

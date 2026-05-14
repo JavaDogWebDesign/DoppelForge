@@ -1,0 +1,33 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/promotion/code/list
+  description: List promotion codes
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - codes[].promotion_code_id
+    - codes[].code
+    - total
+    - code
+  optional_paths:
+    - codes[].promotion_id
+    - codes[].state
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "codes[].promotion_code_id":   { type: id, anchor: true }
+  "codes[].promotion_id":        { type: id, anchor: true }
+  "codes[].code":                { type: id }
+  "codes[].state":               { type: preserve }
+  "codes[].create_date":         { type: unixTimestamp }
+  "codes[].update_date":         { type: unixTimestamp }
+  "codes[].uses":                { type: preserve }
+  "codes[].assigned_email":      { type: email, anchor: true }
+  "codes[].assigned_user_id":    { type: id, anchor: true }
+  "*": { type: auto }

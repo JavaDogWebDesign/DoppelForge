@@ -1,0 +1,158 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/orders.json
+  description: List orders
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/order
+
+signature:
+  required_paths:
+    - orders[].id
+    - orders[].admin_graphql_api_id
+    - orders[].name
+    - orders[].financial_status
+  optional_paths:
+    - orders[].customer
+    - orders[].line_items
+
+fields:
+  "orders[].id":                            { type: id, anchor: true }
+  "orders[].admin_graphql_api_id":          { type: preserve }
+  "orders[].app_id":                        { type: id }
+  "orders[].browser_ip":                    { type: ipv4 }
+  "orders[].buyer_accepts_marketing":       { type: preserve }
+  "orders[].cancel_reason":                 { type: preserve }
+  "orders[].cancelled_at":                  { type: isoDate }
+  "orders[].cart_token":                    { type: id, anchor: true }
+  "orders[].checkout_id":                   { type: id, anchor: true }
+  "orders[].checkout_token":                { type: id, anchor: true }
+  "orders[].closed_at":                     { type: isoDate }
+  "orders[].confirmation_number":           { type: id, anchor: true }
+  "orders[].confirmed":                     { type: preserve }
+  "orders[].contact_email":                 { type: email, anchor: true }
+  "orders[].created_at":                    { type: isoDate }
+  "orders[].currency":                      { type: preserve }
+  "orders[].customer_locale":               { type: preserve }
+  "orders[].device_id":                     { type: id, anchor: true }
+  "orders[].discount_codes":                { type: preserve }
+  "orders[].email":                         { type: email, anchor: true }
+  "orders[].estimated_taxes":               { type: preserve }
+  "orders[].financial_status":              { type: preserve }
+  "orders[].fulfillment_status":            { type: preserve }
+  "orders[].gateway":                       { type: preserve }
+  "orders[].landing_site":                  { type: url }
+  "orders[].landing_site_ref":              { type: preserve }
+  "orders[].location_id":                   { type: id, anchor: true }
+  "orders[].merchant_of_record_app_id":     { type: id }
+  "orders[].name":                          { type: id, anchor: true }
+  "orders[].note":                          { type: shortText }
+  "orders[].note_attributes":               { type: preserve }
+  "orders[].number":                        { type: preserve }
+  "orders[].order_number":                  { type: id, anchor: true }
+  "orders[].order_status_url":              { type: url }
+  "orders[].payment_gateway_names":         { type: preserve }
+  "orders[].phone":                         { type: phone }
+  "orders[].po_number":                     { type: id }
+  "orders[].presentment_currency":          { type: preserve }
+  "orders[].processed_at":                  { type: isoDate }
+  "orders[].reference":                     { type: id, anchor: true }
+  "orders[].referring_site":                { type: url }
+  "orders[].source_identifier":             { type: id, anchor: true }
+  "orders[].source_name":                   { type: preserve }
+  "orders[].source_url":                    { type: url }
+  "orders[].subtotal_price":                { type: preserve }
+  "orders[].tags":                          { type: preserve }
+  "orders[].tax_exempt":                    { type: preserve }
+  "orders[].taxes_included":                { type: preserve }
+  "orders[].test":                          { type: preserve }
+  "orders[].token":                         { type: id, anchor: true }
+  "orders[].total_discounts":               { type: preserve }
+  "orders[].total_line_items_price":        { type: preserve }
+  "orders[].total_outstanding":             { type: preserve }
+  "orders[].total_price":                   { type: preserve }
+  "orders[].total_shipping_price_set.shop_money.amount":         { type: preserve }
+  "orders[].total_shipping_price_set.shop_money.currency_code":  { type: preserve }
+  "orders[].total_shipping_price_set.presentment_money.amount":  { type: preserve }
+  "orders[].total_shipping_price_set.presentment_money.currency_code": { type: preserve }
+  "orders[].total_tax":                     { type: preserve }
+  "orders[].total_tip_received":            { type: preserve }
+  "orders[].total_weight":                  { type: preserve }
+  "orders[].updated_at":                    { type: isoDate }
+  "orders[].user_id":                       { type: id, anchor: true }
+  "orders[].customer.id":                   { type: id, anchor: true }
+  "orders[].customer.email":                { type: email, anchor: true }
+  "orders[].customer.first_name":           { type: firstName }
+  "orders[].customer.last_name":            { type: lastName }
+  "orders[].customer.phone":                { type: phone }
+  "orders[].customer.state":                { type: preserve }
+  "orders[].customer.tags":                 { type: preserve }
+  "orders[].customer.created_at":           { type: isoDate }
+  "orders[].customer.updated_at":           { type: isoDate }
+  "orders[].customer.admin_graphql_api_id": { type: preserve }
+  "orders[].customer.default_address.first_name": { type: firstName }
+  "orders[].customer.default_address.last_name":  { type: lastName }
+  "orders[].customer.default_address.address1":   { type: street }
+  "orders[].customer.default_address.city":       { type: city }
+  "orders[].customer.default_address.country":    { type: country }
+  "orders[].billing_address.first_name":     { type: firstName }
+  "orders[].billing_address.last_name":      { type: lastName }
+  "orders[].billing_address.company":        { type: company }
+  "orders[].billing_address.address1":       { type: street }
+  "orders[].billing_address.address2":       { type: streetSecondary }
+  "orders[].billing_address.city":           { type: city }
+  "orders[].billing_address.province":       { type: stateOrProvince }
+  "orders[].billing_address.province_code":  { type: stateOrProvince }
+  "orders[].billing_address.country":        { type: country }
+  "orders[].billing_address.country_code":   { type: countryCode }
+  "orders[].billing_address.zip":            { type: postalCode }
+  "orders[].billing_address.phone":          { type: phone }
+  "orders[].billing_address.name":           { type: fullName }
+  "orders[].shipping_address.first_name":    { type: firstName }
+  "orders[].shipping_address.last_name":     { type: lastName }
+  "orders[].shipping_address.company":       { type: company }
+  "orders[].shipping_address.address1":      { type: street }
+  "orders[].shipping_address.address2":      { type: streetSecondary }
+  "orders[].shipping_address.city":          { type: city }
+  "orders[].shipping_address.province":      { type: stateOrProvince }
+  "orders[].shipping_address.province_code": { type: stateOrProvince }
+  "orders[].shipping_address.country":       { type: country }
+  "orders[].shipping_address.country_code":  { type: countryCode }
+  "orders[].shipping_address.zip":           { type: postalCode }
+  "orders[].shipping_address.phone":         { type: phone }
+  "orders[].shipping_address.name":          { type: fullName }
+  "orders[].line_items[].id":                { type: id, anchor: true }
+  "orders[].line_items[].admin_graphql_api_id": { type: preserve }
+  "orders[].line_items[].product_id":        { type: id, anchor: true }
+  "orders[].line_items[].variant_id":        { type: id, anchor: true }
+  "orders[].line_items[].title":             { type: productName }
+  "orders[].line_items[].name":              { type: productName }
+  "orders[].line_items[].variant_title":     { type: shortText }
+  "orders[].line_items[].sku":               { type: sku, anchor: true }
+  "orders[].line_items[].vendor":            { type: company }
+  "orders[].line_items[].quantity":          { type: preserve }
+  "orders[].line_items[].price":             { type: preserve }
+  "orders[].line_items[].fulfillment_status": { type: preserve }
+  "orders[].line_items[].grams":             { type: preserve }
+  "orders[].line_items[].requires_shipping": { type: preserve }
+  "orders[].line_items[].taxable":           { type: preserve }
+  "orders[].line_items[].gift_card":         { type: preserve }
+  "orders[].line_items[].fulfillable_quantity": { type: preserve }
+  "orders[].line_items[].fulfillment_service":  { type: preserve }
+  "orders[].line_items[].properties":        { type: preserve }
+  "orders[].refunds[].id":                   { type: id, anchor: true }
+  "orders[].refunds[].order_id":             { type: id, anchor: true }
+  "orders[].refunds[].admin_graphql_api_id": { type: preserve }
+  "orders[].refunds[].note":                 { type: shortText }
+  "orders[].refunds[].created_at":           { type: isoDate }
+  "orders[].fulfillments[].id":              { type: id, anchor: true }
+  "orders[].fulfillments[].order_id":        { type: id, anchor: true }
+  "orders[].fulfillments[].admin_graphql_api_id": { type: preserve }
+  "orders[].fulfillments[].status":          { type: preserve }
+  "orders[].fulfillments[].tracking_number": { type: id, anchor: true }
+  "orders[].fulfillments[].tracking_company": { type: company }
+  "orders[].fulfillments[].tracking_url":    { type: url }
+  "orders[].shipping_lines[].id":            { type: id, anchor: true }
+  "orders[].shipping_lines[].title":         { type: shortText }
+  "orders[].shipping_lines[].code":          { type: preserve }
+  "orders[].shipping_lines[].price":         { type: preserve }
+  "orders[].shipping_lines[].carrier_identifier": { type: id }
+  "*": { type: auto }

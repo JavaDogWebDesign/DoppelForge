@@ -1,0 +1,53 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/payment/list
+  description: List payments
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - payments[].payment_id
+    - payments[].user
+    - payments[].amount
+    - payments[].currency
+    - code
+  optional_paths:
+    - payments[].create_date
+    - payments[].refunded
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "payments[].payment_id":               { type: id, anchor: true }
+  "payments[].source":                   { type: preserve }
+  "payments[].amount":                   { type: preserve }
+  "payments[].currency":                 { type: preserve }
+  "payments[].amount_currency":          { type: preserve }
+  "payments[].tax_amount":               { type: preserve }
+  "payments[].create_date":              { type: unixTimestamp }
+  "payments[].refunded":                 { type: preserve }
+  "payments[].refundable":               { type: preserve }
+  "payments[].refund_amount":            { type: preserve }
+  "payments[].refund_currency":          { type: preserve }
+  "payments[].tracking_id":              { type: id, anchor: true }
+  "payments[].subscription_id":          { type: id, anchor: true }
+  "payments[].external_transaction_id":  { type: id, anchor: true }
+  "payments[].invoice_number":           { type: id, anchor: true }
+  "payments[].user.uid":                 { type: id, anchor: true }
+  "payments[].user.email":               { type: email, anchor: true }
+  "payments[].user.first_name":          { type: firstName }
+  "payments[].user.last_name":           { type: lastName }
+  "payments[].user.personal_name":       { type: fullName }
+  "payments[].term.term_id":             { type: id, anchor: true }
+  "payments[].term.name":                { type: shortText }
+  "payments[].term.type":                { type: preserve }
+  "payments[].term.payment_billing_plan": { type: preserve }
+  "payments[].term.payment_currency":    { type: preserve }
+  "payments[].promotion.promotion_id":   { type: id, anchor: true }
+  "payments[].promotion.name":           { type: shortText }
+  "payments[].user_payment_info_id":     { type: id, anchor: true }
+  "*": { type: auto }

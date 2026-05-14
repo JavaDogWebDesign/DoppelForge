@@ -1,0 +1,37 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/gift_cards.json
+  description: List gift cards
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/giftcard
+
+signature:
+  required_paths:
+    - gift_cards[].id
+    - gift_cards[].api_client_id
+    - gift_cards[].user_id
+    - gift_cards[].last_characters
+  optional_paths:
+    - gift_cards[].balance
+    - gift_cards[].expires_on
+
+fields:
+  "gift_cards[].id":              { type: id, anchor: true }
+  "gift_cards[].api_client_id":   { type: id, anchor: true }
+  "gift_cards[].user_id":         { type: id, anchor: true }
+  "gift_cards[].order_id":        { type: id, anchor: true }
+  "gift_cards[].line_item_id":    { type: id, anchor: true }
+  "gift_cards[].customer_id":     { type: id, anchor: true }
+  "gift_cards[].note":            { type: shortText }
+  "gift_cards[].template_suffix": { type: preserve }
+  "gift_cards[].last_characters": { type: id }
+  "gift_cards[].masked_code":     { type: id }
+  "gift_cards[].balance":         { type: preserve }
+  "gift_cards[].currency":        { type: preserve }
+  "gift_cards[].initial_value":   { type: preserve }
+  "gift_cards[].disabled_at":     { type: isoDate }
+  "gift_cards[].enabled":         { type: preserve }
+  "gift_cards[].status":          { type: preserve }
+  "gift_cards[].created_at":      { type: isoDate }
+  "gift_cards[].updated_at":      { type: isoDate }
+  "gift_cards[].expires_on":      { type: isoDate }
+  "*": { type: auto }

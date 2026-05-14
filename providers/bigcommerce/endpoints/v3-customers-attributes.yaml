@@ -1,0 +1,28 @@
+endpoint:
+  method: GET
+  path: /v3/customers/attributes
+  description: List customer attributes (schema definitions)
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/customer-attributes
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].name
+    - data[].type
+    - meta.pagination.total
+  optional_paths:
+    - data[].date_created
+    - data[].date_modified
+
+fields:
+  "data[].id":                          { type: id, anchor: true }
+  "data[].name":                        { type: shortText }
+  "data[].type":                        { type: preserve }
+  "data[].date_created":                { type: isoDate }
+  "data[].date_modified":               { type: isoDate }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "*": { type: auto }

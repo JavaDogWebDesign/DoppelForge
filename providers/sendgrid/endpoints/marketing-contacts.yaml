@@ -1,0 +1,45 @@
+endpoint:
+  method: GET
+  path: /v3/marketing/contacts
+  description: List Marketing Campaigns contacts
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/contacts/get-sample-contacts
+
+# Response is { result: [...], _metadata: {...}, contact_count }.
+signature:
+  required_paths:
+    - result[].id
+    - result[].email
+    - result[].created_at
+    - result[].list_ids
+  optional_paths:
+    - contact_count
+    - _metadata.self
+    - result[].first_name
+
+fields:
+  "contact_count":     { type: preserve }
+  "_metadata.self":    { type: url }
+  "_metadata.next":    { type: url }
+  "_metadata.prev":    { type: url }
+  "_metadata.count":   { type: preserve }
+  "result[].id":           { type: id, anchor: true }
+  "result[].contact_id":   { type: id, anchor: true }
+  "result[].email":        { type: email, anchor: true }
+  "result[].alternate_emails": { type: preserve }
+  "result[].first_name":   { type: firstName }
+  "result[].last_name":    { type: lastName }
+  "result[].address_line_1": { type: street }
+  "result[].address_line_2": { type: streetSecondary }
+  "result[].city":         { type: city }
+  "result[].state_province_region": { type: stateOrProvince }
+  "result[].postal_code":  { type: postalCode }
+  "result[].country":      { type: country }
+  "result[].phone_number_id": { type: phone }
+  "result[].whatsapp":     { type: phone }
+  "result[].unique_name":  { type: shortText }
+  "result[].list_ids":     { type: preserve }
+  "result[].segment_ids":  { type: preserve }
+  "result[].created_at":   { type: isoDate }
+  "result[].updated_at":   { type: isoDate }
+  "result[].custom_fields": { type: auto }
+  "*": { type: auto }

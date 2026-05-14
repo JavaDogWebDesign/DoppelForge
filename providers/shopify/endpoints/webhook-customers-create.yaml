@@ -1,0 +1,76 @@
+endpoint:
+  method: POST
+  path: customers/create
+  kind: webhook
+  description: Shopify webhook — customer body (create/update/delete share this shape)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-10/resources/webhook
+
+signature:
+  required_paths:
+    - id
+    - email
+    - admin_graphql_api_id
+    - state
+    - verified_email
+  optional_paths:
+    - default_address
+    - addresses
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "admin_graphql_api_id":     { type: preserve }
+  "accepts_marketing":        { type: preserve }
+  "accepts_marketing_updated_at": { type: isoDate }
+  "created_at":               { type: isoDate }
+  "currency":                 { type: preserve }
+  "email":                    { type: email, anchor: true }
+  "first_name":               { type: firstName }
+  "last_name":                { type: lastName }
+  "last_order_id":            { type: id, anchor: true }
+  "last_order_name":          { type: id, anchor: true }
+  "marketing_opt_in_level":   { type: preserve }
+  "multipass_identifier":     { type: id, anchor: true }
+  "note":                     { type: shortText }
+  "orders_count":             { type: preserve }
+  "phone":                    { type: phone }
+  "state":                    { type: preserve }
+  "tags":                     { type: preserve }
+  "tax_exempt":               { type: preserve }
+  "tax_exemptions":           { type: preserve }
+  "total_spent":              { type: preserve }
+  "updated_at":               { type: isoDate }
+  "verified_email":           { type: preserve }
+  "default_address.id":        { type: id, anchor: true }
+  "default_address.customer_id": { type: id, anchor: true }
+  "default_address.first_name": { type: firstName }
+  "default_address.last_name":  { type: lastName }
+  "default_address.company":    { type: company }
+  "default_address.address1":   { type: street }
+  "default_address.address2":   { type: streetSecondary }
+  "default_address.city":       { type: city }
+  "default_address.province":   { type: stateOrProvince }
+  "default_address.province_code": { type: stateOrProvince }
+  "default_address.country":    { type: country }
+  "default_address.country_code": { type: countryCode }
+  "default_address.country_name": { type: country }
+  "default_address.zip":        { type: postalCode }
+  "default_address.phone":      { type: phone }
+  "default_address.name":       { type: fullName }
+  "default_address.default":    { type: preserve }
+  "addresses[].id":             { type: id, anchor: true }
+  "addresses[].customer_id":    { type: id, anchor: true }
+  "addresses[].first_name":     { type: firstName }
+  "addresses[].last_name":      { type: lastName }
+  "addresses[].company":        { type: company }
+  "addresses[].address1":       { type: street }
+  "addresses[].address2":       { type: streetSecondary }
+  "addresses[].city":           { type: city }
+  "addresses[].province":       { type: stateOrProvince }
+  "addresses[].province_code":  { type: stateOrProvince }
+  "addresses[].country":        { type: country }
+  "addresses[].country_code":   { type: countryCode }
+  "addresses[].zip":            { type: postalCode }
+  "addresses[].phone":          { type: phone }
+  "addresses[].name":           { type: fullName }
+  "addresses[].default":        { type: preserve }
+  "*": { type: auto }

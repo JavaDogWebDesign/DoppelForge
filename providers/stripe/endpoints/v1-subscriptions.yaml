@@ -1,0 +1,82 @@
+endpoint:
+  method: GET
+  path: /v1/subscriptions
+  description: List subscriptions
+  doc_url: https://docs.stripe.com/api/subscriptions/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].status
+    - data[].customer
+    - has_more
+  optional_paths:
+    - data[].items
+    - data[].latest_invoice
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                                   { type: id, anchor: true }
+  "data[].object":                               { type: preserve }
+  "data[].application":                          { type: id, anchor: true }
+  "data[].application_fee_percent":              { type: preserve }
+  "data[].automatic_tax.enabled":                { type: preserve }
+  "data[].billing_cycle_anchor":                 { type: unixTimestamp }
+  "data[].cancel_at":                            { type: unixTimestamp }
+  "data[].cancel_at_period_end":                 { type: preserve }
+  "data[].canceled_at":                          { type: unixTimestamp }
+  "data[].cancellation_details.reason":          { type: preserve }
+  "data[].cancellation_details.feedback":        { type: preserve }
+  "data[].cancellation_details.comment":         { type: shortText }
+  "data[].collection_method":                    { type: preserve }
+  "data[].created":                              { type: unixTimestamp }
+  "data[].currency":                             { type: preserve }
+  "data[].current_period_end":                   { type: unixTimestamp }
+  "data[].current_period_start":                 { type: unixTimestamp }
+  "data[].customer":                             { type: id, anchor: true }
+  "data[].days_until_due":                       { type: preserve }
+  "data[].default_payment_method":               { type: id, anchor: true }
+  "data[].default_source":                       { type: id, anchor: true }
+  "data[].description":                          { type: shortText }
+  "data[].ended_at":                             { type: unixTimestamp }
+  "data[].items.object":                         { type: preserve }
+  "data[].items.has_more":                       { type: preserve }
+  "data[].items.url":                            { type: url }
+  "data[].items.data[].id":                      { type: id, anchor: true }
+  "data[].items.data[].object":                  { type: preserve }
+  "data[].items.data[].created":                 { type: unixTimestamp }
+  "data[].items.data[].metadata":                { type: preserve }
+  "data[].items.data[].price.id":                { type: id, anchor: true }
+  "data[].items.data[].price.object":            { type: preserve }
+  "data[].items.data[].price.active":            { type: preserve }
+  "data[].items.data[].price.billing_scheme":    { type: preserve }
+  "data[].items.data[].price.currency":          { type: preserve }
+  "data[].items.data[].price.product":           { type: id, anchor: true }
+  "data[].items.data[].price.recurring.interval": { type: preserve }
+  "data[].items.data[].price.recurring.interval_count": { type: preserve }
+  "data[].items.data[].price.recurring.usage_type":     { type: preserve }
+  "data[].items.data[].price.type":              { type: preserve }
+  "data[].items.data[].price.unit_amount":       { type: preserve }
+  "data[].items.data[].quantity":                { type: preserve }
+  "data[].items.data[].subscription":            { type: id, anchor: true }
+  "data[].latest_invoice":                       { type: id, anchor: true }
+  "data[].livemode":                             { type: preserve }
+  "data[].metadata":                             { type: preserve }
+  "data[].next_pending_invoice_item_invoice":    { type: unixTimestamp }
+  "data[].on_behalf_of":                         { type: id, anchor: true }
+  "data[].pause_collection.behavior":            { type: preserve }
+  "data[].pause_collection.resumes_at":          { type: unixTimestamp }
+  "data[].payment_settings.payment_method_types": { type: preserve }
+  "data[].pending_setup_intent":                 { type: id, anchor: true }
+  "data[].schedule":                             { type: id, anchor: true }
+  "data[].start_date":                           { type: unixTimestamp }
+  "data[].status":                               { type: preserve }
+  "data[].test_clock":                           { type: id, anchor: true }
+  "data[].transfer_data.destination":            { type: id, anchor: true }
+  "data[].trial_end":                            { type: unixTimestamp }
+  "data[].trial_start":                          { type: unixTimestamp }
+  "*": { type: auto }

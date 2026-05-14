@@ -1,0 +1,41 @@
+endpoint:
+  method: GET
+  path: /v3/customers/addresses
+  description: List customer addresses
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/customer-addresses
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].customer_id
+    - data[].address1
+    - data[].postal_code
+    - meta.pagination.total
+  optional_paths:
+    - data[].form_fields
+    - data[].country_code
+
+fields:
+  "data[].id":                          { type: id, anchor: true }
+  "data[].customer_id":                 { type: id, anchor: true }
+  "data[].first_name":                  { type: firstName }
+  "data[].last_name":                   { type: lastName }
+  "data[].company":                     { type: company }
+  "data[].address1":                    { type: street }
+  "data[].address2":                    { type: streetSecondary }
+  "data[].address_type":                { type: preserve }
+  "data[].city":                        { type: city }
+  "data[].state_or_province":           { type: stateOrProvince }
+  "data[].postal_code":                 { type: postalCode }
+  "data[].country":                     { type: country }
+  "data[].country_code":                { type: countryCode }
+  "data[].phone":                       { type: phone }
+  "data[].form_fields[].name":          { type: preserve }
+  "data[].form_fields[].value":         { type: shortText }
+  "data[].form_fields[].address_id":    { type: id, anchor: true }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "*": { type: auto }

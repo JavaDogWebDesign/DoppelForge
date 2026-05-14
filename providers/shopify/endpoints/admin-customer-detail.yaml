@@ -1,0 +1,75 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/customers/{customer_id}.json
+  description: Get a single customer
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/customer
+
+signature:
+  required_paths:
+    - customer.id
+    - customer.email
+    - customer.admin_graphql_api_id
+  optional_paths:
+    - customer.default_address
+    - customer.addresses
+
+fields:
+  "customer.id":                       { type: id, anchor: true }
+  "customer.email":                    { type: email, anchor: true }
+  "customer.first_name":               { type: firstName }
+  "customer.last_name":                { type: lastName }
+  "customer.phone":                    { type: phone }
+  "customer.state":                    { type: preserve }
+  "customer.note":                     { type: shortText }
+  "customer.verified_email":           { type: preserve }
+  "customer.multipass_identifier":     { type: id, anchor: true }
+  "customer.tax_exempt":               { type: preserve }
+  "customer.tags":                     { type: preserve }
+  "customer.currency":                 { type: preserve }
+  "customer.accepts_marketing":        { type: preserve }
+  "customer.accepts_marketing_updated_at": { type: isoDate }
+  "customer.marketing_opt_in_level":   { type: preserve }
+  "customer.orders_count":             { type: preserve }
+  "customer.total_spent":              { type: preserve }
+  "customer.last_order_id":            { type: id, anchor: true }
+  "customer.last_order_name":          { type: id, anchor: true }
+  "customer.created_at":               { type: isoDate }
+  "customer.updated_at":               { type: isoDate }
+  "customer.admin_graphql_api_id":     { type: preserve }
+  "customer.email_marketing_consent.state":             { type: preserve }
+  "customer.email_marketing_consent.opt_in_level":      { type: preserve }
+  "customer.email_marketing_consent.consent_updated_at": { type: isoDate }
+  "customer.sms_marketing_consent.state":               { type: preserve }
+  "customer.sms_marketing_consent.opt_in_level":        { type: preserve }
+  "customer.sms_marketing_consent.consent_updated_at":  { type: isoDate }
+  "customer.default_address.id":             { type: id, anchor: true }
+  "customer.default_address.customer_id":    { type: id, anchor: true }
+  "customer.default_address.first_name":     { type: firstName }
+  "customer.default_address.last_name":      { type: lastName }
+  "customer.default_address.company":        { type: company }
+  "customer.default_address.address1":       { type: street }
+  "customer.default_address.address2":       { type: streetSecondary }
+  "customer.default_address.city":           { type: city }
+  "customer.default_address.province":       { type: stateOrProvince }
+  "customer.default_address.province_code":  { type: stateOrProvince }
+  "customer.default_address.country":        { type: country }
+  "customer.default_address.country_code":   { type: countryCode }
+  "customer.default_address.country_name":   { type: country }
+  "customer.default_address.zip":            { type: postalCode }
+  "customer.default_address.phone":          { type: phone }
+  "customer.default_address.name":           { type: fullName }
+  "customer.addresses[].id":                 { type: id, anchor: true }
+  "customer.addresses[].customer_id":        { type: id, anchor: true }
+  "customer.addresses[].first_name":         { type: firstName }
+  "customer.addresses[].last_name":          { type: lastName }
+  "customer.addresses[].company":            { type: company }
+  "customer.addresses[].address1":           { type: street }
+  "customer.addresses[].address2":           { type: streetSecondary }
+  "customer.addresses[].city":               { type: city }
+  "customer.addresses[].province":           { type: stateOrProvince }
+  "customer.addresses[].province_code":      { type: stateOrProvince }
+  "customer.addresses[].country":            { type: country }
+  "customer.addresses[].country_code":       { type: countryCode }
+  "customer.addresses[].zip":                { type: postalCode }
+  "customer.addresses[].phone":              { type: phone }
+  "*": { type: auto }

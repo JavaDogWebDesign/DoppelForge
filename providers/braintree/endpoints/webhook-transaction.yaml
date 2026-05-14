@@ -1,0 +1,87 @@
+endpoint:
+  method: POST
+  path: transaction_*
+  kind: webhook
+  description: Braintree webhook — transaction kinds (settled/settlement_declined/disbursed share shape)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/general/webhooks/transaction
+
+signature:
+  required_paths:
+    - kind
+    - subject.transaction.id
+    - subject.transaction.status
+    - subject.transaction.type
+    - subject.transaction.amount
+    - subject.transaction.payment-instrument-type
+  optional_paths:
+    - timestamp
+    - subject.transaction.customer
+    - subject.transaction.billing
+    - subject.transaction.shipping
+    - subject.transaction.credit-card
+
+fields:
+  "kind":                                          { type: preserve }
+  "timestamp.#text":                               { type: isoDate }
+  "timestamp.@_type":                              { type: preserve }
+  "source-merchant-id":                            { type: id, anchor: true }
+  "subject.transaction.id":                        { type: id, anchor: true }
+  "subject.transaction.type":                      { type: preserve }
+  "subject.transaction.status":                    { type: preserve }
+  "subject.transaction.amount":                    { type: priceAmount }
+  "subject.transaction.tax-amount":                { type: priceAmount }
+  "subject.transaction.shipping-amount":           { type: priceAmount }
+  "subject.transaction.discount-amount":           { type: priceAmount }
+  "subject.transaction.currency-iso-code":         { type: currency }
+  "subject.transaction.merchant-account-id":       { type: id, anchor: true }
+  "subject.transaction.order-id":                  { type: id, anchor: true }
+  "subject.transaction.payment-instrument-type":   { type: preserve }
+  "subject.transaction.processor-response-code":   { type: preserve }
+  "subject.transaction.processor-response-text":   { type: shortText }
+  "subject.transaction.processor-settlement-response-code": { type: preserve }
+  "subject.transaction.processor-settlement-response-text": { type: shortText }
+  "subject.transaction.created-at.#text":          { type: isoDate }
+  "subject.transaction.created-at.@_type":         { type: preserve }
+  "subject.transaction.updated-at.#text":          { type: isoDate }
+  "subject.transaction.updated-at.@_type":         { type: preserve }
+  "subject.transaction.customer.id":               { type: id, anchor: true }
+  "subject.transaction.customer.first-name":       { type: firstName }
+  "subject.transaction.customer.last-name":        { type: lastName }
+  "subject.transaction.customer.company":          { type: company }
+  "subject.transaction.customer.email":            { type: email, anchor: true }
+  "subject.transaction.customer.phone":            { type: phone }
+  "subject.transaction.billing.id":                { type: id, anchor: true }
+  "subject.transaction.billing.first-name":        { type: firstName }
+  "subject.transaction.billing.last-name":         { type: lastName }
+  "subject.transaction.billing.company":           { type: company }
+  "subject.transaction.billing.street-address":    { type: street }
+  "subject.transaction.billing.extended-address":  { type: streetSecondary }
+  "subject.transaction.billing.locality":          { type: city }
+  "subject.transaction.billing.region":            { type: stateOrProvince }
+  "subject.transaction.billing.postal-code":       { type: postalCode }
+  "subject.transaction.billing.country-name":      { type: country }
+  "subject.transaction.billing.country-code-alpha2": { type: countryCode }
+  "subject.transaction.shipping.id":               { type: id, anchor: true }
+  "subject.transaction.shipping.first-name":       { type: firstName }
+  "subject.transaction.shipping.last-name":        { type: lastName }
+  "subject.transaction.shipping.company":          { type: company }
+  "subject.transaction.shipping.street-address":   { type: street }
+  "subject.transaction.shipping.extended-address": { type: streetSecondary }
+  "subject.transaction.shipping.locality":         { type: city }
+  "subject.transaction.shipping.region":           { type: stateOrProvince }
+  "subject.transaction.shipping.postal-code":      { type: postalCode }
+  "subject.transaction.shipping.country-name":     { type: country }
+  "subject.transaction.shipping.country-code-alpha2": { type: countryCode }
+  "subject.transaction.credit-card.token":         { type: id, anchor: true }
+  "subject.transaction.credit-card.bin":           { type: sku }
+  "subject.transaction.credit-card.last-4":        { type: sku }
+  "subject.transaction.credit-card.cardholder-name": { type: fullName }
+  "subject.transaction.credit-card.expiration-month": { type: preserve }
+  "subject.transaction.credit-card.expiration-year": { type: preserve }
+  "subject.transaction.credit-card.masked-number": { type: sku }
+  "subject.transaction.credit-card.card-type":     { type: preserve }
+  "subject.transaction.paypal.payer-email":        { type: email, anchor: true }
+  "subject.transaction.paypal.payment-id":         { type: id, anchor: true }
+  "subject.transaction.paypal.authorization-id":   { type: id, anchor: true }
+  "subject.transaction.paypal.payer-id":           { type: id, anchor: true }
+  "*": { type: auto }

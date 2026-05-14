@@ -1,0 +1,6 @@
+id: braintree
+name: Braintree
+category: payments
+icon: credit-card
+color: "#00A1DF"
+docs: https://developer.paypal.com/braintree/docs

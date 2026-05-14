@@ -1,0 +1,48 @@
+endpoint:
+  method: GET
+  path: /admin/customers/export.csv
+  description: Shopify Admin → Customers → Export CSV
+  doc_url: https://help.shopify.com/en/manual/customers/manage-customers#export-customer-data
+
+# Column names captured from a real Shopify Admin customers export. If Shopify
+# adjusts the column set, update `required_paths` and re-run smoke fixtures.
+signature:
+  required_paths:
+    - "[].First Name"
+    - "[].Last Name"
+    - "[].Email"
+    - "[].Accepts Email Marketing"
+    - "[].Default Address Country Code"
+  optional_paths:
+    - "[].Phone"
+    - "[].Tags"
+    - "[].Total Spent"
+
+fields:
+  "[].Customer ID":                    { type: id, anchor: true }
+  "[].First Name":                     { type: firstName }
+  "[].Last Name":                      { type: lastName }
+  "[].Email":                          { type: email, anchor: true }
+  "[].Accepts Email Marketing":        { type: preserve }
+  "[].Default Address Company":        { type: company }
+  "[].Default Address Address1":       { type: street }
+  "[].Default Address Address2":       { type: streetSecondary }
+  "[].Default Address City":           { type: city }
+  "[].Default Address Province":       { type: stateOrProvince }
+  "[].Default Address Province Code":  { type: stateOrProvince }
+  "[].Default Address Country":        { type: country }
+  "[].Default Address Country Code":   { type: countryCode }
+  "[].Default Address Zip":            { type: postalCode }
+  "[].Default Address Phone":          { type: phone }
+  "[].Default Address Name":           { type: fullName }
+  "[].Phone":                          { type: phone }
+  "[].Accepts SMS Marketing":          { type: preserve }
+  "[].Total Spent":                    { type: priceAmount }
+  "[].Total Orders":                   { type: preserve }
+  "[].Note":                           { type: shortText }
+  "[].Tax Exempt":                     { type: preserve }
+  "[].Tags":                           { type: preserve }
+  "[].Last Order ID":                  { type: id, anchor: true }
+  "[].Last Order Name":                { type: id, anchor: true }
+  "[].Last Order Date":                { type: isoDate }
+  "*": { type: auto }

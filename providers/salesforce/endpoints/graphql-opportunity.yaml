@@ -1,0 +1,50 @@
+endpoint:
+  method: POST
+  path: /services/data/v60.0/graphql (query Opportunity)
+  description: Salesforce GraphQL — Opportunity SObject (sales deals)
+  doc_url: https://developer.salesforce.com/docs/platform/graphql/guide/query-record-objects.html
+
+signature:
+  required_paths:
+    - data.uiapi.query.Opportunity.edges[].node.Id
+    - data.uiapi.query.Opportunity.edges[].node.StageName.value
+    - data.uiapi.query.Opportunity.edges[].node.CloseDate.value
+    - data.uiapi.query.Opportunity.edges[].node.Amount.value
+    - data.uiapi.query.Opportunity.pageInfo.endCursor
+  optional_paths:
+    - data.uiapi.query.Opportunity.totalCount
+    - data.uiapi.query.Opportunity.edges[].node.AccountId.value
+    - data.uiapi.query.Opportunity.edges[].node.ForecastCategoryName.value
+
+fields:
+  "data.uiapi.query.Opportunity.totalCount":       { type: preserve }
+  "data.uiapi.query.Opportunity.pageResultCount":  { type: preserve }
+  "data.uiapi.query.Opportunity.pageInfo.hasNextPage":     { type: preserve }
+  "data.uiapi.query.Opportunity.pageInfo.hasPreviousPage": { type: preserve }
+  "data.uiapi.query.Opportunity.pageInfo.startCursor":     { type: id }
+  "data.uiapi.query.Opportunity.pageInfo.endCursor":       { type: id }
+  "data.uiapi.query.Opportunity.edges[].cursor":           { type: id }
+  "data.uiapi.query.Opportunity.edges[].node.Id":                          { type: id, anchor: true }
+  "data.uiapi.query.Opportunity.edges[].node.Name.value":                  { type: shortText, anchor: true }
+  "data.uiapi.query.Opportunity.edges[].node.AccountId.value":             { type: id, anchor: true }
+  "data.uiapi.query.Opportunity.edges[].node.AccountId.displayValue":      { type: company }
+  "data.uiapi.query.Opportunity.edges[].node.OwnerId.value":               { type: id, anchor: true }
+  "data.uiapi.query.Opportunity.edges[].node.OwnerId.displayValue":        { type: fullName }
+  "data.uiapi.query.Opportunity.edges[].node.Amount.value":                { type: priceAmount }
+  "data.uiapi.query.Opportunity.edges[].node.Amount.displayValue":         { type: priceAmount }
+  "data.uiapi.query.Opportunity.edges[].node.CurrencyIsoCode.value":       { type: currency }
+  "data.uiapi.query.Opportunity.edges[].node.StageName.value":             { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.Probability.value":           { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.CloseDate.value":             { type: isoDate }
+  "data.uiapi.query.Opportunity.edges[].node.Type.value":                  { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.LeadSource.value":            { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.ForecastCategoryName.value":  { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.Description.value":           { type: longText }
+  "data.uiapi.query.Opportunity.edges[].node.NextStep.value":              { type: shortText }
+  "data.uiapi.query.Opportunity.edges[].node.IsWon.value":                 { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.IsClosed.value":              { type: preserve }
+  "data.uiapi.query.Opportunity.edges[].node.LastModifiedDate":            { type: isoDate }
+  "data.uiapi.query.Opportunity.edges[].node.CreatedDate":                 { type: isoDate }
+  "data.uiapi.query.Opportunity.edges[].node.SystemModstamp":              { type: isoDate }
+  "extensions.weakETags":                                                  { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,39 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/offer/list
+  description: List offers (paywall offer presentations)
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - offers[].offer_id
+    - offers[].aid
+    - offers[].name
+    - total
+    - code
+  optional_paths:
+    - offers[].description
+    - offers[].terms
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "offers[].offer_id":              { type: id, anchor: true }
+  "offers[].aid":                   { type: id, anchor: true }
+  "offers[].name":                  { type: shortText }
+  "offers[].description":           { type: shortText }
+  "offers[].deleted":               { type: preserve }
+  "offers[].create_date":           { type: unixTimestamp }
+  "offers[].update_date":           { type: unixTimestamp }
+  "offers[].start_date_time":       { type: unixTimestamp }
+  "offers[].end_date_time":         { type: unixTimestamp }
+  "offers[].terms[].term_id":       { type: id, anchor: true }
+  "offers[].terms[].name":          { type: shortText }
+  "offers[].terms[].type":          { type: preserve }
+  "offers[].terms[].payment_billing_plan": { type: preserve }
+  "offers[].terms[].payment_currency": { type: preserve }
+  "*": { type: auto }

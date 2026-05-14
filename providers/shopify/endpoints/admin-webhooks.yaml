@@ -1,0 +1,28 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/webhooks.json
+  description: List configured webhooks
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/webhook
+
+signature:
+  required_paths:
+    - webhooks[].id
+    - webhooks[].address
+    - webhooks[].topic
+    - webhooks[].format
+  optional_paths:
+    - webhooks[].api_version
+    - webhooks[].metafield_namespaces
+
+fields:
+  "webhooks[].id":                          { type: id, anchor: true }
+  "webhooks[].address":                     { type: url }
+  "webhooks[].topic":                       { type: preserve }
+  "webhooks[].format":                      { type: preserve }
+  "webhooks[].api_version":                 { type: preserve }
+  "webhooks[].private_metafield_namespaces": { type: preserve }
+  "webhooks[].metafield_namespaces":        { type: preserve }
+  "webhooks[].fields":                      { type: preserve }
+  "webhooks[].created_at":                  { type: isoDate }
+  "webhooks[].updated_at":                  { type: isoDate }
+  "*": { type: auto }

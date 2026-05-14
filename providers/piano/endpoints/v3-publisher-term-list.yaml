@@ -1,0 +1,58 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/term/list
+  description: List terms (pricing / billing plans)
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - terms[].term_id
+    - terms[].aid
+    - terms[].name
+    - total
+    - code
+  optional_paths:
+    - terms[].payment_billing_plan
+    - terms[].resource
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "terms[].term_id":                       { type: id, anchor: true }
+  "terms[].aid":                           { type: id, anchor: true }
+  "terms[].name":                          { type: shortText }
+  "terms[].description":                   { type: shortText }
+  "terms[].type":                          { type: preserve }
+  "terms[].type_name":                     { type: preserve }
+  "terms[].payment_billing_plan":          { type: preserve }
+  "terms[].payment_billing_plan_description": { type: shortText }
+  "terms[].payment_billing_plan_table":    { type: preserve }
+  "terms[].payment_allow_promo_codes":     { type: preserve }
+  "terms[].payment_first_amount":          { type: preserve }
+  "terms[].payment_first_day":             { type: preserve }
+  "terms[].payment_first_period":          { type: preserve }
+  "terms[].payment_first_taxes":           { type: preserve }
+  "terms[].payment_first_total":           { type: preserve }
+  "terms[].payment_first_total_with_taxes": { type: preserve }
+  "terms[].payment_currency":              { type: preserve }
+  "terms[].payment_is_subscription":       { type: preserve }
+  "terms[].payment_renew_grace_period":    { type: preserve }
+  "terms[].payment_trial_new_customers_only": { type: preserve }
+  "terms[].payment_force_auto_renew":      { type: preserve }
+  "terms[].schedule":                      { type: preserve }
+  "terms[].term_billing_descriptor":       { type: preserve }
+  "terms[].create_date":                   { type: unixTimestamp }
+  "terms[].update_date":                   { type: unixTimestamp }
+  "terms[].subscription_count":            { type: preserve }
+  "terms[].resource.rid":                  { type: id, anchor: true }
+  "terms[].resource.aid":                  { type: id, anchor: true }
+  "terms[].resource.name":                 { type: shortText }
+  "terms[].resource.description":          { type: shortText }
+  "terms[].resource.image_url":            { type: url }
+  "terms[].resource.disabled":             { type: preserve }
+  "terms[].resource.type":                 { type: preserve }
+  "*": { type: auto }

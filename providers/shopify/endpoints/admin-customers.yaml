@@ -1,0 +1,81 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/customers.json
+  description: List customers (Admin REST API)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/customer
+
+signature:
+  required_paths:
+    - customers[].id
+    - customers[].email
+    - customers[].admin_graphql_api_id
+  optional_paths:
+    - customers[].default_address
+    - customers[].addresses
+
+fields:
+  "customers[].id":                       { type: id, anchor: true }
+  "customers[].email":                    { type: email, anchor: true }
+  "customers[].first_name":               { type: firstName }
+  "customers[].last_name":                { type: lastName }
+  "customers[].phone":                    { type: phone }
+  "customers[].state":                    { type: preserve }
+  "customers[].note":                     { type: shortText }
+  "customers[].verified_email":           { type: preserve }
+  "customers[].multipass_identifier":     { type: id, anchor: true }
+  "customers[].tax_exempt":               { type: preserve }
+  "customers[].tags":                     { type: preserve }
+  "customers[].currency":                 { type: preserve }
+  "customers[].accepts_marketing":        { type: preserve }
+  "customers[].accepts_marketing_updated_at": { type: isoDate }
+  "customers[].marketing_opt_in_level":   { type: preserve }
+  "customers[].tax_exemptions":           { type: preserve }
+  "customers[].orders_count":             { type: preserve }
+  "customers[].total_spent":              { type: preserve }
+  "customers[].last_order_id":            { type: id, anchor: true }
+  "customers[].last_order_name":          { type: id, anchor: true }
+  "customers[].created_at":               { type: isoDate }
+  "customers[].updated_at":               { type: isoDate }
+  "customers[].admin_graphql_api_id":     { type: preserve }
+  "customers[].email_marketing_consent.state":             { type: preserve }
+  "customers[].email_marketing_consent.opt_in_level":      { type: preserve }
+  "customers[].email_marketing_consent.consent_updated_at": { type: isoDate }
+  "customers[].sms_marketing_consent.state":               { type: preserve }
+  "customers[].sms_marketing_consent.opt_in_level":        { type: preserve }
+  "customers[].sms_marketing_consent.consent_updated_at":  { type: isoDate }
+  "customers[].sms_marketing_consent.consent_collected_from": { type: preserve }
+  "customers[].default_address.id":             { type: id, anchor: true }
+  "customers[].default_address.customer_id":    { type: id, anchor: true }
+  "customers[].default_address.first_name":     { type: firstName }
+  "customers[].default_address.last_name":      { type: lastName }
+  "customers[].default_address.company":        { type: company }
+  "customers[].default_address.address1":       { type: street }
+  "customers[].default_address.address2":       { type: streetSecondary }
+  "customers[].default_address.city":           { type: city }
+  "customers[].default_address.province":       { type: stateOrProvince }
+  "customers[].default_address.province_code":  { type: stateOrProvince }
+  "customers[].default_address.country":        { type: country }
+  "customers[].default_address.country_code":   { type: countryCode }
+  "customers[].default_address.country_name":   { type: country }
+  "customers[].default_address.zip":            { type: postalCode }
+  "customers[].default_address.phone":          { type: phone }
+  "customers[].default_address.name":           { type: fullName }
+  "customers[].default_address.default":        { type: preserve }
+  "customers[].addresses[].id":                 { type: id, anchor: true }
+  "customers[].addresses[].customer_id":        { type: id, anchor: true }
+  "customers[].addresses[].first_name":         { type: firstName }
+  "customers[].addresses[].last_name":          { type: lastName }
+  "customers[].addresses[].company":            { type: company }
+  "customers[].addresses[].address1":           { type: street }
+  "customers[].addresses[].address2":           { type: streetSecondary }
+  "customers[].addresses[].city":               { type: city }
+  "customers[].addresses[].province":           { type: stateOrProvince }
+  "customers[].addresses[].province_code":      { type: stateOrProvince }
+  "customers[].addresses[].country":            { type: country }
+  "customers[].addresses[].country_code":       { type: countryCode }
+  "customers[].addresses[].country_name":       { type: country }
+  "customers[].addresses[].zip":                { type: postalCode }
+  "customers[].addresses[].phone":              { type: phone }
+  "customers[].addresses[].name":               { type: fullName }
+  "customers[].addresses[].default":            { type: preserve }
+  "*": { type: auto }

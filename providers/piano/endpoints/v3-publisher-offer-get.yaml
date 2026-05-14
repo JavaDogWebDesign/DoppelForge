@@ -1,0 +1,34 @@
+endpoint:
+  method: GET
+  path: /api/v3/publisher/offer/get
+  description: Get an offer
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - offer.offer_id
+    - offer.aid
+    - offer.name
+    - code
+  optional_paths:
+    - offer.description
+    - offer.terms
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "offer.offer_id":          { type: id, anchor: true }
+  "offer.aid":               { type: id, anchor: true }
+  "offer.name":              { type: shortText }
+  "offer.description":       { type: shortText }
+  "offer.deleted":           { type: preserve }
+  "offer.create_date":       { type: unixTimestamp }
+  "offer.update_date":       { type: unixTimestamp }
+  "offer.start_date_time":   { type: unixTimestamp }
+  "offer.end_date_time":     { type: unixTimestamp }
+  "offer.terms[].term_id":   { type: id, anchor: true }
+  "offer.terms[].name":      { type: shortText }
+  "offer.terms[].type":      { type: preserve }
+  "offer.terms[].payment_billing_plan": { type: preserve }
+  "offer.terms[].payment_currency": { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,42 @@
+endpoint:
+  method: GET
+  path: /subscriptions/{subscription_id}
+  description: Retrieve a subscription
+  doc_url: https://developer.rechargepayments.com/2021-11/subscriptions/subscriptions_retrieve
+
+signature:
+  required_paths:
+    - subscription.id
+    - subscription.customer_id
+    - subscription.product_title
+    - subscription.status
+  optional_paths:
+    - subscription.next_charge_scheduled_at
+    - subscription.address_id
+
+fields:
+  "subscription.id":                          { type: id, anchor: true }
+  "subscription.address_id":                  { type: id, anchor: true }
+  "subscription.customer_id":                 { type: id, anchor: true }
+  "subscription.cancellation_reason":         { type: shortText }
+  "subscription.cancellation_reason_comments": { type: shortText }
+  "subscription.cancelled_at":                { type: isoDate }
+  "subscription.charge_interval_frequency":   { type: preserve }
+  "subscription.created_at":                  { type: isoDate }
+  "subscription.updated_at":                  { type: isoDate }
+  "subscription.external_product_id.ecommerce": { type: id, anchor: true }
+  "subscription.external_variant_id.ecommerce": { type: id, anchor: true }
+  "subscription.has_queued_charges":          { type: preserve }
+  "subscription.is_prepaid":                  { type: preserve }
+  "subscription.next_charge_scheduled_at":    { type: isoDate }
+  "subscription.order_interval_frequency":    { type: preserve }
+  "subscription.order_interval_unit":         { type: preserve }
+  "subscription.presentment_currency":        { type: preserve }
+  "subscription.price":                       { type: preserve }
+  "subscription.product_title":               { type: productName }
+  "subscription.properties":                  { type: preserve }
+  "subscription.quantity":                    { type: preserve }
+  "subscription.sku":                         { type: sku, anchor: true }
+  "subscription.status":                      { type: preserve }
+  "subscription.variant_title":               { type: shortText }
+  "*": { type: auto }

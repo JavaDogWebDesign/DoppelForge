@@ -1,0 +1,88 @@
+endpoint:
+  method: GET
+  path: /charges
+  description: List charges
+  doc_url: https://developer.rechargepayments.com/2021-11/charges
+
+signature:
+  required_paths:
+    - charges[].id
+    - charges[].customer_id
+    - charges[].status
+    - charges[].total_price
+  optional_paths:
+    - next_cursor
+    - charges[].external_order_id
+
+fields:
+  "next_cursor":      { type: id, anchor: true }
+  "previous_cursor":  { type: id, anchor: true }
+  "charges[].id":                            { type: id, anchor: true }
+  "charges[].address_id":                    { type: id, anchor: true }
+  "charges[].customer_id":                   { type: id, anchor: true }
+  "charges[].external_order_id.ecommerce":   { type: id, anchor: true }
+  "charges[].external_transaction_id.payment_processor": { type: id, anchor: true }
+  "charges[].billing_address.address1":      { type: street }
+  "charges[].billing_address.address2":      { type: streetSecondary }
+  "charges[].billing_address.city":          { type: city }
+  "charges[].billing_address.company":       { type: company }
+  "charges[].billing_address.country_code":  { type: countryCode }
+  "charges[].billing_address.first_name":    { type: firstName }
+  "charges[].billing_address.last_name":     { type: lastName }
+  "charges[].billing_address.phone":         { type: phone }
+  "charges[].billing_address.province":      { type: stateOrProvince }
+  "charges[].billing_address.zip":           { type: postalCode }
+  "charges[].shipping_address.address1":     { type: street }
+  "charges[].shipping_address.address2":     { type: streetSecondary }
+  "charges[].shipping_address.city":         { type: city }
+  "charges[].shipping_address.company":      { type: company }
+  "charges[].shipping_address.country_code": { type: countryCode }
+  "charges[].shipping_address.first_name":   { type: firstName }
+  "charges[].shipping_address.last_name":    { type: lastName }
+  "charges[].shipping_address.phone":        { type: phone }
+  "charges[].shipping_address.province":     { type: stateOrProvince }
+  "charges[].shipping_address.zip":          { type: postalCode }
+  "charges[].client_details.browser_ip":     { type: ipv4 }
+  "charges[].client_details.user_agent":     { type: shortText }
+  "charges[].created_at":                    { type: isoDate }
+  "charges[].updated_at":                    { type: isoDate }
+  "charges[].scheduled_at":                  { type: isoDate }
+  "charges[].processed_at":                  { type: isoDate }
+  "charges[].currency":                      { type: preserve }
+  "charges[].discounts":                     { type: preserve }
+  "charges[].error":                         { type: shortText }
+  "charges[].error_type":                    { type: preserve }
+  "charges[].external_variant_not_found":    { type: preserve }
+  "charges[].has_uncommitted_changes":       { type: preserve }
+  "charges[].note":                          { type: shortText }
+  "charges[].notes":                         { type: shortText }
+  "charges[].number_of_payment_attempts":    { type: preserve }
+  "charges[].order_attributes":              { type: preserve }
+  "charges[].orders_count":                  { type: preserve }
+  "charges[].payment_processor":             { type: preserve }
+  "charges[].processor_name":                { type: preserve }
+  "charges[].retry_date":                    { type: isoDate }
+  "charges[].status":                        { type: preserve }
+  "charges[].subtotal_price":                { type: preserve }
+  "charges[].tags":                          { type: preserve }
+  "charges[].tax_lines":                     { type: preserve }
+  "charges[].total_discounts":               { type: preserve }
+  "charges[].total_duties":                  { type: preserve }
+  "charges[].total_line_items_price":        { type: preserve }
+  "charges[].total_price":                   { type: preserve }
+  "charges[].total_refunds":                 { type: preserve }
+  "charges[].total_tax":                     { type: preserve }
+  "charges[].total_weight_grams":            { type: preserve }
+  "charges[].type":                          { type: preserve }
+  "charges[].line_items[].purchase_item_id": { type: id, anchor: true }
+  "charges[].line_items[].title":            { type: productName }
+  "charges[].line_items[].variant_title":    { type: shortText }
+  "charges[].line_items[].sku":              { type: sku, anchor: true }
+  "charges[].line_items[].quantity":         { type: preserve }
+  "charges[].line_items[].unit_price":       { type: preserve }
+  "charges[].line_items[].total_price":      { type: preserve }
+  "charges[].line_items[].grams":            { type: preserve }
+  "charges[].line_items[].external_product_id.ecommerce": { type: id, anchor: true }
+  "charges[].line_items[].external_variant_id.ecommerce": { type: id, anchor: true }
+  "charges[].line_items[].properties":       { type: preserve }
+  "*": { type: auto }

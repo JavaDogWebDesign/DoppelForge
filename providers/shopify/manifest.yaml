@@ -1,0 +1,6 @@
+id: shopify
+name: Shopify
+category: ecommerce
+icon: shopping-bag
+color: "#95BF47"
+docs: https://shopify.dev/docs/api/admin-rest

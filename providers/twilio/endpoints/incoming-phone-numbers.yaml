@@ -1,0 +1,64 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json
+  description: List provisioned phone numbers on the account
+  doc_url: https://www.twilio.com/docs/phone-numbers/api/incomingphonenumber-resource
+
+signature:
+  required_paths:
+    - incoming_phone_numbers[].sid
+    - incoming_phone_numbers[].account_sid
+    - incoming_phone_numbers[].phone_number
+  optional_paths:
+    - next_page_uri
+    - incoming_phone_numbers[].friendly_name
+
+fields:
+  "page":            { type: preserve }
+  "page_size":       { type: preserve }
+  "first_page_uri":  { type: url }
+  "next_page_uri":   { type: url }
+  "previous_page_uri": { type: url }
+  "uri":             { type: url }
+  "start":           { type: preserve }
+  "end":             { type: preserve }
+  "num_pages":       { type: preserve }
+  "total":           { type: preserve }
+  "incoming_phone_numbers[].sid":                  { type: id, anchor: true }
+  "incoming_phone_numbers[].account_sid":          { type: id, anchor: true }
+  "incoming_phone_numbers[].address_sid":          { type: id, anchor: true }
+  "incoming_phone_numbers[].trunk_sid":            { type: id, anchor: true }
+  "incoming_phone_numbers[].identity_sid":         { type: id, anchor: true }
+  "incoming_phone_numbers[].phone_number":         { type: phone }
+  "incoming_phone_numbers[].friendly_name":        { type: shortText }
+  "incoming_phone_numbers[].api_version":          { type: preserve }
+  "incoming_phone_numbers[].voice_caller_id_lookup": { type: preserve }
+  "incoming_phone_numbers[].voice_url":            { type: url }
+  "incoming_phone_numbers[].voice_method":         { type: preserve }
+  "incoming_phone_numbers[].voice_fallback_url":   { type: url }
+  "incoming_phone_numbers[].voice_fallback_method": { type: preserve }
+  "incoming_phone_numbers[].voice_application_sid": { type: id, anchor: true }
+  "incoming_phone_numbers[].status_callback":      { type: url }
+  "incoming_phone_numbers[].status_callback_method": { type: preserve }
+  "incoming_phone_numbers[].sms_url":              { type: url }
+  "incoming_phone_numbers[].sms_method":           { type: preserve }
+  "incoming_phone_numbers[].sms_fallback_url":     { type: url }
+  "incoming_phone_numbers[].sms_fallback_method":  { type: preserve }
+  "incoming_phone_numbers[].sms_application_sid":  { type: id, anchor: true }
+  "incoming_phone_numbers[].messaging_service_sid": { type: id, anchor: true }
+  "incoming_phone_numbers[].address_requirements": { type: preserve }
+  "incoming_phone_numbers[].beta":                 { type: preserve }
+  "incoming_phone_numbers[].emergency_status":     { type: preserve }
+  "incoming_phone_numbers[].emergency_address_sid": { type: id, anchor: true }
+  "incoming_phone_numbers[].emergency_address_status": { type: preserve }
+  "incoming_phone_numbers[].bundle_sid":           { type: id, anchor: true }
+  "incoming_phone_numbers[].origin":               { type: preserve }
+  "incoming_phone_numbers[].capabilities.voice":   { type: preserve }
+  "incoming_phone_numbers[].capabilities.sms":     { type: preserve }
+  "incoming_phone_numbers[].capabilities.mms":     { type: preserve }
+  "incoming_phone_numbers[].capabilities.fax":     { type: preserve }
+  "incoming_phone_numbers[].status":               { type: preserve }
+  "incoming_phone_numbers[].date_created":         { type: isoDate }
+  "incoming_phone_numbers[].date_updated":         { type: isoDate }
+  "incoming_phone_numbers[].uri":                  { type: url }
+  "*": { type: auto }

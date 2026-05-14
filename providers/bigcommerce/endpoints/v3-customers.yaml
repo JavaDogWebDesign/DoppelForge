@@ -1,0 +1,54 @@
+endpoint:
+  method: GET
+  path: /v3/customers
+  description: List customers
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].email
+    - meta.pagination.total
+  optional_paths:
+    - data[].addresses[].country_code
+    - data[].store_credit_amounts
+
+fields:
+  "data[].id":                            { type: id, anchor: true }
+  "data[].uuid":                          { type: uuid, anchor: true }
+  "data[].email":                         { type: email, anchor: true }
+  "data[].first_name":                    { type: firstName }
+  "data[].last_name":                     { type: lastName }
+  "data[].company":                       { type: company }
+  "data[].phone":                         { type: phone }
+  "data[].notes":                         { type: shortText }
+  "data[].tax_exempt_category":           { type: preserve }
+  "data[].customer_group_id":             { type: preserve }
+  "data[].date_created":                  { type: isoDate }
+  "data[].date_modified":                 { type: isoDate }
+  "data[].registration_ip_address":       { type: ipv4 }
+  "data[].channel_ids":                   { type: preserve }
+  "data[].accepts_product_review_abandoned_cart_emails": { type: preserve }
+  "data[].origin_channel_id":             { type: preserve }
+  "data[].addresses[].id":                { type: id, anchor: true }
+  "data[].addresses[].customer_id":       { type: id, anchor: true }
+  "data[].addresses[].first_name":        { type: firstName }
+  "data[].addresses[].last_name":         { type: lastName }
+  "data[].addresses[].company":           { type: company }
+  "data[].addresses[].address1":          { type: street }
+  "data[].addresses[].address2":          { type: streetSecondary }
+  "data[].addresses[].address_type":      { type: preserve }
+  "data[].addresses[].city":              { type: city }
+  "data[].addresses[].state_or_province": { type: stateOrProvince }
+  "data[].addresses[].postal_code":       { type: postalCode }
+  "data[].addresses[].country_code":      { type: countryCode }
+  "data[].addresses[].country":           { type: country }
+  "data[].addresses[].phone":             { type: phone }
+  "data[].store_credit_amounts[].amount": { type: preserve }
+  "data[].authentication.force_password_reset": { type: preserve }
+  "meta.pagination.total":                { type: preserve }
+  "meta.pagination.count":                { type: preserve }
+  "meta.pagination.per_page":             { type: preserve }
+  "meta.pagination.current_page":         { type: preserve }
+  "meta.pagination.total_pages":          { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,54 @@
+endpoint:
+  method: POST
+  path: /merchants/{merchant_id}/customers/advanced_search
+  description: Search customers (collection)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/request/customer/search
+
+signature:
+  # `totalItems` is the Braintree-specific collection pagination key; pinning
+  # it as required prevents this signature from matching Recharge or Shopify
+  # customer lists, which share the customers[].id/first_name/created_at trio.
+  required_paths:
+    - customers[].id
+    - customers[].first_name
+    - customers[].created_at
+    - totalItems
+  optional_paths:
+    - customers[].credit_cards
+    - customers[].addresses
+    - currentPage
+
+fields:
+  "customers[].id":               { type: id, anchor: true }
+  "customers[].first_name":       { type: firstName }
+  "customers[].last_name":        { type: lastName }
+  "customers[].company":          { type: company }
+  "customers[].email":            { type: email, anchor: true }
+  "customers[].phone":            { type: phone }
+  "customers[].fax":              { type: phone }
+  "customers[].website":          { type: url }
+  "customers[].created_at":       { type: isoDate }
+  "customers[].updated_at":       { type: isoDate }
+  "customers[].custom_fields":    { type: preserve }
+  "customers[].credit_cards[].token":          { type: id, anchor: true }
+  "customers[].credit_cards[].bin":            { type: id }
+  "customers[].credit_cards[].last_4":         { type: id }
+  "customers[].credit_cards[].card_type":      { type: preserve }
+  "customers[].credit_cards[].cardholder_name": { type: fullName }
+  "customers[].credit_cards[].expiration_month": { type: preserve }
+  "customers[].credit_cards[].expiration_year":  { type: preserve }
+  "customers[].addresses[].id":            { type: id, anchor: true }
+  "customers[].addresses[].first_name":    { type: firstName }
+  "customers[].addresses[].last_name":     { type: lastName }
+  "customers[].addresses[].street_address": { type: street }
+  "customers[].addresses[].locality":      { type: city }
+  "customers[].addresses[].region":        { type: stateOrProvince }
+  "customers[].addresses[].postal_code":   { type: postalCode }
+  "customers[].addresses[].country_name":  { type: country }
+  "customers[].addresses[].country_code_alpha2": { type: countryCode }
+  "customers[].addresses[].phone_number":  { type: phone }
+  "totalItems":   { type: preserve }
+  "totalCount":   { type: preserve }
+  "pageSize":     { type: preserve }
+  "currentPage":  { type: preserve }
+  "*": { type: auto }

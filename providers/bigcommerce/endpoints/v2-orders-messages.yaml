@@ -1,0 +1,30 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/messages
+  description: List order messages (correspondence)
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-messages
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].order_id"
+    - "[].message"
+    - "[].type"
+    - "[].date_created"
+  optional_paths:
+    - "[].subject"
+    - "[].customer"
+
+fields:
+  "[].id":              { type: id, anchor: true }
+  "[].order_id":        { type: id, anchor: true }
+  "[].staff_id":        { type: id, anchor: true }
+  "[].customer_id":     { type: id, anchor: true }
+  "[].type":            { type: preserve }
+  "[].subject":         { type: shortText }
+  "[].message":         { type: longText }
+  "[].status":          { type: preserve }
+  "[].is_flagged":      { type: preserve }
+  "[].date_created":    { type: isoDate }
+  "[].customer":        { type: preserve }
+  "*": { type: auto }

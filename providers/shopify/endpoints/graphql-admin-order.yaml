@@ -1,0 +1,103 @@
+endpoint:
+  method: POST
+  path: /admin/api/2024-10/graphql.json (query order)
+  description: Shopify Admin GraphQL — single order by GID
+  doc_url: https://shopify.dev/docs/api/admin-graphql/latest/queries/order
+
+signature:
+  required_paths:
+    - data.order.id
+    - data.order.name
+    - data.order.totalPriceSet.shopMoney.amount
+    - data.order.displayFinancialStatus
+  optional_paths:
+    - extensions.cost.actualQueryCost
+    - data.order.email
+    - data.order.customer
+    - data.order.lineItems
+
+fields:
+  "extensions.cost.requestedQueryCost":  { type: preserve }
+  "extensions.cost.actualQueryCost":     { type: preserve }
+  "extensions.cost.throttleStatus.maximumAvailable":   { type: preserve }
+  "extensions.cost.throttleStatus.currentlyAvailable": { type: preserve }
+  "extensions.cost.throttleStatus.restoreRate":        { type: preserve }
+  "data.order.id":                  { type: id, anchor: true }
+  "data.order.name":                { type: id, anchor: true }
+  "data.order.email":               { type: email, anchor: true }
+  "data.order.phone":               { type: phone }
+  "data.order.note":                { type: shortText }
+  "data.order.tags":                { type: preserve }
+  "data.order.confirmationNumber":  { type: id, anchor: true }
+  "data.order.createdAt":           { type: isoDate }
+  "data.order.updatedAt":           { type: isoDate }
+  "data.order.processedAt":         { type: isoDate }
+  "data.order.closedAt":            { type: isoDate }
+  "data.order.cancelledAt":         { type: isoDate }
+  "data.order.displayFinancialStatus":    { type: preserve }
+  "data.order.displayFulfillmentStatus":  { type: preserve }
+  "data.order.fullyPaid":           { type: preserve }
+  "data.order.unpaid":              { type: preserve }
+  "data.order.confirmed":           { type: preserve }
+  "data.order.test":                { type: preserve }
+  "data.order.taxesIncluded":       { type: preserve }
+  "data.order.currencyCode":            { type: preserve }
+  "data.order.presentmentCurrencyCode": { type: preserve }
+  "data.order.totalPriceSet.shopMoney.amount":               { type: priceAmount }
+  "data.order.totalPriceSet.shopMoney.currencyCode":         { type: preserve }
+  "data.order.totalPriceSet.presentmentMoney.amount":        { type: priceAmount }
+  "data.order.totalPriceSet.presentmentMoney.currencyCode":  { type: preserve }
+  "data.order.subtotalPriceSet.shopMoney.amount":            { type: priceAmount }
+  "data.order.subtotalPriceSet.shopMoney.currencyCode":      { type: preserve }
+  "data.order.totalTaxSet.shopMoney.amount":                 { type: priceAmount }
+  "data.order.totalTaxSet.shopMoney.currencyCode":           { type: preserve }
+  "data.order.totalShippingPriceSet.shopMoney.amount":       { type: priceAmount }
+  "data.order.totalShippingPriceSet.shopMoney.currencyCode": { type: preserve }
+  "data.order.totalRefundedSet.shopMoney.amount":            { type: priceAmount }
+  "data.order.totalRefundedSet.shopMoney.currencyCode":      { type: preserve }
+  "data.order.customer.id":                { type: id, anchor: true }
+  "data.order.customer.email":             { type: email, anchor: true }
+  "data.order.customer.firstName":         { type: firstName }
+  "data.order.customer.lastName":          { type: lastName }
+  "data.order.customer.displayName":       { type: fullName }
+  "data.order.customer.phone":             { type: phone }
+  "data.order.billingAddress.firstName":   { type: firstName }
+  "data.order.billingAddress.lastName":    { type: lastName }
+  "data.order.billingAddress.name":        { type: fullName }
+  "data.order.billingAddress.company":     { type: company }
+  "data.order.billingAddress.address1":    { type: street }
+  "data.order.billingAddress.address2":    { type: streetSecondary }
+  "data.order.billingAddress.city":        { type: city }
+  "data.order.billingAddress.province":    { type: stateOrProvince }
+  "data.order.billingAddress.provinceCode": { type: stateOrProvince }
+  "data.order.billingAddress.zip":         { type: postalCode }
+  "data.order.billingAddress.country":     { type: country }
+  "data.order.billingAddress.countryCode": { type: countryCode }
+  "data.order.billingAddress.phone":       { type: phone }
+  "data.order.shippingAddress.firstName":   { type: firstName }
+  "data.order.shippingAddress.lastName":    { type: lastName }
+  "data.order.shippingAddress.name":        { type: fullName }
+  "data.order.shippingAddress.company":     { type: company }
+  "data.order.shippingAddress.address1":    { type: street }
+  "data.order.shippingAddress.address2":    { type: streetSecondary }
+  "data.order.shippingAddress.city":        { type: city }
+  "data.order.shippingAddress.province":    { type: stateOrProvince }
+  "data.order.shippingAddress.provinceCode": { type: stateOrProvince }
+  "data.order.shippingAddress.zip":         { type: postalCode }
+  "data.order.shippingAddress.country":     { type: country }
+  "data.order.shippingAddress.countryCode": { type: countryCode }
+  "data.order.shippingAddress.phone":       { type: phone }
+  "data.order.lineItems.edges[].cursor":   { type: id }
+  "data.order.lineItems.edges[].node.id":         { type: id, anchor: true }
+  "data.order.lineItems.edges[].node.title":      { type: productName }
+  "data.order.lineItems.edges[].node.name":       { type: productName }
+  "data.order.lineItems.edges[].node.sku":        { type: sku, anchor: true }
+  "data.order.lineItems.edges[].node.vendor":     { type: company }
+  "data.order.lineItems.edges[].node.quantity":   { type: preserve }
+  "data.order.lineItems.edges[].node.originalUnitPriceSet.shopMoney.amount":   { type: priceAmount }
+  "data.order.lineItems.edges[].node.discountedUnitPriceSet.shopMoney.amount": { type: priceAmount }
+  "data.order.lineItems.edges[].node.variant.id":  { type: id, anchor: true }
+  "data.order.lineItems.edges[].node.product.id":  { type: id, anchor: true }
+  "data.order.lineItems.edges[].node.customAttributes[].key":   { type: preserve }
+  "data.order.lineItems.edges[].node.customAttributes[].value": { type: shortText }
+  "*": { type: auto }

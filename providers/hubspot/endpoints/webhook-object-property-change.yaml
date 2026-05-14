@@ -1,0 +1,35 @@
+endpoint:
+  method: POST
+  path: "*.propertyChange"
+  kind: webhook
+  description: HubSpot webhook — property change events (contact/deal/company/ticket share shape)
+  doc_url: https://developers.hubspot.com/docs/api/webhooks
+
+signature:
+  required_paths:
+    - "[].eventId"
+    - "[].subscriptionType"
+    - "[].portalId"
+    - "[].objectId"
+    - "[].propertyName"
+    - "[].propertyValue"
+  optional_paths:
+    - "[].changeFlag"
+    - "[].changeSource"
+    - "[].sourceId"
+
+fields:
+  "[].eventId":          { type: id, anchor: true }
+  "[].subscriptionId":   { type: id, anchor: true }
+  "[].portalId":         { type: id, anchor: true }
+  "[].appId":            { type: id, anchor: true }
+  "[].occurredAt":       { type: preserve }
+  "[].subscriptionType": { type: preserve }
+  "[].attemptNumber":    { type: preserve }
+  "[].objectId":         { type: id, anchor: true }
+  "[].changeSource":     { type: preserve }
+  "[].changeFlag":       { type: preserve }
+  "[].propertyName":     { type: preserve }
+  "[].propertyValue":    { type: auto }
+  "[].sourceId":         { type: id, anchor: true }
+  "*": { type: auto }

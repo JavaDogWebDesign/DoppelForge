@@ -1,0 +1,68 @@
+endpoint:
+  method: GET
+  path: /v2/orders
+  description: List orders
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].customer_id"
+    - "[].status_id"
+  optional_paths:
+    - "[].billing_address"
+    - "[].cart_id"
+
+fields:
+  "[].id":                              { type: id, anchor: true }
+  "[].customer_id":                     { type: id, anchor: true }
+  "[].cart_id":                         { type: uuid, anchor: true }
+  "[].order_id":                        { type: id, anchor: true }
+  "[].date_created":                    { type: isoDate }
+  "[].date_modified":                   { type: isoDate }
+  "[].date_shipped":                    { type: isoDate }
+  "[].status_id":                       { type: preserve }
+  "[].status":                          { type: preserve }
+  "[].subtotal_ex_tax":                 { type: preserve }
+  "[].subtotal_inc_tax":                { type: preserve }
+  "[].subtotal_tax":                    { type: preserve }
+  "[].total_ex_tax":                    { type: preserve }
+  "[].total_inc_tax":                   { type: preserve }
+  "[].total_tax":                       { type: preserve }
+  "[].items_total":                     { type: preserve }
+  "[].items_shipped":                   { type: preserve }
+  "[].payment_method":                  { type: preserve }
+  "[].payment_status":                  { type: preserve }
+  "[].currency_id":                     { type: preserve }
+  "[].currency_code":                   { type: preserve }
+  "[].currency_exchange_rate":          { type: preserve }
+  "[].default_currency_id":             { type: preserve }
+  "[].default_currency_code":           { type: preserve }
+  "[].channel_id":                      { type: preserve }
+  "[].ip_address":                      { type: ipv4 }
+  "[].ip_address_v6":                   { type: preserve }
+  "[].geoip_country":                   { type: country }
+  "[].geoip_country_iso2":              { type: countryCode }
+  "[].order_source":                    { type: preserve }
+  "[].external_source":                 { type: preserve }
+  "[].external_id":                     { type: preserve }
+  "[].external_merchant_id":            { type: preserve }
+  "[].tax_provider_id":                 { type: preserve }
+  "[].customer_message":                { type: shortText }
+  "[].staff_notes":                     { type: shortText }
+  "[].billing_address.first_name":      { type: firstName }
+  "[].billing_address.last_name":       { type: lastName }
+  "[].billing_address.company":         { type: company }
+  "[].billing_address.street_1":        { type: street }
+  "[].billing_address.street_2":        { type: streetSecondary }
+  "[].billing_address.city":            { type: city }
+  "[].billing_address.state":           { type: stateOrProvince }
+  "[].billing_address.zip":             { type: postalCode }
+  "[].billing_address.country":         { type: country }
+  "[].billing_address.country_iso2":    { type: countryCode }
+  "[].billing_address.phone":           { type: phone }
+  "[].billing_address.email":           { type: email, anchor: true }
+  "[].products.url":                    { type: url }
+  "[].shipping_addresses.url":          { type: url }
+  "[].coupons.url":                     { type: url }
+  "*": { type: auto }

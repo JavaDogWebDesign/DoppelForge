@@ -1,0 +1,75 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/products/{product_id}.json
+  description: Get a single product
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/product
+
+signature:
+  required_paths:
+    - product.id
+    - product.admin_graphql_api_id
+    - product.title
+    - product.handle
+  optional_paths:
+    - product.variants
+    - product.images
+
+fields:
+  "product.id":                    { type: id, anchor: true }
+  "product.admin_graphql_api_id":  { type: preserve }
+  "product.title":                 { type: productName }
+  "product.body_html":             { type: longText }
+  "product.vendor":                { type: company }
+  "product.product_type":          { type: shortText }
+  "product.created_at":            { type: isoDate }
+  "product.handle":                { type: id, anchor: true }
+  "product.updated_at":            { type: isoDate }
+  "product.published_at":          { type: isoDate }
+  "product.template_suffix":       { type: preserve }
+  "product.status":                { type: preserve }
+  "product.published_scope":       { type: preserve }
+  "product.tags":                  { type: preserve }
+  "product.variants[].id":         { type: id, anchor: true }
+  "product.variants[].product_id": { type: id, anchor: true }
+  "product.variants[].admin_graphql_api_id": { type: preserve }
+  "product.variants[].title":      { type: productName }
+  "product.variants[].price":      { type: preserve }
+  "product.variants[].sku":        { type: sku, anchor: true }
+  "product.variants[].position":   { type: preserve }
+  "product.variants[].inventory_policy": { type: preserve }
+  "product.variants[].compare_at_price": { type: preserve }
+  "product.variants[].option1":    { type: preserve }
+  "product.variants[].option2":    { type: preserve }
+  "product.variants[].option3":    { type: preserve }
+  "product.variants[].created_at": { type: isoDate }
+  "product.variants[].updated_at": { type: isoDate }
+  "product.variants[].taxable":    { type: preserve }
+  "product.variants[].barcode":    { type: id }
+  "product.variants[].grams":      { type: preserve }
+  "product.variants[].image_id":   { type: id, anchor: true }
+  "product.variants[].weight":     { type: preserve }
+  "product.variants[].weight_unit": { type: preserve }
+  "product.variants[].inventory_item_id": { type: id, anchor: true }
+  "product.variants[].inventory_quantity": { type: preserve }
+  "product.variants[].requires_shipping": { type: preserve }
+  "product.options[].id":          { type: id, anchor: true }
+  "product.options[].product_id":  { type: id, anchor: true }
+  "product.options[].name":        { type: preserve }
+  "product.options[].position":    { type: preserve }
+  "product.options[].values":      { type: preserve }
+  "product.images[].id":           { type: id, anchor: true }
+  "product.images[].product_id":   { type: id, anchor: true }
+  "product.images[].admin_graphql_api_id": { type: preserve }
+  "product.images[].position":     { type: preserve }
+  "product.images[].alt":          { type: shortText }
+  "product.images[].width":        { type: preserve }
+  "product.images[].height":       { type: preserve }
+  "product.images[].src":          { type: url }
+  "product.images[].variant_ids":  { type: preserve }
+  "product.images[].created_at":   { type: isoDate }
+  "product.images[].updated_at":   { type: isoDate }
+  "product.image.id":              { type: id, anchor: true }
+  "product.image.product_id":      { type: id, anchor: true }
+  "product.image.src":             { type: url }
+  "product.image.alt":             { type: shortText }
+  "*": { type: auto }

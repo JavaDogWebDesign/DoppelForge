@@ -1,0 +1,37 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/products
+  description: List products
+  doc_url: https://developers.hubspot.com/docs/api/crm/products
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+    - results[].properties.name
+  optional_paths:
+    - paging.next.after
+    - results[].properties.price
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                          { type: id, anchor: true }
+  "results[].createdAt":                   { type: isoDate }
+  "results[].updatedAt":                   { type: isoDate }
+  "results[].archived":                    { type: preserve }
+  "results[].properties.hs_object_id":     { type: id, anchor: true }
+  "results[].properties.createdate":       { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.name":             { type: productName }
+  "results[].properties.description":      { type: longText }
+  "results[].properties.price":            { type: preserve }
+  "results[].properties.hs_cost_of_goods_sold": { type: preserve }
+  "results[].properties.hs_sku":           { type: sku, anchor: true }
+  "results[].properties.hs_product_type":  { type: preserve }
+  "results[].properties.hs_recurring_billing_period": { type: preserve }
+  "results[].properties.tax":              { type: preserve }
+  "results[].properties.hs_url":           { type: url }
+  "results[].properties.hubspot_owner_id": { type: id, anchor: true }
+  "*": { type: auto }

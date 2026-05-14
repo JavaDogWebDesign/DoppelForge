@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /payment_methods
+  description: List payment methods
+  doc_url: https://developer.rechargepayments.com/2021-11/payment_methods
+
+signature:
+  required_paths:
+    - payment_methods[].id
+    - payment_methods[].customer_id
+    - payment_methods[].payment_type
+  optional_paths:
+    - next_cursor
+    - payment_methods[].payment_details
+
+fields:
+  "next_cursor":      { type: id, anchor: true }
+  "previous_cursor":  { type: id, anchor: true }
+  "payment_methods[].id":                      { type: id, anchor: true }
+  "payment_methods[].customer_id":             { type: id, anchor: true }
+  "payment_methods[].processor_customer_token": { type: id, anchor: true }
+  "payment_methods[].processor_name":          { type: preserve }
+  "payment_methods[].payment_type":            { type: preserve }
+  "payment_methods[].default":                 { type: preserve }
+  "payment_methods[].status":                  { type: preserve }
+  "payment_methods[].status_reason":           { type: preserve }
+  "payment_methods[].created_at":              { type: isoDate }
+  "payment_methods[].updated_at":              { type: isoDate }
+  "payment_methods[].include":                 { type: preserve }
+  "payment_methods[].payment_details.brand":           { type: preserve }
+  "payment_methods[].payment_details.exp_month":       { type: preserve }
+  "payment_methods[].payment_details.exp_year":        { type: preserve }
+  "payment_methods[].payment_details.last4":           { type: id }
+  "payment_methods[].payment_details.paypal_email":    { type: email, anchor: true }
+  "payment_methods[].payment_details.paypal_payer_id": { type: id, anchor: true }
+  "payment_methods[].billing_address.address1":  { type: street }
+  "payment_methods[].billing_address.address2":  { type: streetSecondary }
+  "payment_methods[].billing_address.city":      { type: city }
+  "payment_methods[].billing_address.company":   { type: company }
+  "payment_methods[].billing_address.country":   { type: country }
+  "payment_methods[].billing_address.country_code": { type: countryCode }
+  "payment_methods[].billing_address.first_name": { type: firstName }
+  "payment_methods[].billing_address.last_name":  { type: lastName }
+  "payment_methods[].billing_address.phone":      { type: phone }
+  "payment_methods[].billing_address.province":   { type: stateOrProvince }
+  "payment_methods[].billing_address.zip":        { type: postalCode }
+  "*": { type: auto }

@@ -1,0 +1,63 @@
+endpoint:
+  method: GET
+  path: /v1/payment_intents/{intent}
+  description: Retrieve a payment intent
+  doc_url: https://docs.stripe.com/api/payment_intents/retrieve
+
+signature:
+  required_paths:
+    - id
+    - object
+    - amount
+    - client_secret
+    - status
+  optional_paths:
+    - customer
+    - latest_charge
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "object":                   { type: preserve }
+  "amount":                   { type: preserve }
+  "amount_capturable":        { type: preserve }
+  "amount_received":          { type: preserve }
+  "application":              { type: id, anchor: true }
+  "application_fee_amount":   { type: preserve }
+  "canceled_at":              { type: unixTimestamp }
+  "cancellation_reason":      { type: preserve }
+  "capture_method":           { type: preserve }
+  "client_secret":            { type: redact }
+  "confirmation_method":      { type: preserve }
+  "created":                  { type: unixTimestamp }
+  "currency":                 { type: preserve }
+  "customer":                 { type: id, anchor: true }
+  "description":              { type: shortText }
+  "invoice":                  { type: id, anchor: true }
+  "last_payment_error.code":         { type: preserve }
+  "last_payment_error.decline_code": { type: preserve }
+  "last_payment_error.message":      { type: shortText }
+  "last_payment_error.type":         { type: preserve }
+  "latest_charge":            { type: id, anchor: true }
+  "livemode":                 { type: preserve }
+  "metadata":                 { type: preserve }
+  "next_action.type":         { type: preserve }
+  "on_behalf_of":             { type: id, anchor: true }
+  "payment_method":           { type: id, anchor: true }
+  "payment_method_types":     { type: preserve }
+  "receipt_email":            { type: email, anchor: true }
+  "review":                   { type: id, anchor: true }
+  "setup_future_usage":       { type: preserve }
+  "shipping.address.city":         { type: city }
+  "shipping.address.country":      { type: countryCode }
+  "shipping.address.line1":        { type: street }
+  "shipping.address.line2":        { type: streetSecondary }
+  "shipping.address.postal_code":  { type: postalCode }
+  "shipping.address.state":        { type: stateOrProvince }
+  "shipping.name":            { type: fullName }
+  "shipping.phone":           { type: phone }
+  "shipping.tracking_number": { type: id, anchor: true }
+  "shipping.carrier":         { type: company }
+  "statement_descriptor":     { type: preserve }
+  "status":                   { type: preserve }
+  "transfer_group":           { type: id }
+  "*": { type: auto }

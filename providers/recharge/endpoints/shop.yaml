@@ -1,0 +1,43 @@
+endpoint:
+  method: GET
+  path: /shop
+  description: Retrieve shop metadata
+  doc_url: https://developer.rechargepayments.com/2021-11/shop
+
+signature:
+  required_paths:
+    - shop.id
+    - shop.shop_email
+    - shop.name
+  optional_paths:
+    - shop.domain
+    - shop.timezone
+
+fields:
+  "shop.id":                       { type: id, anchor: true }
+  "shop.shop_email":               { type: email, anchor: true }
+  "shop.email":                    { type: email, anchor: true }
+  "shop.customer_service_email":   { type: email, anchor: true }
+  "shop.name":                     { type: company }
+  "shop.domain":                   { type: url }
+  "shop.myshopify_domain":         { type: url }
+  "shop.url":                      { type: url }
+  "shop.created_at":               { type: isoDate }
+  "shop.updated_at":               { type: isoDate }
+  "shop.iana_timezone":            { type: preserve }
+  "shop.timezone":                 { type: preserve }
+  "shop.currency":                 { type: preserve }
+  "shop.country":                  { type: country }
+  "shop.country_code":             { type: countryCode }
+  "shop.province":                 { type: stateOrProvince }
+  "shop.city":                     { type: city }
+  "shop.address1":                 { type: street }
+  "shop.address2":                 { type: streetSecondary }
+  "shop.zip":                      { type: postalCode }
+  "shop.phone":                    { type: phone }
+  "shop.shop_phone":               { type: phone }
+  "shop.checkout_logo_url":        { type: url }
+  "shop.checkout_platform":        { type: preserve }
+  "shop.disabled_currencies":      { type: preserve }
+  "shop.enabled_presentment_currencies": { type: preserve }
+  "*": { type: auto }

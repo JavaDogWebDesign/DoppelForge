@@ -1,0 +1,61 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{orderId}/transactions
+  description: Get an order's transactions
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-transactions
+
+# Signature emphasizes payment-specific fields so this doesn't collide
+# with other v3 list endpoints (which also use data[].id and meta.pagination).
+signature:
+  required_paths:
+    - data[].id
+    - data[].order_id
+    - data[].gateway
+    - data[].payment_method_id
+    - meta.pagination.total
+  optional_paths:
+    - data[].avs_result
+    - data[].cvv_result
+    - data[].credit_card
+
+fields:
+  "data[].id":                          { type: id, anchor: true }
+  "data[].order_id":                    { type: id, anchor: true }
+  "data[].event":                       { type: preserve }
+  "data[].method":                      { type: preserve }
+  "data[].amount":                      { type: preserve }
+  "data[].currency":                    { type: preserve }
+  "data[].gateway":                     { type: preserve }
+  "data[].gateway_transaction_id":      { type: id, anchor: true }
+  "data[].payment_method_id":           { type: preserve }
+  "data[].status":                      { type: preserve }
+  "data[].test":                        { type: preserve }
+  "data[].fraud_review":                { type: preserve }
+  "data[].reference_transaction_id":    { type: id, anchor: true }
+  "data[].date_created":                { type: isoDate }
+  "data[].avs_result.code":             { type: preserve }
+  "data[].avs_result.message":          { type: preserve }
+  "data[].avs_result.street_match":     { type: preserve }
+  "data[].avs_result.postal_match":     { type: preserve }
+  "data[].cvv_result.code":             { type: preserve }
+  "data[].cvv_result.message":          { type: preserve }
+  "data[].credit_card.card_type":       { type: preserve }
+  "data[].credit_card.card_iin":        { type: id }
+  "data[].credit_card.card_last4":      { type: id }
+  "data[].credit_card.card_expiry_month": { type: preserve }
+  "data[].credit_card.card_expiry_year":  { type: preserve }
+  "data[].gift_certificate":            { type: preserve }
+  "data[].store_credit":                { type: preserve }
+  "data[].offline":                     { type: preserve }
+  "data[].custom":                      { type: preserve }
+  "data[].payment_instrument_token":    { type: id, anchor: true }
+  "data[].custom_provider_field_result": { type: preserve }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "meta.pagination.links.current":      { type: preserve }
+  "meta.pagination.links.next":         { type: preserve }
+  "meta.pagination.links.previous":     { type: preserve }
+  "*": { type: auto }

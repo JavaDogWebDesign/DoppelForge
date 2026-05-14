@@ -1,0 +1,62 @@
+endpoint:
+  method: GET
+  path: /v1/customers
+  description: List customers
+  doc_url: https://docs.stripe.com/api/customers/list
+
+# Stripe list envelope: { object: "list", url, has_more, data: [...] }
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - has_more
+    - url
+  optional_paths:
+    - data[].email
+    - data[].address
+
+fields:
+  "object":            { type: preserve }
+  "url":               { type: url }
+  "has_more":          { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].address.city":             { type: city }
+  "data[].address.country":          { type: countryCode }
+  "data[].address.line1":            { type: street }
+  "data[].address.line2":            { type: streetSecondary }
+  "data[].address.postal_code":      { type: postalCode }
+  "data[].address.state":            { type: stateOrProvince }
+  "data[].balance":                  { type: preserve }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].default_source":           { type: id, anchor: true }
+  "data[].delinquent":               { type: preserve }
+  "data[].description":              { type: shortText }
+  "data[].discount":                 { type: preserve }
+  "data[].email":                    { type: email, anchor: true }
+  "data[].invoice_prefix":           { type: id, anchor: true }
+  "data[].invoice_settings.custom_fields":         { type: preserve }
+  "data[].invoice_settings.default_payment_method": { type: id, anchor: true }
+  "data[].invoice_settings.footer":                { type: shortText }
+  "data[].invoice_settings.rendering_options":     { type: preserve }
+  "data[].livemode":                 { type: preserve }
+  "data[].metadata":                 { type: preserve }
+  "data[].name":                     { type: fullName }
+  "data[].next_invoice_sequence":    { type: preserve }
+  "data[].phone":                    { type: phone }
+  "data[].preferred_locales":        { type: preserve }
+  "data[].shipping.address.city":         { type: city }
+  "data[].shipping.address.country":      { type: countryCode }
+  "data[].shipping.address.line1":        { type: street }
+  "data[].shipping.address.line2":        { type: streetSecondary }
+  "data[].shipping.address.postal_code":  { type: postalCode }
+  "data[].shipping.address.state":        { type: stateOrProvince }
+  "data[].shipping.name":            { type: fullName }
+  "data[].shipping.phone":           { type: phone }
+  "data[].shipping.tracking_number": { type: id, anchor: true }
+  "data[].shipping.carrier":         { type: company }
+  "data[].tax_exempt":               { type: preserve }
+  "data[].test_clock":               { type: id, anchor: true }
+  "*": { type: auto }

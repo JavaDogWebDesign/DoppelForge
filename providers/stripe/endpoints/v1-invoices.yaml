@@ -1,0 +1,122 @@
+endpoint:
+  method: GET
+  path: /v1/invoices
+  description: List invoices
+  doc_url: https://docs.stripe.com/api/invoices/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].number
+    - data[].customer
+    - has_more
+  optional_paths:
+    - data[].lines
+    - data[].hosted_invoice_url
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].account_country":          { type: countryCode }
+  "data[].account_name":             { type: company }
+  "data[].account_tax_ids":          { type: preserve }
+  "data[].amount_due":               { type: preserve }
+  "data[].amount_paid":              { type: preserve }
+  "data[].amount_remaining":         { type: preserve }
+  "data[].amount_shipping":          { type: preserve }
+  "data[].application":              { type: id, anchor: true }
+  "data[].attempt_count":            { type: preserve }
+  "data[].attempted":                { type: preserve }
+  "data[].auto_advance":             { type: preserve }
+  "data[].billing_reason":           { type: preserve }
+  "data[].charge":                   { type: id, anchor: true }
+  "data[].collection_method":        { type: preserve }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].customer":                 { type: id, anchor: true }
+  "data[].customer_address.city":         { type: city }
+  "data[].customer_address.country":      { type: countryCode }
+  "data[].customer_address.line1":        { type: street }
+  "data[].customer_address.line2":        { type: streetSecondary }
+  "data[].customer_address.postal_code":  { type: postalCode }
+  "data[].customer_address.state":        { type: stateOrProvince }
+  "data[].customer_email":           { type: email, anchor: true }
+  "data[].customer_name":            { type: fullName }
+  "data[].customer_phone":           { type: phone }
+  "data[].customer_shipping.address.city":         { type: city }
+  "data[].customer_shipping.address.country":      { type: countryCode }
+  "data[].customer_shipping.address.line1":        { type: street }
+  "data[].customer_shipping.address.line2":        { type: streetSecondary }
+  "data[].customer_shipping.address.postal_code":  { type: postalCode }
+  "data[].customer_shipping.address.state":        { type: stateOrProvince }
+  "data[].customer_shipping.name":   { type: fullName }
+  "data[].customer_shipping.phone":  { type: phone }
+  "data[].customer_tax_exempt":      { type: preserve }
+  "data[].default_payment_method":   { type: id, anchor: true }
+  "data[].description":              { type: shortText }
+  "data[].due_date":                 { type: unixTimestamp }
+  "data[].ending_balance":           { type: preserve }
+  "data[].footer":                   { type: shortText }
+  "data[].hosted_invoice_url":       { type: url }
+  "data[].invoice_pdf":              { type: url }
+  "data[].lines.object":             { type: preserve }
+  "data[].lines.has_more":           { type: preserve }
+  "data[].lines.url":                { type: url }
+  "data[].lines.data[].id":          { type: id, anchor: true }
+  "data[].lines.data[].object":      { type: preserve }
+  "data[].lines.data[].amount":      { type: preserve }
+  "data[].lines.data[].amount_excluding_tax": { type: preserve }
+  "data[].lines.data[].currency":    { type: preserve }
+  "data[].lines.data[].description": { type: shortText }
+  "data[].lines.data[].discountable": { type: preserve }
+  "data[].lines.data[].invoice":     { type: id, anchor: true }
+  "data[].lines.data[].invoice_item": { type: id, anchor: true }
+  "data[].lines.data[].livemode":    { type: preserve }
+  "data[].lines.data[].metadata":    { type: preserve }
+  "data[].lines.data[].period.start": { type: unixTimestamp }
+  "data[].lines.data[].period.end":   { type: unixTimestamp }
+  "data[].lines.data[].plan.id":     { type: id, anchor: true }
+  "data[].lines.data[].plan.product": { type: id, anchor: true }
+  "data[].lines.data[].plan.amount": { type: preserve }
+  "data[].lines.data[].plan.currency": { type: preserve }
+  "data[].lines.data[].plan.interval": { type: preserve }
+  "data[].lines.data[].price.id":    { type: id, anchor: true }
+  "data[].lines.data[].price.product": { type: id, anchor: true }
+  "data[].lines.data[].proration":   { type: preserve }
+  "data[].lines.data[].quantity":    { type: preserve }
+  "data[].lines.data[].subscription": { type: id, anchor: true }
+  "data[].lines.data[].subscription_item": { type: id, anchor: true }
+  "data[].lines.data[].type":        { type: preserve }
+  "data[].lines.data[].unit_amount_excluding_tax": { type: preserve }
+  "data[].livemode":                 { type: preserve }
+  "data[].metadata":                 { type: preserve }
+  "data[].next_payment_attempt":     { type: unixTimestamp }
+  "data[].number":                   { type: id, anchor: true }
+  "data[].on_behalf_of":             { type: id, anchor: true }
+  "data[].paid":                     { type: preserve }
+  "data[].paid_out_of_band":         { type: preserve }
+  "data[].payment_intent":           { type: id, anchor: true }
+  "data[].period_end":               { type: unixTimestamp }
+  "data[].period_start":             { type: unixTimestamp }
+  "data[].receipt_number":           { type: id, anchor: true }
+  "data[].starting_balance":         { type: preserve }
+  "data[].statement_descriptor":     { type: preserve }
+  "data[].status":                   { type: preserve }
+  "data[].status_transitions.finalized_at": { type: unixTimestamp }
+  "data[].status_transitions.marked_uncollectible_at": { type: unixTimestamp }
+  "data[].status_transitions.paid_at": { type: unixTimestamp }
+  "data[].status_transitions.voided_at": { type: unixTimestamp }
+  "data[].subscription":             { type: id, anchor: true }
+  "data[].subtotal":                 { type: preserve }
+  "data[].subtotal_excluding_tax":   { type: preserve }
+  "data[].tax":                      { type: preserve }
+  "data[].test_clock":               { type: id, anchor: true }
+  "data[].total":                    { type: preserve }
+  "data[].total_excluding_tax":      { type: preserve }
+  "data[].webhooks_delivered_at":    { type: unixTimestamp }
+  "*": { type: auto }

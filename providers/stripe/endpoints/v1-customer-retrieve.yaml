@@ -1,0 +1,53 @@
+endpoint:
+  method: GET
+  path: /v1/customers/{customer}
+  description: Retrieve a customer
+  doc_url: https://docs.stripe.com/api/customers/retrieve
+
+signature:
+  required_paths:
+    - id
+    - object
+    - created
+  optional_paths:
+    - email
+    - address
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "object":                   { type: preserve }
+  "address.city":             { type: city }
+  "address.country":          { type: countryCode }
+  "address.line1":            { type: street }
+  "address.line2":            { type: streetSecondary }
+  "address.postal_code":      { type: postalCode }
+  "address.state":            { type: stateOrProvince }
+  "balance":                  { type: preserve }
+  "created":                  { type: unixTimestamp }
+  "currency":                 { type: preserve }
+  "default_source":           { type: id, anchor: true }
+  "delinquent":               { type: preserve }
+  "description":              { type: shortText }
+  "email":                    { type: email, anchor: true }
+  "invoice_prefix":           { type: id, anchor: true }
+  "invoice_settings.default_payment_method": { type: id, anchor: true }
+  "invoice_settings.footer":  { type: shortText }
+  "livemode":                 { type: preserve }
+  "metadata":                 { type: preserve }
+  "name":                     { type: fullName }
+  "next_invoice_sequence":    { type: preserve }
+  "phone":                    { type: phone }
+  "preferred_locales":        { type: preserve }
+  "shipping.address.city":         { type: city }
+  "shipping.address.country":      { type: countryCode }
+  "shipping.address.line1":        { type: street }
+  "shipping.address.line2":        { type: streetSecondary }
+  "shipping.address.postal_code":  { type: postalCode }
+  "shipping.address.state":        { type: stateOrProvince }
+  "shipping.name":            { type: fullName }
+  "shipping.phone":           { type: phone }
+  "shipping.tracking_number": { type: id, anchor: true }
+  "shipping.carrier":         { type: company }
+  "tax_exempt":               { type: preserve }
+  "test_clock":               { type: id, anchor: true }
+  "*": { type: auto }

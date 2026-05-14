@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Doppel">
+  <title>Doppel</title>
+  <defs>
+    <style>
+      .d {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        font-weight: 800;
+        font-size: 56px;
+        letter-spacing: -1px;
+      }
+    </style>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="#14151c"/>
+  <!-- back D: original, receded -->
+  <text x="8" y="48" class="d" fill="#a875e0" fill-opacity="0.32">D</text>
+  <!-- front D: copy, offset right + down -->
+  <text x="18" y="56" class="d" fill="#a875e0">D</text>
+</svg>

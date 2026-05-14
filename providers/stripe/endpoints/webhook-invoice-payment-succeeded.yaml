@@ -1,0 +1,91 @@
+endpoint:
+  method: POST
+  path: invoice.payment_succeeded
+  kind: webhook
+  description: Stripe webhook — invoice payment succeeded
+  doc_url: https://docs.stripe.com/api/events/types#event_types-invoice.payment_succeeded
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.amount_paid
+    - data.object.billing_reason
+  optional_paths:
+    - data.object.hosted_invoice_url
+    - data.object.invoice_pdf
+    - data.object.number
+
+fields:
+  "id":                                       { type: id, anchor: true }
+  "object":                                   { type: preserve }
+  "api_version":                              { type: preserve }
+  "created":                                  { type: unixTimestamp }
+  "livemode":                                 { type: preserve }
+  "pending_webhooks":                         { type: preserve }
+  "type":                                     { type: preserve }
+  "account":                                  { type: id, anchor: true }
+  "request.id":                               { type: id, anchor: true }
+  "request.idempotency_key":                  { type: id, anchor: true }
+  "data.object.id":                           { type: id, anchor: true }
+  "data.object.object":                       { type: preserve }
+  "data.object.account_country":              { type: countryCode }
+  "data.object.account_name":                 { type: company }
+  "data.object.amount_due":                   { type: preserve }
+  "data.object.amount_paid":                  { type: preserve }
+  "data.object.amount_remaining":             { type: preserve }
+  "data.object.application_fee_amount":       { type: preserve }
+  "data.object.attempt_count":                { type: preserve }
+  "data.object.attempted":                    { type: preserve }
+  "data.object.auto_advance":                 { type: preserve }
+  "data.object.billing_reason":               { type: preserve }
+  "data.object.charge":                       { type: id, anchor: true }
+  "data.object.collection_method":            { type: preserve }
+  "data.object.created":                      { type: unixTimestamp }
+  "data.object.currency":                     { type: preserve }
+  "data.object.customer":                     { type: id, anchor: true }
+  "data.object.customer_address.city":        { type: city }
+  "data.object.customer_address.country":     { type: countryCode }
+  "data.object.customer_address.line1":       { type: street }
+  "data.object.customer_address.line2":       { type: streetSecondary }
+  "data.object.customer_address.postal_code": { type: postalCode }
+  "data.object.customer_address.state":       { type: stateOrProvince }
+  "data.object.customer_email":               { type: email, anchor: true }
+  "data.object.customer_name":                { type: fullName }
+  "data.object.customer_phone":               { type: phone }
+  "data.object.customer_shipping":            { type: preserve }
+  "data.object.customer_tax_exempt":          { type: preserve }
+  "data.object.description":                  { type: shortText }
+  "data.object.due_date":                     { type: unixTimestamp }
+  "data.object.ending_balance":               { type: preserve }
+  "data.object.hosted_invoice_url":           { type: url }
+  "data.object.invoice_pdf":                  { type: url }
+  "data.object.livemode":                     { type: preserve }
+  "data.object.metadata":                     { type: preserve }
+  "data.object.next_payment_attempt":         { type: unixTimestamp }
+  "data.object.number":                       { type: id, anchor: true }
+  "data.object.paid":                         { type: preserve }
+  "data.object.payment_intent":               { type: id, anchor: true }
+  "data.object.period_end":                   { type: unixTimestamp }
+  "data.object.period_start":                 { type: unixTimestamp }
+  "data.object.receipt_number":               { type: id, anchor: true }
+  "data.object.starting_balance":             { type: preserve }
+  "data.object.status":                       { type: preserve }
+  "data.object.subscription":                 { type: id, anchor: true }
+  "data.object.subtotal":                     { type: preserve }
+  "data.object.tax":                          { type: preserve }
+  "data.object.total":                        { type: preserve }
+  "data.object.lines.object":                 { type: preserve }
+  "data.object.lines.has_more":               { type: preserve }
+  "data.object.lines.url":                    { type: url }
+  "data.object.lines.data[].id":              { type: id, anchor: true }
+  "data.object.lines.data[].object":          { type: preserve }
+  "data.object.lines.data[].amount":          { type: preserve }
+  "data.object.lines.data[].currency":        { type: preserve }
+  "data.object.lines.data[].description":     { type: shortText }
+  "data.object.lines.data[].invoice_item":    { type: id, anchor: true }
+  "data.object.lines.data[].subscription":    { type: id, anchor: true }
+  "data.object.lines.data[].quantity":        { type: preserve }
+  "*": { type: auto }

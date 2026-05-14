@@ -1,0 +1,87 @@
+endpoint:
+  method: POST
+  path: /merchants/{merchant_id}/transactions/advanced_search
+  description: Search transactions (SDK Transaction.search collection)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/request/transaction/search
+
+# Most SDKs return a ResourceCollection where items live at `transactions[]`.
+# This map targets that collection shape.
+signature:
+  required_paths:
+    - transactions[].id
+    - transactions[].type
+    - transactions[].amount
+    - transactions[].status
+  optional_paths:
+    - transactions[].credit_card
+    - transactions[].customer
+
+fields:
+  "transactions[].id":                       { type: id, anchor: true }
+  "transactions[].type":                     { type: preserve }
+  "transactions[].status":                   { type: preserve }
+  "transactions[].amount":                   { type: preserve }
+  "transactions[].currency_iso_code":        { type: preserve }
+  "transactions[].merchant_account_id":      { type: id, anchor: true }
+  "transactions[].order_id":                 { type: id, anchor: true }
+  "transactions[].created_at":               { type: isoDate }
+  "transactions[].updated_at":               { type: isoDate }
+  "transactions[].channel":                  { type: preserve }
+  "transactions[].tax_amount":               { type: preserve }
+  "transactions[].tax_exempt":               { type: preserve }
+  "transactions[].product_sku":              { type: sku, anchor: true }
+  "transactions[].service_fee_amount":       { type: preserve }
+  "transactions[].avs_error_response_code":               { type: avsCode }
+  "transactions[].avs_street_address_response_code":      { type: avsCode }
+  "transactions[].avs_postal_code_response_code":         { type: avsCode }
+  "transactions[].cvv_response_code":                     { type: cvvCode }
+  "transactions[].processor_response_code":  { type: preserve }
+  "transactions[].processor_response_text":  { type: shortText }
+  "transactions[].processor_authorization_code": { type: id }
+  "transactions[].network_transaction_id":   { type: id, anchor: true }
+  "transactions[].subscription_id":          { type: id, anchor: true }
+  "transactions[].plan_id":                  { type: id, anchor: true }
+  "transactions[].payment_method_token":     { type: id, anchor: true }
+  "transactions[].payment_instrument_type":  { type: preserve }
+  "transactions[].credit_card.token":        { type: id, anchor: true }
+  "transactions[].credit_card.bin":          { type: id }
+  "transactions[].credit_card.last_4":       { type: id }
+  "transactions[].credit_card.card_type":    { type: preserve }
+  "transactions[].credit_card.expiration_month": { type: preserve }
+  "transactions[].credit_card.expiration_year":  { type: preserve }
+  "transactions[].credit_card.cardholder_name":  { type: fullName }
+  "transactions[].credit_card.country_of_issuance": { type: country }
+  "transactions[].credit_card.issuing_bank": { type: company }
+  "transactions[].credit_card.unique_number_identifier": { type: id, anchor: true }
+  "transactions[].paypal.payer_email":       { type: email, anchor: true }
+  "transactions[].paypal.payer_first_name":  { type: firstName }
+  "transactions[].paypal.payer_last_name":   { type: lastName }
+  "transactions[].paypal.payer_id":          { type: id, anchor: true }
+  "transactions[].billing.first_name":       { type: firstName }
+  "transactions[].billing.last_name":        { type: lastName }
+  "transactions[].billing.company":          { type: company }
+  "transactions[].billing.street_address":   { type: street }
+  "transactions[].billing.extended_address": { type: streetSecondary }
+  "transactions[].billing.locality":         { type: city }
+  "transactions[].billing.region":           { type: stateOrProvince }
+  "transactions[].billing.postal_code":      { type: postalCode }
+  "transactions[].billing.country_name":     { type: country }
+  "transactions[].billing.country_code_alpha2": { type: countryCode }
+  "transactions[].billing.phone_number":     { type: phone }
+  "transactions[].shipping.first_name":      { type: firstName }
+  "transactions[].shipping.last_name":       { type: lastName }
+  "transactions[].shipping.street_address":  { type: street }
+  "transactions[].shipping.locality":        { type: city }
+  "transactions[].shipping.postal_code":     { type: postalCode }
+  "transactions[].shipping.country_name":    { type: country }
+  "transactions[].customer.id":              { type: id, anchor: true }
+  "transactions[].customer.first_name":      { type: firstName }
+  "transactions[].customer.last_name":       { type: lastName }
+  "transactions[].customer.email":           { type: email, anchor: true }
+  "transactions[].customer.phone":           { type: phone }
+  "transactions[].customer.company":         { type: company }
+  "totalItems":                              { type: preserve }
+  "totalCount":                              { type: preserve }
+  "pageSize":                                { type: preserve }
+  "currentPage":                             { type: preserve }
+  "*": { type: auto }

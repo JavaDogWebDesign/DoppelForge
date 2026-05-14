@@ -1,0 +1,64 @@
+endpoint:
+  method: POST
+  path: customer.created
+  kind: webhook
+  description: Stripe webhook — customer created
+  doc_url: https://docs.stripe.com/api/events/types#event_types-customer.created
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.invoice_prefix
+  optional_paths:
+    - data.object.email
+    - data.object.balance
+    - data.object.delinquent
+
+fields:
+  "id":                                  { type: id, anchor: true }
+  "object":                              { type: preserve }
+  "api_version":                         { type: preserve }
+  "created":                             { type: unixTimestamp }
+  "livemode":                            { type: preserve }
+  "pending_webhooks":                    { type: preserve }
+  "type":                                { type: preserve }
+  "account":                             { type: id, anchor: true }
+  "request.id":                          { type: id, anchor: true }
+  "request.idempotency_key":             { type: id, anchor: true }
+  "data.object.id":                      { type: id, anchor: true }
+  "data.object.object":                  { type: preserve }
+  "data.object.address.city":            { type: city }
+  "data.object.address.country":         { type: countryCode }
+  "data.object.address.line1":           { type: street }
+  "data.object.address.line2":           { type: streetSecondary }
+  "data.object.address.postal_code":     { type: postalCode }
+  "data.object.address.state":           { type: stateOrProvince }
+  "data.object.balance":                 { type: preserve }
+  "data.object.created":                 { type: unixTimestamp }
+  "data.object.currency":                { type: preserve }
+  "data.object.default_source":          { type: id, anchor: true }
+  "data.object.delinquent":              { type: preserve }
+  "data.object.description":             { type: shortText }
+  "data.object.discount":                { type: preserve }
+  "data.object.email":                   { type: email, anchor: true }
+  "data.object.invoice_prefix":          { type: id }
+  "data.object.invoice_settings":        { type: preserve }
+  "data.object.livemode":                { type: preserve }
+  "data.object.metadata":                { type: preserve }
+  "data.object.name":                    { type: fullName }
+  "data.object.next_invoice_sequence":   { type: preserve }
+  "data.object.phone":                   { type: phone }
+  "data.object.preferred_locales":       { type: preserve }
+  "data.object.shipping.name":           { type: fullName }
+  "data.object.shipping.phone":          { type: phone }
+  "data.object.shipping.address.city":   { type: city }
+  "data.object.shipping.address.country": { type: countryCode }
+  "data.object.shipping.address.line1":  { type: street }
+  "data.object.shipping.address.line2":  { type: streetSecondary }
+  "data.object.shipping.address.postal_code": { type: postalCode }
+  "data.object.shipping.address.state":  { type: stateOrProvince }
+  "data.object.tax_exempt":              { type: preserve }
+  "*": { type: auto }

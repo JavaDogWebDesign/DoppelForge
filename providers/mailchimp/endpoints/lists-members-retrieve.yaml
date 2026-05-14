@@ -1,0 +1,79 @@
+endpoint:
+  method: GET
+  path: /3.0/lists/{list_id}/members/{subscriber_hash}
+  description: Retrieve a list member (subscriber)
+  doc_url: https://mailchimp.com/developer/marketing/api/list-members/get-member-info/
+
+# Mailchimp wraps each member as a bare object (no envelope). `id` is the
+# MD5 hash of the lowercased email — anchor so all references resolve.
+signature:
+  required_paths:
+    - id
+    - email_address
+    - status
+    - list_id
+    - timestamp_signup
+  optional_paths:
+    - merge_fields
+    - last_changed
+    - email_client
+    - stats
+
+fields:
+  "id":               { type: id, anchor: true }
+  "email_address":    { type: email, anchor: true }
+  "unique_email_id":  { type: id, anchor: true }
+  "contact_id":       { type: id, anchor: true }
+  "full_name":        { type: fullName }
+  "web_id":           { type: id, anchor: true }
+  "email_type":       { type: preserve }
+  "status":           { type: preserve }
+  "consent_timestamp": { type: isoDate }
+  "ip_signup":        { type: ipv4 }
+  "timestamp_signup": { type: isoDate }
+  "ip_opt":           { type: ipv4 }
+  "timestamp_opt":    { type: isoDate }
+  "member_rating":    { type: preserve }
+  "last_changed":     { type: isoDate }
+  "language":         { type: preserve }
+  "vip":              { type: preserve }
+  "email_client":     { type: shortText }
+  "list_id":          { type: id, anchor: true }
+  "source":           { type: preserve }
+  "tags_count":       { type: preserve }
+  "tags[].id":        { type: id, anchor: true }
+  "tags[].name":      { type: shortText }
+  "location.latitude":     { type: preserve }
+  "location.longitude":    { type: preserve }
+  "location.gmtoff":       { type: preserve }
+  "location.dstoff":       { type: preserve }
+  "location.country_code": { type: countryCode }
+  "location.timezone":     { type: preserve }
+  "location.region":       { type: stateOrProvince }
+  "merge_fields.FNAME":    { type: firstName }
+  "merge_fields.LNAME":    { type: lastName }
+  "merge_fields.PHONE":    { type: phone }
+  "merge_fields.BIRTHDAY": { type: isoDate }
+  "merge_fields.ADDRESS.addr1":   { type: street }
+  "merge_fields.ADDRESS.addr2":   { type: streetSecondary }
+  "merge_fields.ADDRESS.city":    { type: city }
+  "merge_fields.ADDRESS.state":   { type: stateOrProvince }
+  "merge_fields.ADDRESS.zip":     { type: postalCode }
+  "merge_fields.ADDRESS.country": { type: countryCode }
+  "marketing_permissions[].marketing_permission_id": { type: id, anchor: true }
+  "marketing_permissions[].text":    { type: shortText }
+  "marketing_permissions[].enabled": { type: preserve }
+  "last_note.note_id":     { type: id, anchor: true }
+  "last_note.created_at":  { type: isoDate }
+  "last_note.created_by":  { type: fullName }
+  "last_note.note":        { type: longText }
+  "stats.avg_open_rate":   { type: preserve }
+  "stats.avg_click_rate":  { type: preserve }
+  "stats.ecommerce_data.total_revenue":     { type: priceAmount }
+  "stats.ecommerce_data.number_of_orders":  { type: preserve }
+  "stats.ecommerce_data.currency_code":     { type: currency }
+  "interests":            { type: auto }
+  "_links[].href":        { type: url }
+  "_links[].rel":         { type: preserve }
+  "_links[].method":      { type: preserve }
+  "*": { type: auto }

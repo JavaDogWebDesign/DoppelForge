@@ -1,0 +1,52 @@
+endpoint:
+  method: POST
+  path: /collector/graphql (query company_collection)
+  description: HubSpot Content Hub GraphQL — company_collection
+  doc_url: https://developers.hubspot.com/docs/cms/start-building/features/data-driven-content/graphql/query-hubspot-data-using-graphql
+
+signature:
+  required_paths:
+    - data.CRM.company_collection.items[].id
+    - data.CRM.company_collection.items[].name
+    - data.CRM.company_collection.total
+    - data.CRM.company_collection.offset
+    - data.CRM.company_collection.limit
+  optional_paths:
+    - extensions.query_complexity.used_points
+    - data.CRM.company_collection.items[].domain
+    - data.CRM.company_collection.items[].industry
+
+fields:
+  "extensions.query_complexity.used_points":      { type: preserve }
+  "extensions.query_complexity.remaining_points": { type: preserve }
+  "data.CRM.company_collection.total":            { type: preserve }
+  "data.CRM.company_collection.offset":           { type: preserve }
+  "data.CRM.company_collection.limit":            { type: preserve }
+  "data.CRM.company_collection.items[].id":            { type: id, anchor: true }
+  "data.CRM.company_collection.items[].hs_object_id":  { type: id, anchor: true }
+  "data.CRM.company_collection.items[].createdate":    { type: isoDate }
+  "data.CRM.company_collection.items[].lastmodifieddate": { type: isoDate }
+  "data.CRM.company_collection.items[].name":          { type: company }
+  "data.CRM.company_collection.items[].domain":        { type: id, anchor: true }
+  "data.CRM.company_collection.items[].website":       { type: url }
+  "data.CRM.company_collection.items[].phone":         { type: phone }
+  "data.CRM.company_collection.items[].address":       { type: street }
+  "data.CRM.company_collection.items[].address2":      { type: streetSecondary }
+  "data.CRM.company_collection.items[].city":          { type: city }
+  "data.CRM.company_collection.items[].state":         { type: stateOrProvince }
+  "data.CRM.company_collection.items[].zip":           { type: postalCode }
+  "data.CRM.company_collection.items[].country":       { type: country }
+  "data.CRM.company_collection.items[].industry":      { type: shortText }
+  "data.CRM.company_collection.items[].description":   { type: longText }
+  "data.CRM.company_collection.items[].numberofemployees": { type: preserve }
+  "data.CRM.company_collection.items[].annualrevenue": { type: priceAmount }
+  "data.CRM.company_collection.items[].lifecyclestage": { type: preserve }
+  "data.CRM.company_collection.items[].hs_lead_status": { type: preserve }
+  "data.CRM.company_collection.items[].hubspot_owner_id": { type: id, anchor: true }
+  "data.CRM.company_collection.items[].hubspot_team_id":  { type: id, anchor: true }
+  "data.CRM.company_collection.items[].linkedin_company_page": { type: url }
+  "data.CRM.company_collection.items[].twitterhandle":    { type: id, anchor: true }
+  "data.CRM.company_collection.items[].facebook_company_page": { type: url }
+  "data.CRM.company_collection.items[].num_associated_contacts": { type: preserve }
+  "data.CRM.company_collection.items[].num_associated_deals":    { type: preserve }
+  "*": { type: auto }

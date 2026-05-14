@@ -1,0 +1,113 @@
+endpoint:
+  method: GET
+  path: /v3/catalog/products
+  description: List products
+  doc_url: https://developer.bigcommerce.com/docs/rest-catalog/products
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].name
+    - data[].sku
+    - meta.pagination.total
+  optional_paths:
+    - data[].variants[].sku
+    - data[].categories
+
+fields:
+  "data[].id":                          { type: id, anchor: true }
+  "data[].name":                        { type: productName }
+  "data[].type":                        { type: preserve }
+  "data[].sku":                         { type: sku, anchor: true }
+  "data[].description":                 { type: longText }
+  "data[].weight":                      { type: preserve }
+  "data[].width":                       { type: preserve }
+  "data[].depth":                       { type: preserve }
+  "data[].height":                      { type: preserve }
+  "data[].price":                       { type: preserve }
+  "data[].cost_price":                  { type: preserve }
+  "data[].retail_price":                { type: preserve }
+  "data[].sale_price":                  { type: preserve }
+  "data[].map_price":                   { type: preserve }
+  "data[].tax_class_id":                { type: preserve }
+  "data[].product_tax_code":            { type: preserve }
+  "data[].calculated_price":            { type: preserve }
+  "data[].categories":                  { type: preserve }
+  "data[].brand_id":                    { type: preserve }
+  "data[].option_set_id":               { type: preserve }
+  "data[].option_set_display":          { type: preserve }
+  "data[].inventory_level":             { type: preserve }
+  "data[].inventory_warning_level":     { type: preserve }
+  "data[].inventory_tracking":          { type: preserve }
+  "data[].reviews_rating_sum":          { type: preserve }
+  "data[].reviews_count":               { type: preserve }
+  "data[].total_sold":                  { type: preserve }
+  "data[].fixed_cost_shipping_price":   { type: preserve }
+  "data[].is_free_shipping":            { type: preserve }
+  "data[].is_visible":                  { type: preserve }
+  "data[].is_featured":                 { type: preserve }
+  "data[].related_products":            { type: preserve }
+  "data[].warranty":                    { type: shortText }
+  "data[].bin_picking_number":          { type: preserve }
+  "data[].layout_file":                 { type: preserve }
+  "data[].upc":                         { type: preserve }
+  "data[].mpn":                         { type: preserve }
+  "data[].gtin":                        { type: preserve }
+  "data[].search_keywords":             { type: shortText }
+  "data[].availability":                { type: preserve }
+  "data[].availability_description":    { type: shortText }
+  "data[].gift_wrapping_options_type":  { type: preserve }
+  "data[].gift_wrapping_options_list":  { type: preserve }
+  "data[].sort_order":                  { type: preserve }
+  "data[].condition":                   { type: preserve }
+  "data[].is_condition_shown":          { type: preserve }
+  "data[].order_quantity_minimum":      { type: preserve }
+  "data[].order_quantity_maximum":      { type: preserve }
+  "data[].page_title":                  { type: productName }
+  "data[].meta_keywords":               { type: preserve }
+  "data[].meta_description":            { type: shortText }
+  "data[].view_count":                  { type: preserve }
+  "data[].preorder_release_date":       { type: isoDate }
+  "data[].preorder_message":            { type: shortText }
+  "data[].is_preorder_only":            { type: preserve }
+  "data[].is_price_hidden":             { type: preserve }
+  "data[].price_hidden_label":          { type: shortText }
+  "data[].custom_url.url":              { type: url }
+  "data[].custom_url.is_customized":    { type: preserve }
+  "data[].open_graph_type":             { type: preserve }
+  "data[].open_graph_title":            { type: productName }
+  "data[].open_graph_description":      { type: shortText }
+  "data[].open_graph_use_meta_description": { type: preserve }
+  "data[].open_graph_use_product_name": { type: preserve }
+  "data[].open_graph_use_image":        { type: preserve }
+  "data[].date_created":                { type: isoDate }
+  "data[].date_modified":               { type: isoDate }
+  "data[].variants[].id":               { type: id, anchor: true }
+  "data[].variants[].product_id":       { type: id, anchor: true }
+  "data[].variants[].sku":              { type: sku, anchor: true }
+  "data[].variants[].sku_id":           { type: id }
+  "data[].variants[].price":            { type: preserve }
+  "data[].variants[].calculated_price": { type: preserve }
+  "data[].variants[].sale_price":       { type: preserve }
+  "data[].variants[].retail_price":     { type: preserve }
+  "data[].variants[].map_price":        { type: preserve }
+  "data[].variants[].weight":           { type: preserve }
+  "data[].variants[].width":            { type: preserve }
+  "data[].variants[].height":           { type: preserve }
+  "data[].variants[].depth":            { type: preserve }
+  "data[].variants[].is_free_shipping": { type: preserve }
+  "data[].variants[].inventory_level":  { type: preserve }
+  "data[].variants[].inventory_warning_level": { type: preserve }
+  "data[].variants[].bin_picking_number": { type: preserve }
+  "data[].variants[].upc":              { type: preserve }
+  "data[].variants[].mpn":              { type: preserve }
+  "data[].variants[].gtin":             { type: preserve }
+  "data[].variants[].purchasing_disabled": { type: preserve }
+  "data[].variants[].purchasing_disabled_message": { type: shortText }
+  "data[].variants[].image_url":        { type: url }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "*": { type: auto }

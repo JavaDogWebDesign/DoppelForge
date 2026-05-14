@@ -1,0 +1,53 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/quotes
+  description: List quotes
+  doc_url: https://developers.hubspot.com/docs/api/crm/quotes
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+  optional_paths:
+    - paging.next.after
+    - results[].properties.hs_title
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                          { type: id, anchor: true }
+  "results[].createdAt":                   { type: isoDate }
+  "results[].updatedAt":                   { type: isoDate }
+  "results[].archived":                    { type: preserve }
+  "results[].properties.hs_object_id":     { type: id, anchor: true }
+  "results[].properties.createdate":       { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.hs_title":         { type: shortText }
+  "results[].properties.hs_quote_number":  { type: id, anchor: true }
+  "results[].properties.hs_status":        { type: preserve }
+  "results[].properties.hs_expiration_date": { type: isoDate }
+  "results[].properties.hs_terms":         { type: longText }
+  "results[].properties.hs_currency":      { type: preserve }
+  "results[].properties.hs_language":      { type: preserve }
+  "results[].properties.hs_locale":        { type: preserve }
+  "results[].properties.hs_template_type": { type: preserve }
+  "results[].properties.hs_sender_firstname": { type: firstName }
+  "results[].properties.hs_sender_lastname":  { type: lastName }
+  "results[].properties.hs_sender_email":     { type: email, anchor: true }
+  "results[].properties.hs_sender_phone":     { type: phone }
+  "results[].properties.hs_sender_company_name": { type: company }
+  "results[].properties.hs_sender_jobtitle":  { type: shortText }
+  "results[].properties.hs_sender_company_address":      { type: street }
+  "results[].properties.hs_sender_company_address2":     { type: streetSecondary }
+  "results[].properties.hs_sender_company_city":         { type: city }
+  "results[].properties.hs_sender_company_state":        { type: stateOrProvince }
+  "results[].properties.hs_sender_company_zip":          { type: postalCode }
+  "results[].properties.hs_sender_company_country":      { type: country }
+  "results[].properties.hs_quote_amount":   { type: preserve }
+  "results[].properties.hs_subtotal":       { type: preserve }
+  "results[].properties.hs_tax_amount":     { type: preserve }
+  "results[].properties.hs_total_discount": { type: preserve }
+  "results[].properties.hs_quote_link":     { type: url }
+  "results[].properties.hubspot_owner_id":  { type: id, anchor: true }
+  "*": { type: auto }

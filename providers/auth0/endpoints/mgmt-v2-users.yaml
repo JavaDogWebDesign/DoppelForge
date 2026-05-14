@@ -1,0 +1,50 @@
+endpoint:
+  method: GET
+  path: /api/v2/users
+  description: List or search users (Management API v2)
+  doc_url: https://auth0.com/docs/api/management/v2/users/get-users
+
+# When `include_totals=true`, the response is `{ start, limit, length, total,
+# users: [...] }`. Without it, the response is a bare array of users. Both
+# shapes route here via the array-rooted users[] paths.
+signature:
+  required_paths:
+    - users[].user_id
+    - users[].email
+    - users[].created_at
+  optional_paths:
+    - total
+    - start
+    - limit
+    - users[].identities
+    - users[].last_login
+
+fields:
+  "start":   { type: preserve }
+  "limit":   { type: preserve }
+  "length":  { type: preserve }
+  "total":   { type: preserve }
+  "users[].user_id":         { type: id, anchor: true }
+  "users[].email":           { type: email, anchor: true }
+  "users[].email_verified":  { type: preserve }
+  "users[].username":        { type: id, anchor: true }
+  "users[].name":            { type: fullName }
+  "users[].given_name":      { type: firstName }
+  "users[].family_name":     { type: lastName }
+  "users[].nickname":        { type: shortText }
+  "users[].picture":         { type: url }
+  "users[].phone_number":    { type: phone }
+  "users[].phone_verified":  { type: preserve }
+  "users[].created_at":      { type: isoDate }
+  "users[].updated_at":      { type: isoDate }
+  "users[].last_login":      { type: isoDate }
+  "users[].last_ip":         { type: ipv4 }
+  "users[].logins_count":    { type: preserve }
+  "users[].blocked":         { type: preserve }
+  "users[].identities[].user_id":    { type: id, anchor: true }
+  "users[].identities[].provider":   { type: preserve }
+  "users[].identities[].connection": { type: preserve }
+  "users[].identities[].isSocial":   { type: preserve }
+  "users[].user_metadata":   { type: auto }
+  "users[].app_metadata":    { type: auto }
+  "*": { type: auto }

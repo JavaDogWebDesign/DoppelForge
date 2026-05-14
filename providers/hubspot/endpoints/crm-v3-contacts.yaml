@@ -1,0 +1,77 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/contacts
+  description: List contacts
+  doc_url: https://developers.hubspot.com/docs/api/crm/contacts
+
+# HubSpot v3 envelope: { results: [...], paging: { next: { after, link } } }
+# Each result has { id, properties: {...}, createdAt, updatedAt, archived }.
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+  optional_paths:
+    - paging.next.after
+    - results[].properties.email
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                                  { type: id, anchor: true }
+  "results[].createdAt":                           { type: isoDate }
+  "results[].updatedAt":                           { type: isoDate }
+  "results[].archived":                            { type: preserve }
+  "results[].archivedAt":                          { type: isoDate }
+  "results[].properties.hs_object_id":             { type: id, anchor: true }
+  "results[].properties.createdate":               { type: isoDate }
+  "results[].properties.lastmodifieddate":         { type: isoDate }
+  "results[].properties.email":                    { type: email, anchor: true }
+  "results[].properties.firstname":                { type: firstName }
+  "results[].properties.lastname":                 { type: lastName }
+  "results[].properties.fullname":                 { type: fullName }
+  "results[].properties.company":                  { type: company }
+  "results[].properties.jobtitle":                 { type: shortText }
+  "results[].properties.phone":                    { type: phone }
+  "results[].properties.mobilephone":              { type: phone }
+  "results[].properties.fax":                      { type: phone }
+  "results[].properties.website":                  { type: url }
+  "results[].properties.address":                  { type: street }
+  "results[].properties.city":                     { type: city }
+  "results[].properties.state":                    { type: stateOrProvince }
+  "results[].properties.zip":                      { type: postalCode }
+  "results[].properties.country":                  { type: country }
+  "results[].properties.ip_country":               { type: country }
+  "results[].properties.ip_country_code":          { type: countryCode }
+  "results[].properties.ip_state":                 { type: stateOrProvince }
+  "results[].properties.ip_city":                  { type: city }
+  "results[].properties.ip_zipcode":               { type: postalCode }
+  "results[].properties.industry":                 { type: shortText }
+  "results[].properties.lifecyclestage":           { type: preserve }
+  "results[].properties.hs_lead_status":           { type: preserve }
+  "results[].properties.hubspotscore":             { type: preserve }
+  "results[].properties.num_associated_deals":     { type: preserve }
+  "results[].properties.hs_email_domain":          { type: id }
+  "results[].properties.hs_persona":               { type: preserve }
+  "results[].properties.hs_legal_basis":           { type: preserve }
+  "results[].properties.hs_marketable_status":     { type: preserve }
+  "results[].properties.hs_marketable_until_renewal": { type: preserve }
+  "results[].properties.hs_marketable_reason_type":   { type: preserve }
+  "results[].properties.hs_email_first_send_date": { type: isoDate }
+  "results[].properties.hs_email_last_send_date":  { type: isoDate }
+  "results[].properties.hs_email_last_open_date":  { type: isoDate }
+  "results[].properties.hs_email_last_click_date": { type: isoDate }
+  "results[].properties.hs_email_optout":          { type: preserve }
+  "results[].properties.hs_facebookid":            { type: id, anchor: true }
+  "results[].properties.hs_googleplusid":          { type: id, anchor: true }
+  "results[].properties.hs_linkedinid":            { type: id, anchor: true }
+  "results[].properties.twitterhandle":            { type: id, anchor: true }
+  "results[].properties.hubspot_owner_id":         { type: id, anchor: true }
+  "results[].properties.hubspot_team_id":          { type: id, anchor: true }
+  "results[].properties.hs_all_owner_ids":         { type: preserve }
+  "results[].properties.notes_last_contacted":     { type: isoDate }
+  "results[].properties.notes_last_updated":       { type: isoDate }
+  "results[].properties.first_conversion_date":    { type: isoDate }
+  "results[].properties.recent_conversion_date":   { type: isoDate }
+  "results[].properties.num_unique_conversion_events": { type: preserve }
+  "*": { type: auto }

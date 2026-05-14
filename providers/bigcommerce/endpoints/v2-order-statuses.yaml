@@ -1,0 +1,23 @@
+endpoint:
+  method: GET
+  path: /v2/order_statuses
+  description: List order status definitions
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-statuses
+
+# Schema/enum data — almost entirely preserve.
+signature:
+  required_paths:
+    - "[].id"
+    - "[].name"
+    - "[].system_label"
+  optional_paths:
+    - "[].custom_label"
+    - "[].system_description"
+
+fields:
+  "[].id":                  { type: preserve }
+  "[].name":                { type: preserve }
+  "[].system_label":        { type: preserve }
+  "[].custom_label":        { type: preserve }
+  "[].system_description":  { type: preserve }
+  "*": { type: auto }

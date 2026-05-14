@@ -1,0 +1,44 @@
+endpoint:
+  method: POST
+  path: /collector/graphql (query deal_collection)
+  description: HubSpot Content Hub GraphQL — deal_collection
+  doc_url: https://developers.hubspot.com/docs/cms/start-building/features/data-driven-content/graphql/query-hubspot-data-using-graphql
+
+signature:
+  required_paths:
+    - data.CRM.deal_collection.items[].id
+    - data.CRM.deal_collection.items[].dealname
+    - data.CRM.deal_collection.items[].dealstage
+    - data.CRM.deal_collection.total
+    - data.CRM.deal_collection.offset
+  optional_paths:
+    - extensions.query_complexity.used_points
+    - data.CRM.deal_collection.items[].amount
+    - data.CRM.deal_collection.items[].pipeline
+
+fields:
+  "extensions.query_complexity.used_points":      { type: preserve }
+  "extensions.query_complexity.remaining_points": { type: preserve }
+  "data.CRM.deal_collection.total":               { type: preserve }
+  "data.CRM.deal_collection.offset":              { type: preserve }
+  "data.CRM.deal_collection.limit":               { type: preserve }
+  "data.CRM.deal_collection.items[].id":             { type: id, anchor: true }
+  "data.CRM.deal_collection.items[].hs_object_id":   { type: id, anchor: true }
+  "data.CRM.deal_collection.items[].createdate":     { type: isoDate }
+  "data.CRM.deal_collection.items[].lastmodifieddate": { type: isoDate }
+  "data.CRM.deal_collection.items[].closedate":      { type: isoDate }
+  "data.CRM.deal_collection.items[].dealname":       { type: shortText }
+  "data.CRM.deal_collection.items[].dealstage":      { type: preserve }
+  "data.CRM.deal_collection.items[].pipeline":       { type: preserve }
+  "data.CRM.deal_collection.items[].dealtype":       { type: preserve }
+  "data.CRM.deal_collection.items[].amount":         { type: priceAmount }
+  "data.CRM.deal_collection.items[].amount_in_home_currency": { type: priceAmount }
+  "data.CRM.deal_collection.items[].deal_currency_code": { type: currency }
+  "data.CRM.deal_collection.items[].description":    { type: longText }
+  "data.CRM.deal_collection.items[].hubspot_owner_id": { type: id, anchor: true }
+  "data.CRM.deal_collection.items[].hubspot_team_id":  { type: id, anchor: true }
+  "data.CRM.deal_collection.items[].hs_deal_stage_probability": { type: preserve }
+  "data.CRM.deal_collection.items[].hs_priority":    { type: preserve }
+  "data.CRM.deal_collection.items[].num_associated_contacts": { type: preserve }
+  "data.CRM.deal_collection.items[].hs_num_target_accounts": { type: preserve }
+  "*": { type: auto }

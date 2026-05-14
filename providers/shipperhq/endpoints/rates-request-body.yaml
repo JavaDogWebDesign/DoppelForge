@@ -1,0 +1,59 @@
+endpoint:
+  method: POST
+  path: /rates (request body)
+  description: ShipperHQ Rates API — request body (credentials + destination + cart)
+  doc_url: https://dev.shipperhq.com/rates-service/
+
+# Models the request POSTed to the Rates API, not the response. Developers
+# often paste the request body when debugging missing rates or wrong totals.
+# `credentials.apiKey` and `credentials.password` are redacted — auth lives
+# inline rather than in an Authorization header.
+signature:
+  required_paths:
+    - credentials.apiKey
+    - destination.country
+    - cart.items
+    - siteDetails
+  optional_paths:
+    - customer
+    - destination.zipcode
+    - destination.postalCode
+
+fields:
+  "credentials.apiKey":   { type: redact }
+  "credentials.password": { type: redact }
+  "siteDetails.ecommerceCart":     { type: preserve }
+  "siteDetails.ecommerceName":     { type: preserve }
+  "siteDetails.ecommerceVersion":  { type: preserve }
+  "siteDetails.appVersion":        { type: preserve }
+  "siteDetails.environmentScope":  { type: preserve }
+  "siteDetails.websiteUrl":        { type: url }
+  "destination.street":            { type: street }
+  "destination.city":              { type: city }
+  "destination.region":            { type: stateOrProvince }
+  "destination.zipcode":           { type: postalCode }
+  "destination.postalCode":        { type: postalCode }
+  "destination.country":           { type: countryCode }
+  "destination.validationStatus":  { type: preserve }
+  "destination.destinationType":   { type: preserve }
+  "customer.email":     { type: email, anchor: true }
+  "customer.remoteIp":  { type: ipv4 }
+  "customer.id":        { type: id, anchor: true }
+  "customer.groupId":   { type: id }
+  "cart.declaredValue": { type: priceAmount }
+  "cart.currency":      { type: currency }
+  "cart.items[].sku":         { type: sku, anchor: true }
+  "cart.items[].name":        { type: productName }
+  "cart.items[].price":       { type: priceAmount }
+  "cart.items[].weight":      { type: preserve }
+  "cart.items[].qty":         { type: preserve }
+  "cart.items[].id":          { type: id, anchor: true }
+  "cart.items[].type":        { type: preserve }
+  "cart.items[].productType": { type: preserve }
+  "cart.items[].freeShipping": { type: preserve }
+  "cart.items[].fixedPrice":   { type: priceAmount }
+  "cart.items[].fixedWeight":  { type: preserve }
+  "cart.items[].dimGroup":     { type: preserve }
+  "cart.items[].hazmatType":   { type: preserve }
+  "cart.items[].originCountry": { type: countryCode }
+  "*": { type: auto }

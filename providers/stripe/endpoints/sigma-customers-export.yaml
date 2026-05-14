@@ -1,0 +1,50 @@
+endpoint:
+  method: GET
+  path: /v1/sigma/queries (customers result)
+  description: Stripe Sigma — customers query result (bare array, also produced by NDJSON exports)
+  doc_url: https://docs.stripe.com/sigma
+
+# Unlike /v1/customers, which wraps in { object: "list", data: [...], has_more, url },
+# Sigma query results (and NDJSON exports of customer streams) are bare arrays
+# of customer objects, one per row/line. Same per-element shape, no envelope.
+signature:
+  required_paths:
+    - "[].id"
+    - "[].object"
+    - "[].created"
+    - "[].livemode"
+  optional_paths:
+    - "[].email"
+    - "[].name"
+    - "[].address"
+
+fields:
+  "[].id":                      { type: id, anchor: true }
+  "[].object":                  { type: preserve }
+  "[].created":                 { type: unixTimestamp }
+  "[].livemode":                { type: preserve }
+  "[].email":                   { type: email, anchor: true }
+  "[].name":                    { type: fullName }
+  "[].phone":                   { type: phone }
+  "[].description":             { type: shortText }
+  "[].balance":                 { type: preserve }
+  "[].currency":                { type: preserve }
+  "[].default_source":          { type: id, anchor: true }
+  "[].delinquent":              { type: preserve }
+  "[].invoice_prefix":          { type: id }
+  "[].metadata":                { type: preserve }
+  "[].next_invoice_sequence":   { type: preserve }
+  "[].tax_exempt":              { type: preserve }
+  "[].address.line1":           { type: street }
+  "[].address.line2":           { type: streetSecondary }
+  "[].address.city":            { type: city }
+  "[].address.state":           { type: stateOrProvince }
+  "[].address.postal_code":     { type: postalCode }
+  "[].address.country":         { type: countryCode }
+  "[].shipping.name":           { type: fullName }
+  "[].shipping.phone":          { type: phone }
+  "[].shipping.address.line1":  { type: street }
+  "[].shipping.address.city":   { type: city }
+  "[].shipping.address.postal_code": { type: postalCode }
+  "[].shipping.address.country": { type: countryCode }
+  "*": { type: auto }

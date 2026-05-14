@@ -1,0 +1,44 @@
+endpoint:
+  method: POST
+  path: /merchants/{merchant_id}/disputes/advanced_search
+  description: Search disputes (collection)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/request/dispute/search
+
+signature:
+  required_paths:
+    - disputes[].id
+    - disputes[].amount_disputed
+    - disputes[].status
+    - disputes[].reason
+  optional_paths:
+    - disputes[].transaction
+    - disputes[].case_number
+
+fields:
+  "disputes[].id":                       { type: id, anchor: true }
+  "disputes[].amount_disputed":          { type: preserve }
+  "disputes[].amount_won":               { type: preserve }
+  "disputes[].case_number":              { type: id, anchor: true }
+  "disputes[].currency_iso_code":        { type: preserve }
+  "disputes[].kind":                     { type: preserve }
+  "disputes[].merchant_account_id":      { type: id, anchor: true }
+  "disputes[].reason":                   { type: preserve }
+  "disputes[].reason_code":              { type: preserve }
+  "disputes[].reason_description":       { type: shortText }
+  "disputes[].received_date":            { type: isoDate }
+  "disputes[].reply_by_date":            { type: isoDate }
+  "disputes[].status":                   { type: preserve }
+  "disputes[].date_opened":              { type: isoDate }
+  "disputes[].date_won":                 { type: isoDate }
+  "disputes[].created_at":               { type: isoDate }
+  "disputes[].updated_at":               { type: isoDate }
+  "disputes[].chargeback_protection_level": { type: preserve }
+  "disputes[].transaction.id":           { type: id, anchor: true }
+  "disputes[].transaction.amount":       { type: preserve }
+  "disputes[].transaction.order_id":     { type: id, anchor: true }
+  "disputes[].transaction.created_at":   { type: isoDate }
+  "totalItems":   { type: preserve }
+  "totalCount":   { type: preserve }
+  "pageSize":     { type: preserve }
+  "currentPage":  { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,51 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/orders/{order_id}/transactions.json
+  description: List order transactions (payments, refunds, etc.)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/transaction
+
+signature:
+  required_paths:
+    - transactions[].id
+    - transactions[].order_id
+    - transactions[].kind
+    - transactions[].status
+  optional_paths:
+    - transactions[].payment_details
+    - transactions[].receipt
+
+fields:
+  "transactions[].id":                       { type: id, anchor: true }
+  "transactions[].order_id":                 { type: id, anchor: true }
+  "transactions[].admin_graphql_api_id":     { type: preserve }
+  "transactions[].kind":                     { type: preserve }
+  "transactions[].gateway":                  { type: preserve }
+  "transactions[].status":                   { type: preserve }
+  "transactions[].message":                  { type: shortText }
+  "transactions[].created_at":               { type: isoDate }
+  "transactions[].processed_at":             { type: isoDate }
+  "transactions[].test":                     { type: preserve }
+  "transactions[].authorization":            { type: id, anchor: true }
+  "transactions[].location_id":              { type: id, anchor: true }
+  "transactions[].user_id":                  { type: id, anchor: true }
+  "transactions[].parent_id":                { type: id, anchor: true }
+  "transactions[].device_id":                { type: id }
+  "transactions[].error_code":               { type: preserve }
+  "transactions[].source_name":              { type: preserve }
+  "transactions[].amount":                   { type: preserve }
+  "transactions[].currency":                 { type: preserve }
+  "transactions[].authorization_expires_at": { type: isoDate }
+  "transactions[].extended_authorization_attributes.standard_authorization_expires_at": { type: isoDate }
+  "transactions[].extended_authorization_attributes.extended_authorization_expires_at": { type: isoDate }
+  "transactions[].payment_id":               { type: id, anchor: true }
+  "transactions[].payment_details.credit_card_bin":           { type: id }
+  "transactions[].payment_details.avs_result_code":           { type: avsCode }
+  "transactions[].payment_details.cvv_result_code":           { type: cvvCode }
+  "transactions[].payment_details.credit_card_number":        { type: redact }
+  "transactions[].payment_details.credit_card_company":       { type: preserve }
+  "transactions[].payment_details.credit_card_name":          { type: fullName }
+  "transactions[].payment_details.credit_card_wallet":        { type: preserve }
+  "transactions[].payment_details.credit_card_expiration_month": { type: preserve }
+  "transactions[].payment_details.credit_card_expiration_year":  { type: preserve }
+  "transactions[].receipt":                  { type: preserve }
+  "*": { type: auto }

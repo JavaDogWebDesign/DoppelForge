@@ -1,0 +1,67 @@
+endpoint:
+  method: POST
+  path: /services/data/v60.0/graphql (query Lead)
+  description: Salesforce GraphQL — Lead SObject (pre-conversion prospects)
+  doc_url: https://developer.salesforce.com/docs/platform/graphql/guide/query-record-objects.html
+
+# Lead is the highest-PII SObject. Address compound is named `Address` (no
+# Mailing/Billing prefix) — different from Contact's MailingAddress.
+signature:
+  required_paths:
+    - data.uiapi.query.Lead.edges[].node.Id
+    - data.uiapi.query.Lead.edges[].node.Company.value
+    - data.uiapi.query.Lead.edges[].node.Status.value
+    - data.uiapi.query.Lead.edges[].node.LeadSource.value
+    - data.uiapi.query.Lead.pageInfo.endCursor
+  optional_paths:
+    - data.uiapi.query.Lead.totalCount
+    - data.uiapi.query.Lead.edges[].node.Email.value
+    - data.uiapi.query.Lead.edges[].node.Address
+
+fields:
+  "data.uiapi.query.Lead.totalCount":       { type: preserve }
+  "data.uiapi.query.Lead.pageResultCount":  { type: preserve }
+  "data.uiapi.query.Lead.pageInfo.hasNextPage":     { type: preserve }
+  "data.uiapi.query.Lead.pageInfo.hasPreviousPage": { type: preserve }
+  "data.uiapi.query.Lead.pageInfo.startCursor":     { type: id }
+  "data.uiapi.query.Lead.pageInfo.endCursor":       { type: id }
+  "data.uiapi.query.Lead.edges[].cursor":           { type: id }
+  "data.uiapi.query.Lead.edges[].node.Id":              { type: id, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.FirstName.value": { type: firstName }
+  "data.uiapi.query.Lead.edges[].node.LastName.value":  { type: lastName }
+  "data.uiapi.query.Lead.edges[].node.Name.value":      { type: fullName, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.Company.value":   { type: company, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.Email.value":     { type: email, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.Phone.value":     { type: phone }
+  "data.uiapi.query.Lead.edges[].node.MobilePhone.value": { type: phone }
+  "data.uiapi.query.Lead.edges[].node.Title.value":     { type: shortText }
+  "data.uiapi.query.Lead.edges[].node.Website.value":   { type: url }
+  "data.uiapi.query.Lead.edges[].node.Industry.value":  { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.LeadSource.value": { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.Status.value":    { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.Rating.value":    { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.AnnualRevenue.value":      { type: priceAmount }
+  "data.uiapi.query.Lead.edges[].node.AnnualRevenue.displayValue": { type: priceAmount }
+  "data.uiapi.query.Lead.edges[].node.NumberOfEmployees.value":  { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.OwnerId.value":            { type: id, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.OwnerId.displayValue":     { type: fullName }
+  "data.uiapi.query.Lead.edges[].node.IsConverted.value":        { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.ConvertedAccountId.value": { type: id, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.ConvertedContactId.value": { type: id, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.ConvertedOpportunityId.value": { type: id, anchor: true }
+  "data.uiapi.query.Lead.edges[].node.ConvertedDate.value":      { type: isoDate }
+  "data.uiapi.query.Lead.edges[].node.Description.value":        { type: longText }
+  "data.uiapi.query.Lead.edges[].node.LastModifiedDate":         { type: isoDate }
+  "data.uiapi.query.Lead.edges[].node.CreatedDate":              { type: isoDate }
+  "data.uiapi.query.Lead.edges[].node.SystemModstamp":           { type: isoDate }
+  "data.uiapi.query.Lead.edges[].node.Address.Street.value":     { type: street }
+  "data.uiapi.query.Lead.edges[].node.Address.City.value":       { type: city }
+  "data.uiapi.query.Lead.edges[].node.Address.State.value":      { type: stateOrProvince }
+  "data.uiapi.query.Lead.edges[].node.Address.StateCode.value":  { type: stateOrProvince }
+  "data.uiapi.query.Lead.edges[].node.Address.PostalCode.value": { type: postalCode }
+  "data.uiapi.query.Lead.edges[].node.Address.Country.value":    { type: country }
+  "data.uiapi.query.Lead.edges[].node.Address.CountryCode.value": { type: countryCode }
+  "data.uiapi.query.Lead.edges[].node.Address.Latitude.value":   { type: preserve }
+  "data.uiapi.query.Lead.edges[].node.Address.Longitude.value":  { type: preserve }
+  "extensions.weakETags":                                        { type: preserve }
+  "*": { type: auto }

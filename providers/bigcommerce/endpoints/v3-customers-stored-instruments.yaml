@@ -1,0 +1,44 @@
+endpoint:
+  method: GET
+  path: /v3/customers/{customerId}/stored-instruments
+  description: Get a customer's stored payment instruments (cards, PayPal, bank accounts)
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/stored-instruments
+
+# Top-level array. Payment-method-sensitive — fake account numbers, preserve enums.
+signature:
+  required_paths:
+    - "[].type"
+    - "[].token"
+    - "[].is_default"
+  optional_paths:
+    - "[].billing_address"
+    - "[].last_4"
+
+fields:
+  "[].type":                          { type: preserve }
+  "[].token":                         { type: id, anchor: true }
+  "[].is_default":                    { type: preserve }
+  "[].brand":                         { type: preserve }
+  "[].expiry_month":                  { type: preserve }
+  "[].expiry_year":                   { type: preserve }
+  "[].issuer_identification_number":  { type: id }
+  "[].last_4":                        { type: id }
+  "[].email":                         { type: email, anchor: true }
+  "[].payer_id":                      { type: id, anchor: true }
+  "[].issuer":                        { type: company }
+  "[].iin":                           { type: id }
+  "[].account_number_last_4":         { type: id }
+  "[].routing_number_last_4":         { type: id }
+  "[].billing_address.first_name":    { type: firstName }
+  "[].billing_address.last_name":     { type: lastName }
+  "[].billing_address.email":         { type: email, anchor: true }
+  "[].billing_address.company":       { type: company }
+  "[].billing_address.address1":      { type: street }
+  "[].billing_address.address2":      { type: streetSecondary }
+  "[].billing_address.city":          { type: city }
+  "[].billing_address.postal_code":   { type: postalCode }
+  "[].billing_address.state_or_province":      { type: stateOrProvince }
+  "[].billing_address.state_or_province_code": { type: stateOrProvince }
+  "[].billing_address.country_code":  { type: countryCode }
+  "[].billing_address.phone":         { type: phone }
+  "*": { type: auto }

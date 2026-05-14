@@ -1,0 +1,39 @@
+endpoint:
+  method: GET
+  path: /api/v3/publisher/term/get
+  description: Get a term
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - term.term_id
+    - term.aid
+    - term.name
+    - code
+  optional_paths:
+    - term.payment_billing_plan
+    - term.resource
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "term.term_id":                       { type: id, anchor: true }
+  "term.aid":                           { type: id, anchor: true }
+  "term.name":                          { type: shortText }
+  "term.description":                   { type: shortText }
+  "term.type":                          { type: preserve }
+  "term.payment_billing_plan":          { type: preserve }
+  "term.payment_billing_plan_description": { type: shortText }
+  "term.payment_first_amount":          { type: preserve }
+  "term.payment_first_total":           { type: preserve }
+  "term.payment_currency":              { type: preserve }
+  "term.payment_is_subscription":       { type: preserve }
+  "term.term_billing_descriptor":       { type: preserve }
+  "term.create_date":                   { type: unixTimestamp }
+  "term.update_date":                   { type: unixTimestamp }
+  "term.resource.rid":                  { type: id, anchor: true }
+  "term.resource.aid":                  { type: id, anchor: true }
+  "term.resource.name":                 { type: shortText }
+  "term.resource.description":          { type: shortText }
+  "term.resource.image_url":            { type: url }
+  "*": { type: auto }

@@ -1,0 +1,68 @@
+endpoint:
+  method: GET
+  path: /v1/disputes
+  description: List disputes
+  doc_url: https://docs.stripe.com/api/disputes/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - data[].charge
+    - has_more
+  optional_paths:
+    - data[].evidence
+    - data[].reason
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].amount":                   { type: preserve }
+  "data[].balance_transactions":     { type: preserve }
+  "data[].charge":                   { type: id, anchor: true }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].evidence.access_activity_log":          { type: longText }
+  "data[].evidence.billing_address":              { type: shortText }
+  "data[].evidence.cancellation_policy":          { type: id, anchor: true }
+  "data[].evidence.cancellation_policy_disclosure": { type: longText }
+  "data[].evidence.cancellation_rebuttal":        { type: longText }
+  "data[].evidence.customer_communication":       { type: id, anchor: true }
+  "data[].evidence.customer_email_address":       { type: email, anchor: true }
+  "data[].evidence.customer_name":                { type: fullName }
+  "data[].evidence.customer_purchase_ip":         { type: ipv4 }
+  "data[].evidence.customer_signature":           { type: id, anchor: true }
+  "data[].evidence.duplicate_charge_documentation": { type: id, anchor: true }
+  "data[].evidence.duplicate_charge_explanation": { type: longText }
+  "data[].evidence.duplicate_charge_id":          { type: id, anchor: true }
+  "data[].evidence.product_description":          { type: longText }
+  "data[].evidence.receipt":                      { type: id, anchor: true }
+  "data[].evidence.refund_policy":                { type: id, anchor: true }
+  "data[].evidence.refund_policy_disclosure":     { type: longText }
+  "data[].evidence.refund_refusal_explanation":   { type: longText }
+  "data[].evidence.service_date":                 { type: preserve }
+  "data[].evidence.service_documentation":        { type: id, anchor: true }
+  "data[].evidence.shipping_address":             { type: shortText }
+  "data[].evidence.shipping_carrier":             { type: company }
+  "data[].evidence.shipping_date":                { type: preserve }
+  "data[].evidence.shipping_documentation":       { type: id, anchor: true }
+  "data[].evidence.shipping_tracking_number":     { type: id, anchor: true }
+  "data[].evidence.uncategorized_file":           { type: id, anchor: true }
+  "data[].evidence.uncategorized_text":           { type: longText }
+  "data[].evidence_details.due_by":               { type: unixTimestamp }
+  "data[].evidence_details.has_evidence":         { type: preserve }
+  "data[].evidence_details.past_due":             { type: preserve }
+  "data[].evidence_details.submission_count":     { type: preserve }
+  "data[].is_charge_refundable":                  { type: preserve }
+  "data[].livemode":                              { type: preserve }
+  "data[].metadata":                              { type: preserve }
+  "data[].network_reason_code":                   { type: preserve }
+  "data[].payment_intent":                        { type: id, anchor: true }
+  "data[].reason":                                { type: preserve }
+  "data[].status":                                { type: preserve }
+  "*": { type: auto }

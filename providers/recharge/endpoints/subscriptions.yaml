@@ -1,0 +1,52 @@
+endpoint:
+  method: GET
+  path: /subscriptions
+  description: List subscriptions
+  doc_url: https://developer.rechargepayments.com/2021-11/subscriptions
+
+signature:
+  required_paths:
+    - subscriptions[].id
+    - subscriptions[].customer_id
+    - subscriptions[].product_title
+    - subscriptions[].status
+  optional_paths:
+    - next_cursor
+    - subscriptions[].external_product_id
+
+fields:
+  "next_cursor":      { type: id, anchor: true }
+  "previous_cursor":  { type: id, anchor: true }
+  "subscriptions[].id":                          { type: id, anchor: true }
+  "subscriptions[].address_id":                  { type: id, anchor: true }
+  "subscriptions[].customer_id":                 { type: id, anchor: true }
+  "subscriptions[].analytics_data.utm_params":   { type: preserve }
+  "subscriptions[].cancellation_reason":         { type: shortText }
+  "subscriptions[].cancellation_reason_comments": { type: shortText }
+  "subscriptions[].cancelled_at":                { type: isoDate }
+  "subscriptions[].charge_interval_frequency":   { type: preserve }
+  "subscriptions[].created_at":                  { type: isoDate }
+  "subscriptions[].updated_at":                  { type: isoDate }
+  "subscriptions[].expire_after_specific_number_of_charges": { type: preserve }
+  "subscriptions[].external_product_id.ecommerce": { type: id, anchor: true }
+  "subscriptions[].external_variant_id.ecommerce": { type: id, anchor: true }
+  "subscriptions[].has_queued_charges":          { type: preserve }
+  "subscriptions[].is_prepaid":                  { type: preserve }
+  "subscriptions[].is_skippable":                { type: preserve }
+  "subscriptions[].is_swappable":                { type: preserve }
+  "subscriptions[].max_retries_reached":         { type: preserve }
+  "subscriptions[].next_charge_scheduled_at":    { type: isoDate }
+  "subscriptions[].order_day_of_month":          { type: preserve }
+  "subscriptions[].order_day_of_week":           { type: preserve }
+  "subscriptions[].order_interval_frequency":    { type: preserve }
+  "subscriptions[].order_interval_unit":         { type: preserve }
+  "subscriptions[].presentment_currency":        { type: preserve }
+  "subscriptions[].price":                       { type: preserve }
+  "subscriptions[].product_title":               { type: productName }
+  "subscriptions[].properties":                  { type: preserve }
+  "subscriptions[].quantity":                    { type: preserve }
+  "subscriptions[].sku":                         { type: sku, anchor: true }
+  "subscriptions[].sku_override":                { type: preserve }
+  "subscriptions[].status":                      { type: preserve }
+  "subscriptions[].variant_title":               { type: shortText }
+  "*": { type: auto }

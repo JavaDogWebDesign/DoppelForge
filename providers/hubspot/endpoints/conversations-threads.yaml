@@ -1,0 +1,35 @@
+endpoint:
+  method: GET
+  path: /conversations/v3/conversations/threads
+  description: List conversation threads
+  doc_url: https://developers.hubspot.com/docs/api/conversations/conversations
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].status
+  optional_paths:
+    - paging.next.after
+    - results[].latestMessageTimestamp
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                              { type: id, anchor: true }
+  "results[].createdAt":                       { type: isoDate }
+  "results[].closedAt":                        { type: isoDate }
+  "results[].assignedTo":                      { type: id, anchor: true }
+  "results[].latestMessageTimestamp":          { type: isoDate }
+  "results[].latestMessageSentTimestamp":      { type: isoDate }
+  "results[].latestMessageReceivedTimestamp":  { type: isoDate }
+  "results[].status":                          { type: preserve }
+  "results[].spam":                            { type: preserve }
+  "results[].archived":                        { type: preserve }
+  "results[].latestMessagePreview":            { type: shortText }
+  "results[].inboxId":                         { type: id, anchor: true }
+  "results[].associatedContactId":             { type: id, anchor: true }
+  "results[].source":                          { type: preserve }
+  "results[].channel":                         { type: preserve }
+  "results[].subject":                         { type: shortText }
+  "*": { type: auto }

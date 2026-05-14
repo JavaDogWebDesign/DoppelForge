@@ -1,0 +1,55 @@
+endpoint:
+  method: POST
+  path: dispute_*
+  kind: webhook
+  description: Braintree webhook — dispute kinds (opened/lost/won/accepted/expired share shape)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/general/webhooks/dispute
+
+signature:
+  required_paths:
+    - kind
+    - subject.dispute.id
+    - subject.dispute.reason
+    - subject.dispute.status
+    - subject.dispute.amount-disputed
+    - subject.dispute.case-number
+  optional_paths:
+    - timestamp
+    - subject.dispute.transaction
+    - subject.dispute.evidence
+    - subject.dispute.received-date
+
+fields:
+  "kind":                                          { type: preserve }
+  "timestamp.#text":                               { type: isoDate }
+  "timestamp.@_type":                              { type: preserve }
+  "source-merchant-id":                            { type: id, anchor: true }
+  "subject.dispute.id":                            { type: id, anchor: true }
+  "subject.dispute.case-number":                   { type: id, anchor: true }
+  "subject.dispute.reason":                        { type: preserve }
+  "subject.dispute.reason-code":                   { type: preserve }
+  "subject.dispute.reason-description":            { type: shortText }
+  "subject.dispute.status":                        { type: preserve }
+  "subject.dispute.kind":                          { type: preserve }
+  "subject.dispute.amount-disputed":               { type: priceAmount }
+  "subject.dispute.amount-won":                    { type: priceAmount }
+  "subject.dispute.currency-iso-code":             { type: currency }
+  "subject.dispute.merchant-account-id":           { type: id, anchor: true }
+  "subject.dispute.received-date":                 { type: isoDate }
+  "subject.dispute.reply-by-date":                 { type: isoDate }
+  "subject.dispute.opened-date":                   { type: isoDate }
+  "subject.dispute.won-date":                      { type: isoDate }
+  "subject.dispute.date-opened":                   { type: isoDate }
+  "subject.dispute.date-won":                      { type: isoDate }
+  "subject.dispute.created-at.#text":              { type: isoDate }
+  "subject.dispute.created-at.@_type":             { type: preserve }
+  "subject.dispute.updated-at.#text":              { type: isoDate }
+  "subject.dispute.updated-at.@_type":             { type: preserve }
+  "subject.dispute.transaction.id":                { type: id, anchor: true }
+  "subject.dispute.transaction.amount":            { type: priceAmount }
+  "subject.dispute.transaction.created-at.#text":  { type: isoDate }
+  "subject.dispute.transaction.created-at.@_type": { type: preserve }
+  "subject.dispute.transaction.order-id":          { type: id, anchor: true }
+  "subject.dispute.transaction.payment-instrument-subtype": { type: preserve }
+  "subject.dispute.evidence.@_type":               { type: preserve }
+  "*": { type: auto }

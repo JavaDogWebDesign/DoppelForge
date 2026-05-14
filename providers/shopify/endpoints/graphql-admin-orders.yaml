@@ -1,0 +1,108 @@
+endpoint:
+  method: POST
+  path: /admin/api/2024-10/graphql.json (query orders)
+  description: Shopify Admin GraphQL — orders connection (list)
+  doc_url: https://shopify.dev/docs/api/admin-graphql/latest/queries/orders
+
+signature:
+  required_paths:
+    - data.orders.edges[].node.id
+    - data.orders.edges[].node.name
+    - data.orders.edges[].node.totalPriceSet.shopMoney.amount
+    - data.orders.pageInfo.hasNextPage
+    - data.orders.edges[].cursor
+  optional_paths:
+    - extensions.cost.actualQueryCost
+    - data.orders.edges[].node.email
+    - data.orders.edges[].node.customer
+
+fields:
+  "extensions.cost.requestedQueryCost":  { type: preserve }
+  "extensions.cost.actualQueryCost":     { type: preserve }
+  "extensions.cost.throttleStatus.maximumAvailable":   { type: preserve }
+  "extensions.cost.throttleStatus.currentlyAvailable": { type: preserve }
+  "extensions.cost.throttleStatus.restoreRate":        { type: preserve }
+  "data.orders.pageInfo.hasNextPage":     { type: preserve }
+  "data.orders.pageInfo.hasPreviousPage": { type: preserve }
+  "data.orders.pageInfo.startCursor":     { type: id }
+  "data.orders.pageInfo.endCursor":       { type: id }
+  "data.orders.edges[].cursor":           { type: id }
+  "data.orders.edges[].node.id":                  { type: id, anchor: true }
+  "data.orders.edges[].node.name":                { type: id, anchor: true }
+  "data.orders.edges[].node.email":               { type: email, anchor: true }
+  "data.orders.edges[].node.phone":               { type: phone }
+  "data.orders.edges[].node.note":                { type: shortText }
+  "data.orders.edges[].node.tags":                { type: preserve }
+  "data.orders.edges[].node.confirmationNumber":  { type: id, anchor: true }
+  "data.orders.edges[].node.createdAt":           { type: isoDate }
+  "data.orders.edges[].node.updatedAt":           { type: isoDate }
+  "data.orders.edges[].node.processedAt":         { type: isoDate }
+  "data.orders.edges[].node.closedAt":            { type: isoDate }
+  "data.orders.edges[].node.cancelledAt":         { type: isoDate }
+  "data.orders.edges[].node.displayFinancialStatus":    { type: preserve }
+  "data.orders.edges[].node.displayFulfillmentStatus":  { type: preserve }
+  "data.orders.edges[].node.fullyPaid":           { type: preserve }
+  "data.orders.edges[].node.unpaid":              { type: preserve }
+  "data.orders.edges[].node.confirmed":           { type: preserve }
+  "data.orders.edges[].node.test":                { type: preserve }
+  "data.orders.edges[].node.taxesIncluded":       { type: preserve }
+  "data.orders.edges[].node.currencyCode":            { type: preserve }
+  "data.orders.edges[].node.presentmentCurrencyCode": { type: preserve }
+  "data.orders.edges[].node.totalPriceSet.shopMoney.amount":               { type: priceAmount }
+  "data.orders.edges[].node.totalPriceSet.shopMoney.currencyCode":         { type: preserve }
+  "data.orders.edges[].node.totalPriceSet.presentmentMoney.amount":        { type: priceAmount }
+  "data.orders.edges[].node.totalPriceSet.presentmentMoney.currencyCode":  { type: preserve }
+  "data.orders.edges[].node.subtotalPriceSet.shopMoney.amount":            { type: priceAmount }
+  "data.orders.edges[].node.subtotalPriceSet.shopMoney.currencyCode":      { type: preserve }
+  "data.orders.edges[].node.totalTaxSet.shopMoney.amount":                 { type: priceAmount }
+  "data.orders.edges[].node.totalTaxSet.shopMoney.currencyCode":           { type: preserve }
+  "data.orders.edges[].node.totalShippingPriceSet.shopMoney.amount":       { type: priceAmount }
+  "data.orders.edges[].node.totalShippingPriceSet.shopMoney.currencyCode": { type: preserve }
+  "data.orders.edges[].node.totalRefundedSet.shopMoney.amount":            { type: priceAmount }
+  "data.orders.edges[].node.totalRefundedSet.shopMoney.currencyCode":      { type: preserve }
+  "data.orders.edges[].node.customer.id":                { type: id, anchor: true }
+  "data.orders.edges[].node.customer.email":             { type: email, anchor: true }
+  "data.orders.edges[].node.customer.firstName":         { type: firstName }
+  "data.orders.edges[].node.customer.lastName":          { type: lastName }
+  "data.orders.edges[].node.customer.displayName":       { type: fullName }
+  "data.orders.edges[].node.customer.phone":             { type: phone }
+  "data.orders.edges[].node.billingAddress.firstName":   { type: firstName }
+  "data.orders.edges[].node.billingAddress.lastName":    { type: lastName }
+  "data.orders.edges[].node.billingAddress.name":        { type: fullName }
+  "data.orders.edges[].node.billingAddress.company":     { type: company }
+  "data.orders.edges[].node.billingAddress.address1":    { type: street }
+  "data.orders.edges[].node.billingAddress.address2":    { type: streetSecondary }
+  "data.orders.edges[].node.billingAddress.city":        { type: city }
+  "data.orders.edges[].node.billingAddress.province":    { type: stateOrProvince }
+  "data.orders.edges[].node.billingAddress.provinceCode": { type: stateOrProvince }
+  "data.orders.edges[].node.billingAddress.zip":         { type: postalCode }
+  "data.orders.edges[].node.billingAddress.country":     { type: country }
+  "data.orders.edges[].node.billingAddress.countryCode": { type: countryCode }
+  "data.orders.edges[].node.billingAddress.phone":       { type: phone }
+  "data.orders.edges[].node.shippingAddress.firstName":   { type: firstName }
+  "data.orders.edges[].node.shippingAddress.lastName":    { type: lastName }
+  "data.orders.edges[].node.shippingAddress.name":        { type: fullName }
+  "data.orders.edges[].node.shippingAddress.company":     { type: company }
+  "data.orders.edges[].node.shippingAddress.address1":    { type: street }
+  "data.orders.edges[].node.shippingAddress.address2":    { type: streetSecondary }
+  "data.orders.edges[].node.shippingAddress.city":        { type: city }
+  "data.orders.edges[].node.shippingAddress.province":    { type: stateOrProvince }
+  "data.orders.edges[].node.shippingAddress.provinceCode": { type: stateOrProvince }
+  "data.orders.edges[].node.shippingAddress.zip":         { type: postalCode }
+  "data.orders.edges[].node.shippingAddress.country":     { type: country }
+  "data.orders.edges[].node.shippingAddress.countryCode": { type: countryCode }
+  "data.orders.edges[].node.shippingAddress.phone":       { type: phone }
+  "data.orders.edges[].node.lineItems.edges[].node.id":         { type: id, anchor: true }
+  "data.orders.edges[].node.lineItems.edges[].node.title":      { type: productName }
+  "data.orders.edges[].node.lineItems.edges[].node.name":       { type: productName }
+  "data.orders.edges[].node.lineItems.edges[].node.sku":        { type: sku, anchor: true }
+  "data.orders.edges[].node.lineItems.edges[].node.vendor":     { type: company }
+  "data.orders.edges[].node.lineItems.edges[].node.quantity":   { type: preserve }
+  "data.orders.edges[].node.lineItems.edges[].node.originalUnitPriceSet.shopMoney.amount":   { type: priceAmount }
+  "data.orders.edges[].node.lineItems.edges[].node.originalUnitPriceSet.shopMoney.currencyCode": { type: preserve }
+  "data.orders.edges[].node.lineItems.edges[].node.discountedUnitPriceSet.shopMoney.amount": { type: priceAmount }
+  "data.orders.edges[].node.lineItems.edges[].node.variant.id":  { type: id, anchor: true }
+  "data.orders.edges[].node.lineItems.edges[].node.product.id":  { type: id, anchor: true }
+  "data.orders.edges[].node.lineItems.edges[].node.customAttributes[].key":   { type: preserve }
+  "data.orders.edges[].node.lineItems.edges[].node.customAttributes[].value": { type: shortText }
+  "*": { type: auto }

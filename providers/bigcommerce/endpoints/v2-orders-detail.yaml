@@ -1,0 +1,119 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{orderId}
+  description: Get a single order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-single
+
+# This map targets the single-order (detail) endpoint. The list endpoint
+# /v2/orders has its own map (v2-orders.yaml) and returns a top-level array.
+# Both XML and JSON responses share this shape, because the XML loader
+# strips the single root <order> wrapper before matching.
+signature:
+  required_paths:
+    - id
+    - customer_id
+    - status_id
+    - billing_address.email
+  optional_paths:
+    - cart_id
+    - payment_provider_id
+    - billing_address.phone
+
+fields:
+  "id":                              { type: id, anchor: true }
+  "customer_id":                     { type: id, anchor: true }
+  "cart_id":                         { type: uuid, anchor: true }
+  "date_created":                    { type: isoDate }
+  "date_modified":                   { type: isoDate }
+  "date_shipped":                    { type: isoDate }
+  "is_tax_inclusive_pricing":        { type: preserve }
+  "status_id":                       { type: preserve }
+  "status":                          { type: preserve }
+  "custom_status":                   { type: preserve }
+  "subtotal_ex_tax":                 { type: preserve }
+  "subtotal_inc_tax":                { type: preserve }
+  "subtotal_tax":                    { type: preserve }
+  "base_shipping_cost":              { type: preserve }
+  "shipping_cost_ex_tax":            { type: preserve }
+  "shipping_cost_inc_tax":           { type: preserve }
+  "shipping_cost_tax":               { type: preserve }
+  "shipping_cost_tax_class_id":      { type: preserve }
+  "base_handling_cost":              { type: preserve }
+  "handling_cost_ex_tax":            { type: preserve }
+  "handling_cost_inc_tax":           { type: preserve }
+  "handling_cost_tax":               { type: preserve }
+  "handling_cost_tax_class_id":      { type: preserve }
+  "base_wrapping_cost":              { type: preserve }
+  "wrapping_cost_ex_tax":            { type: preserve }
+  "wrapping_cost_inc_tax":           { type: preserve }
+  "wrapping_cost_tax":               { type: preserve }
+  "wrapping_cost_tax_class_id":      { type: preserve }
+  "total_ex_tax":                    { type: preserve }
+  "total_inc_tax":                   { type: preserve }
+  "total_tax":                       { type: preserve }
+  "items_total":                     { type: preserve }
+  "items_shipped":                   { type: preserve }
+  "payment_method":                  { type: preserve }
+  "payment_provider_id":             { type: id, anchor: true }
+  "payment_status":                  { type: preserve }
+  "refunded_amount":                 { type: preserve }
+  "order_is_digital":                { type: preserve }
+  "store_credit_amount":             { type: preserve }
+  "gift_certificate_amount":         { type: preserve }
+  "ip_address":                      { type: ipv4 }
+  "ip_address_v6":                   { type: preserve }
+  "geoip_country":                   { type: country }
+  "geoip_country_iso2":              { type: countryCode }
+  "currency_id":                     { type: preserve }
+  "currency_code":                   { type: preserve }
+  "currency_exchange_rate":          { type: preserve }
+  "default_currency_id":             { type: preserve }
+  "default_currency_code":           { type: preserve }
+  "store_default_currency_code":     { type: preserve }
+  "store_default_to_transactional_exchange_rate": { type: preserve }
+  "staff_notes":                     { type: shortText }
+  "customer_message":                { type: shortText }
+  "discount_amount":                 { type: preserve }
+  "coupon_discount":                 { type: preserve }
+  "shipping_address_count":          { type: preserve }
+  "is_deleted":                      { type: preserve }
+  "ebay_order_id":                   { type: preserve }
+  "is_email_opt_in":                 { type: preserve }
+  "credit_card_type":                { type: preserve }
+  "order_source":                    { type: preserve }
+  "channel_id":                      { type: preserve }
+  "external_source":                 { type: preserve }
+  "external_id":                     { type: preserve }
+  "external_merchant_id":            { type: preserve }
+  "external_order_id":               { type: preserve }
+  "tax_provider_id":                 { type: preserve }
+  "customer_locale":                 { type: preserve }
+  "billing_address.first_name":      { type: firstName }
+  "billing_address.last_name":       { type: lastName }
+  "billing_address.company":         { type: company }
+  "billing_address.street_1":        { type: street }
+  "billing_address.street_2":        { type: streetSecondary }
+  "billing_address.city":            { type: city }
+  "billing_address.state":           { type: stateOrProvince }
+  "billing_address.zip":             { type: postalCode }
+  "billing_address.country":         { type: country }
+  "billing_address.country_iso2":    { type: countryCode }
+  "billing_address.phone":           { type: phone }
+  "billing_address.email":           { type: email, anchor: true }
+  "billing_address.form_fields":     { type: preserve }
+  "fees.link.@_rel":                 { type: preserve }
+  "fees.link.@_href":                { type: url }
+  "fees.link.#text":                 { type: shortText }
+  "consignments.link.@_rel":         { type: preserve }
+  "consignments.link.@_href":        { type: url }
+  "consignments.link.#text":         { type: shortText }
+  "products.link.@_rel":             { type: preserve }
+  "products.link.@_href":            { type: url }
+  "products.link.#text":             { type: shortText }
+  "shipping_addresses.link.@_rel":   { type: preserve }
+  "shipping_addresses.link.@_href":  { type: url }
+  "shipping_addresses.link.#text":   { type: shortText }
+  "coupons.link.@_rel":              { type: preserve }
+  "coupons.link.@_href":             { type: url }
+  "coupons.link.#text":              { type: shortText }
+  "*": { type: auto }

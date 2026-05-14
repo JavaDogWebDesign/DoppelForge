@@ -1,0 +1,57 @@
+endpoint:
+  method: POST
+  path: /graphql (query shipment)
+  description: ShipperHQ Insights GraphQL — shipment detail query
+  doc_url: https://dev.shipperhq.com/insights-service/
+
+# ShipperHQ Insights ("Advanced Shipment Details") is gated behind their
+# partner plan; the response schema below is reconstructed from public
+# docs cross-references. Verify against a live response before relying on it.
+signature:
+  required_paths:
+    - data.shipment.transactionId
+    - data.shipment.origin
+    - data.shipment.destination
+    - data.shipment.packages
+  optional_paths:
+    - extensions
+    - data.shipment.carrier
+    - data.shipment.service
+
+fields:
+  "data.shipment.transactionId":          { type: id, anchor: true }
+  "data.shipment.carrier":                { type: preserve }
+  "data.shipment.service":                { type: preserve }
+  "data.shipment.serviceCode":            { type: preserve }
+  "data.shipment.shipDate":               { type: isoDate }
+  "data.shipment.deliveryDate":           { type: isoDate }
+  "data.shipment.origin.name":            { type: fullName }
+  "data.shipment.origin.company":         { type: company }
+  "data.shipment.origin.street":          { type: street }
+  "data.shipment.origin.city":            { type: city }
+  "data.shipment.origin.region":          { type: stateOrProvince }
+  "data.shipment.origin.postalCode":      { type: postalCode }
+  "data.shipment.origin.country":         { type: countryCode }
+  "data.shipment.origin.email":           { type: email, anchor: true }
+  "data.shipment.origin.telephone":       { type: phone }
+  "data.shipment.destination.name":       { type: fullName }
+  "data.shipment.destination.company":    { type: company }
+  "data.shipment.destination.street":     { type: street }
+  "data.shipment.destination.city":       { type: city }
+  "data.shipment.destination.region":     { type: stateOrProvince }
+  "data.shipment.destination.postalCode": { type: postalCode }
+  "data.shipment.destination.country":    { type: countryCode }
+  "data.shipment.destination.email":      { type: email, anchor: true }
+  "data.shipment.destination.telephone":  { type: phone }
+  "data.shipment.packages[].weight":               { type: preserve }
+  "data.shipment.packages[].dimensions.length":    { type: preserve }
+  "data.shipment.packages[].dimensions.width":     { type: preserve }
+  "data.shipment.packages[].dimensions.height":    { type: preserve }
+  "data.shipment.packages[].dimensions.units":     { type: preserve }
+  "data.shipment.packages[].trackingNumber":       { type: id, anchor: true }
+  "data.shipment.packages[].declaredValue":        { type: priceAmount }
+  "data.shipment.packages[].currency":             { type: currency }
+  "data.shipment.totalCharges":           { type: priceAmount }
+  "data.shipment.currency":               { type: currency }
+  "extensions":                           { type: preserve }
+  "*": { type: auto }

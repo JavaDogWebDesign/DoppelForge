@@ -1,0 +1,6 @@
+id: sendgrid
+name: SendGrid
+category: email
+icon: mail
+color: "#1A82E2"
+docs: https://www.twilio.com/docs/sendgrid/api-reference

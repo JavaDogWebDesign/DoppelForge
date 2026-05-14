@@ -1,0 +1,55 @@
+endpoint:
+  method: GET
+  path: /v2/payments/captures/{capture_id}
+  description: Show details for an authorized capture
+  doc_url: https://developer.paypal.com/docs/api/payments/v2/#captures_get
+
+signature:
+  required_paths:
+    - id
+    - status
+    - amount.value
+    - amount.currency_code
+    - final_capture
+    - create_time
+  optional_paths:
+    - invoice_id
+    - seller_protection
+    - seller_receivable_breakdown
+
+fields:
+  "id":               { type: id, anchor: true }
+  "status":           { type: preserve }
+  "status_details.reason": { type: preserve }
+  "amount.currency_code": { type: currency }
+  "amount.value":     { type: priceAmount }
+  "invoice_id":       { type: id, anchor: true }
+  "custom_id":        { type: id, anchor: true }
+  "final_capture":    { type: preserve }
+  "disbursement_mode": { type: preserve }
+  "create_time":      { type: isoDate }
+  "update_time":      { type: isoDate }
+  "seller_protection.status":          { type: preserve }
+  "seller_protection.dispute_categories": { type: preserve }
+  "seller_receivable_breakdown.gross_amount.value":         { type: priceAmount }
+  "seller_receivable_breakdown.gross_amount.currency_code": { type: currency }
+  "seller_receivable_breakdown.paypal_fee.value":           { type: priceAmount }
+  "seller_receivable_breakdown.paypal_fee.currency_code":   { type: currency }
+  "seller_receivable_breakdown.net_amount.value":           { type: priceAmount }
+  "seller_receivable_breakdown.receivable_amount.value":    { type: priceAmount }
+  "seller_receivable_breakdown.exchange_rate.value":        { type: preserve }
+  "seller_receivable_breakdown.exchange_rate.source_currency": { type: currency }
+  "seller_receivable_breakdown.exchange_rate.target_currency": { type: currency }
+  "supplementary_data.related_ids.order_id":           { type: id, anchor: true }
+  "supplementary_data.related_ids.authorization_id":   { type: id, anchor: true }
+  "processor_response.avs_code":              { type: preserve }
+  "processor_response.cvv_code":              { type: preserve }
+  "processor_response.response_code":         { type: preserve }
+  "processor_response.payment_advice_code":   { type: preserve }
+  "network_transaction_reference.id":   { type: id, anchor: true }
+  "network_transaction_reference.date": { type: preserve }
+  "network_transaction_reference.network": { type: preserve }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

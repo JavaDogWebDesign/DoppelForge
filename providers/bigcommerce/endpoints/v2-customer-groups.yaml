@@ -1,0 +1,29 @@
+endpoint:
+  method: GET
+  path: /v2/customer_groups
+  description: List customer groups
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customer-groups
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].name"
+    - "[].is_default"
+  optional_paths:
+    - "[].category_access"
+    - "[].discount_rules"
+
+fields:
+  "[].id":                          { type: id, anchor: true }
+  "[].name":                        { type: shortText }
+  "[].is_default":                  { type: preserve }
+  "[].category_access.type":        { type: preserve }
+  "[].category_access.categories":  { type: preserve }
+  "[].discount_rules[].type":       { type: preserve }
+  "[].discount_rules[].method":     { type: preserve }
+  "[].discount_rules[].amount":     { type: preserve }
+  "[].discount_rules[].price_list_id": { type: preserve }
+  "[].date_created":                { type: isoDate }
+  "[].date_modified":               { type: isoDate }
+  "[].is_group_for_guests":         { type: preserve }
+  "*": { type: auto }

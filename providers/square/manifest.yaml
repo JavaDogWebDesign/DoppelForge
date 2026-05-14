@@ -1,0 +1,6 @@
+id: square
+name: Square
+category: payments
+icon: square
+color: "#000000"
+docs: https://developer.squareup.com/reference/square

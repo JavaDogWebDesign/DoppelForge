@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Run only the latest commit on a branch — older in-flight runs are cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        # Using `npm install` (not `npm ci`) so platform-specific optional
+        # deps (Rolldown's @rolldown/binding-linux-x64-gnu and its @emnapi/*
+        # transitives) can install on Linux even when the lock file was
+        # generated on macOS. `npm ci` is strict about lock-file completeness
+        # in a way that conflicts with platform-conditional native bindings.
+        run: npm install --no-fund --no-audit
+
+      - name: Lint provider YAML
+        # Catches the class of bug that crashes the app at boot — duplicate keys,
+        # bad indentation. Cheaper to fail here than on a contributor PR review.
+        run: npm run lint:yaml
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Type-check & build
+        # `tsc -b && vite build` is what `npm run build` runs. Verifies the
+        # static bundle compiles and types are consistent.
+        run: npm run build
+
+      - name: Bundle privacy audit
+        # Sanity-check that the production bundle has no fetch/XHR/WebSocket
+        # primitives. The privacy claim ("data never leaves your tab") depends
+        # on this; a regression should fail CI loudly.
+        run: |
+          if grep -oE "[^a-zA-Z_]fetch\(|XMLHttpRequest|navigator\.sendBeacon|new WebSocket|new EventSource|importScripts\(" dist/assets/*.js > /tmp/hits 2>/dev/null && [ -s /tmp/hits ]; then
+            echo "::error::Network primitives found in production bundle:"
+            cat /tmp/hits
+            exit 1
+          fi
+          echo "Bundle is clean: no network primitives."

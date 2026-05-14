@@ -1,0 +1,41 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Conferences.json
+  description: List conferences
+  doc_url: https://www.twilio.com/docs/voice/api/conference-resource
+
+signature:
+  required_paths:
+    - conferences[].sid
+    - conferences[].account_sid
+    - conferences[].friendly_name
+    - conferences[].status
+  optional_paths:
+    - next_page_uri
+    - conferences[].region
+
+fields:
+  "page":            { type: preserve }
+  "page_size":       { type: preserve }
+  "first_page_uri":  { type: url }
+  "next_page_uri":   { type: url }
+  "previous_page_uri": { type: url }
+  "uri":             { type: url }
+  "start":           { type: preserve }
+  "end":             { type: preserve }
+  "num_pages":       { type: preserve }
+  "total":           { type: preserve }
+  "conferences[].sid":                { type: id, anchor: true }
+  "conferences[].account_sid":        { type: id, anchor: true }
+  "conferences[].friendly_name":      { type: shortText }
+  "conferences[].status":             { type: preserve }
+  "conferences[].region":             { type: preserve }
+  "conferences[].api_version":        { type: preserve }
+  "conferences[].reason_conference_ended": { type: preserve }
+  "conferences[].call_sid_ending_conference": { type: id, anchor: true }
+  "conferences[].date_created":       { type: isoDate }
+  "conferences[].date_updated":       { type: isoDate }
+  "conferences[].uri":                { type: url }
+  "conferences[].subresource_uris.participants": { type: url }
+  "conferences[].subresource_uris.recordings":   { type: url }
+  "*": { type: auto }

@@ -1,0 +1,42 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/resource/list
+  description: List resources (protected content)
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - resources[].rid
+    - resources[].aid
+    - resources[].name
+    - total
+    - code
+  optional_paths:
+    - resources[].description
+    - resources[].image_url
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "resources[].rid":              { type: id, anchor: true }
+  "resources[].aid":              { type: id, anchor: true }
+  "resources[].name":             { type: shortText }
+  "resources[].description":      { type: shortText }
+  "resources[].image_url":        { type: url }
+  "resources[].purchase_url":     { type: url }
+  "resources[].type":             { type: preserve }
+  "resources[].type_label":       { type: preserve }
+  "resources[].disabled":         { type: preserve }
+  "resources[].bundle":           { type: preserve }
+  "resources[].bundle_type":      { type: preserve }
+  "resources[].is_fbia_resource": { type: preserve }
+  "resources[].publish_date":     { type: unixTimestamp }
+  "resources[].create_date":      { type: unixTimestamp }
+  "resources[].update_date":      { type: unixTimestamp }
+  "resources[].external_id":      { type: id, anchor: true }
+  "resources[].tags":             { type: preserve }
+  "*": { type: auto }

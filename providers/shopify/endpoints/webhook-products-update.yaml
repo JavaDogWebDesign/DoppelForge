@@ -1,0 +1,79 @@
+endpoint:
+  method: POST
+  path: products/update
+  kind: webhook
+  description: Shopify webhook — product body (create/update/delete share this shape)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-10/resources/webhook
+
+signature:
+  required_paths:
+    - id
+    - admin_graphql_api_id
+    - handle
+    - variants[].id
+    - variants[].product_id
+  optional_paths:
+    - title
+    - vendor
+    - product_type
+    - status
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "admin_graphql_api_id":     { type: preserve }
+  "body_html":                { type: longText }
+  "created_at":               { type: isoDate }
+  "handle":                   { type: id, anchor: true }
+  "product_type":             { type: preserve }
+  "published_at":             { type: isoDate }
+  "published_scope":          { type: preserve }
+  "status":                   { type: preserve }
+  "tags":                     { type: preserve }
+  "template_suffix":          { type: preserve }
+  "title":                    { type: productName }
+  "updated_at":               { type: isoDate }
+  "vendor":                   { type: company }
+  "variants[].id":            { type: id, anchor: true }
+  "variants[].admin_graphql_api_id": { type: preserve }
+  "variants[].product_id":    { type: id, anchor: true }
+  "variants[].title":         { type: shortText }
+  "variants[].price":         { type: preserve }
+  "variants[].compare_at_price": { type: preserve }
+  "variants[].sku":           { type: sku, anchor: true }
+  "variants[].barcode":       { type: id, anchor: true }
+  "variants[].position":      { type: preserve }
+  "variants[].inventory_policy": { type: preserve }
+  "variants[].fulfillment_service": { type: preserve }
+  "variants[].inventory_management": { type: preserve }
+  "variants[].option1":       { type: shortText }
+  "variants[].option2":       { type: shortText }
+  "variants[].option3":       { type: shortText }
+  "variants[].taxable":       { type: preserve }
+  "variants[].grams":         { type: preserve }
+  "variants[].weight":        { type: preserve }
+  "variants[].weight_unit":   { type: preserve }
+  "variants[].inventory_item_id": { type: id, anchor: true }
+  "variants[].inventory_quantity": { type: preserve }
+  "variants[].old_inventory_quantity": { type: preserve }
+  "variants[].requires_shipping": { type: preserve }
+  "variants[].created_at":    { type: isoDate }
+  "variants[].updated_at":    { type: isoDate }
+  "options[].id":             { type: id, anchor: true }
+  "options[].product_id":     { type: id, anchor: true }
+  "options[].name":           { type: shortText }
+  "options[].position":       { type: preserve }
+  "options[].values":         { type: preserve }
+  "images[].id":              { type: id, anchor: true }
+  "images[].admin_graphql_api_id": { type: preserve }
+  "images[].product_id":      { type: id, anchor: true }
+  "images[].position":        { type: preserve }
+  "images[].alt":             { type: shortText }
+  "images[].width":           { type: preserve }
+  "images[].height":          { type: preserve }
+  "images[].src":             { type: url }
+  "images[].variant_ids":     { type: preserve }
+  "images[].created_at":      { type: isoDate }
+  "images[].updated_at":      { type: isoDate }
+  "image.id":                 { type: id, anchor: true }
+  "image.src":                { type: url }
+  "*": { type: auto }

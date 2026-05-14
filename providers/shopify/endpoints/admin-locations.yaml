@@ -1,0 +1,36 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/locations.json
+  description: List locations (warehouses, retail stores, fulfillment centers)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/location
+
+signature:
+  required_paths:
+    - locations[].id
+    - locations[].admin_graphql_api_id
+    - locations[].name
+  optional_paths:
+    - locations[].address1
+    - locations[].active
+
+fields:
+  "locations[].id":                        { type: id, anchor: true }
+  "locations[].admin_graphql_api_id":      { type: preserve }
+  "locations[].name":                      { type: company }
+  "locations[].address1":                  { type: street }
+  "locations[].address2":                  { type: streetSecondary }
+  "locations[].city":                      { type: city }
+  "locations[].zip":                       { type: postalCode }
+  "locations[].province":                  { type: stateOrProvince }
+  "locations[].country":                   { type: countryCode }
+  "locations[].country_code":              { type: countryCode }
+  "locations[].country_name":              { type: country }
+  "locations[].province_code":             { type: stateOrProvince }
+  "locations[].phone":                     { type: phone }
+  "locations[].created_at":                { type: isoDate }
+  "locations[].updated_at":                { type: isoDate }
+  "locations[].active":                    { type: preserve }
+  "locations[].legacy":                    { type: preserve }
+  "locations[].localized_country_name":    { type: country }
+  "locations[].localized_province_name":   { type: stateOrProvince }
+  "*": { type: auto }

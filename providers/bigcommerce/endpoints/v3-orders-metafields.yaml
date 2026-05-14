@@ -1,0 +1,35 @@
+endpoint:
+  method: GET
+  path: /v3/orders/{order_id}/metafields
+  description: List metafields attached to an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-metafields
+
+# Metafield values can carry arbitrary merchant data — treat values as shortText to be safe.
+signature:
+  required_paths:
+    - data[].id
+    - data[].namespace
+    - data[].key
+    - data[].resource_type
+    - meta.pagination.total
+  optional_paths:
+    - data[].permission_set
+    - data[].value
+
+fields:
+  "data[].id":              { type: id, anchor: true }
+  "data[].permission_set":  { type: preserve }
+  "data[].namespace":       { type: preserve }
+  "data[].key":             { type: preserve }
+  "data[].value":           { type: shortText }
+  "data[].description":     { type: shortText }
+  "data[].resource_type":   { type: preserve }
+  "data[].resource_id":     { type: id, anchor: true }
+  "data[].date_created":    { type: isoDate }
+  "data[].date_modified":   { type: isoDate }
+  "meta.pagination.total":        { type: preserve }
+  "meta.pagination.count":        { type: preserve }
+  "meta.pagination.per_page":     { type: preserve }
+  "meta.pagination.current_page": { type: preserve }
+  "meta.pagination.total_pages":  { type: preserve }
+  "*": { type: auto }

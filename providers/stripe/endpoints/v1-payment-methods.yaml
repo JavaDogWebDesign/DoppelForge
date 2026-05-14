@@ -1,0 +1,65 @@
+endpoint:
+  method: GET
+  path: /v1/payment_methods
+  description: List payment methods
+  doc_url: https://docs.stripe.com/api/payment_methods/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].type
+    - has_more
+  optional_paths:
+    - data[].card
+    - data[].us_bank_account
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].billing_details.address.city":         { type: city }
+  "data[].billing_details.address.country":      { type: countryCode }
+  "data[].billing_details.address.line1":        { type: street }
+  "data[].billing_details.address.line2":        { type: streetSecondary }
+  "data[].billing_details.address.postal_code":  { type: postalCode }
+  "data[].billing_details.address.state":        { type: stateOrProvince }
+  "data[].billing_details.email":                { type: email, anchor: true }
+  "data[].billing_details.name":                 { type: fullName }
+  "data[].billing_details.phone":                { type: phone }
+  "data[].card.brand":               { type: preserve }
+  "data[].card.country":             { type: countryCode }
+  "data[].card.exp_month":           { type: preserve }
+  "data[].card.exp_year":            { type: preserve }
+  "data[].card.fingerprint":         { type: id, anchor: true }
+  "data[].card.funding":             { type: preserve }
+  "data[].card.iin":                 { type: id }
+  "data[].card.issuer":              { type: company }
+  "data[].card.last4":               { type: id }
+  "data[].card.network":             { type: preserve }
+  "data[].card.checks.address_line1_check":       { type: preserve }
+  "data[].card.checks.address_postal_code_check": { type: preserve }
+  "data[].card.checks.cvc_check":                 { type: preserve }
+  "data[].card.three_d_secure_usage.supported":   { type: preserve }
+  "data[].card.wallet.type":         { type: preserve }
+  "data[].card.wallet.dynamic_last4": { type: id }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].customer":                 { type: id, anchor: true }
+  "data[].livemode":                 { type: preserve }
+  "data[].metadata":                 { type: preserve }
+  "data[].type":                     { type: preserve }
+  "data[].us_bank_account.account_holder_type":   { type: preserve }
+  "data[].us_bank_account.account_type":          { type: preserve }
+  "data[].us_bank_account.bank_name":             { type: company }
+  "data[].us_bank_account.fingerprint":           { type: id, anchor: true }
+  "data[].us_bank_account.last4":                 { type: id }
+  "data[].us_bank_account.routing_number":        { type: id }
+  "data[].sepa_debit.bank_code":     { type: id }
+  "data[].sepa_debit.branch_code":   { type: id }
+  "data[].sepa_debit.country":       { type: countryCode }
+  "data[].sepa_debit.fingerprint":   { type: id, anchor: true }
+  "data[].sepa_debit.last4":         { type: id }
+  "*": { type: auto }

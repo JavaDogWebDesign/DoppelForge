@@ -1,0 +1,67 @@
+endpoint:
+  method: GET
+  path: /shipments
+  description: List shipments
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Shipments
+
+signature:
+  required_paths:
+    - results[].object_id
+    - results[].object_owner
+    - results[].status
+    - results[].address_from
+    - results[].address_to
+    - count
+  optional_paths:
+    - next
+    - previous
+    - results[].rates
+
+fields:
+  "count":    { type: preserve }
+  "next":     { type: url }
+  "previous": { type: url }
+  "results[].object_id":    { type: id, anchor: true }
+  "results[].object_owner": { type: email, anchor: true }
+  "results[].object_created": { type: isoDate }
+  "results[].object_updated": { type: isoDate }
+  "results[].status":       { type: preserve }
+  "results[].test":         { type: preserve }
+  "results[].shipment_date": { type: isoDate }
+  "results[].metadata":     { type: shortText }
+  "results[].address_from.object_id": { type: id, anchor: true }
+  "results[].address_from.name":      { type: fullName }
+  "results[].address_from.company":   { type: company }
+  "results[].address_from.street1":   { type: street }
+  "results[].address_from.street2":   { type: streetSecondary }
+  "results[].address_from.city":      { type: city }
+  "results[].address_from.state":     { type: stateOrProvince }
+  "results[].address_from.zip":       { type: postalCode }
+  "results[].address_from.country":   { type: countryCode }
+  "results[].address_from.phone":     { type: phone }
+  "results[].address_from.email":     { type: email, anchor: true }
+  "results[].address_to.object_id":   { type: id, anchor: true }
+  "results[].address_to.name":        { type: fullName }
+  "results[].address_to.company":     { type: company }
+  "results[].address_to.street1":     { type: street }
+  "results[].address_to.street2":     { type: streetSecondary }
+  "results[].address_to.city":        { type: city }
+  "results[].address_to.state":       { type: stateOrProvince }
+  "results[].address_to.zip":         { type: postalCode }
+  "results[].address_to.country":     { type: countryCode }
+  "results[].address_to.phone":       { type: phone }
+  "results[].address_to.email":       { type: email, anchor: true }
+  "results[].parcels[].object_id":    { type: id, anchor: true }
+  "results[].parcels[].length":       { type: preserve }
+  "results[].parcels[].width":        { type: preserve }
+  "results[].parcels[].height":       { type: preserve }
+  "results[].parcels[].weight":       { type: preserve }
+  "results[].rates[].object_id":      { type: id, anchor: true }
+  "results[].rates[].amount":         { type: priceAmount }
+  "results[].rates[].currency":       { type: currency }
+  "results[].rates[].provider":       { type: company }
+  "results[].rates[].servicelevel.name":  { type: shortText }
+  "results[].rates[].servicelevel.token": { type: preserve }
+  "results[].rates[].estimated_days": { type: preserve }
+  "results[].rates[].carrier_account": { type: id, anchor: true }
+  "*": { type: auto }

@@ -1,0 +1,21 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/inventory_levels.json
+  description: List inventory levels by location
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventorylevel
+
+signature:
+  required_paths:
+    - inventory_levels[].inventory_item_id
+    - inventory_levels[].location_id
+  optional_paths:
+    - inventory_levels[].available
+    - inventory_levels[].updated_at
+
+fields:
+  "inventory_levels[].inventory_item_id":  { type: id, anchor: true }
+  "inventory_levels[].location_id":        { type: id, anchor: true }
+  "inventory_levels[].admin_graphql_api_id": { type: preserve }
+  "inventory_levels[].available":          { type: preserve }
+  "inventory_levels[].updated_at":         { type: isoDate }
+  "*": { type: auto }

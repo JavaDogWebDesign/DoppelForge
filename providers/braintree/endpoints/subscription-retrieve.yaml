@@ -1,0 +1,88 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/subscriptions/{subscription_id}
+  description: Retrieve a subscription
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/subscription
+
+signature:
+  required_paths:
+    - id
+    - plan_id
+    - status
+    - price
+  optional_paths:
+    - transactions
+    - status_history
+
+fields:
+  "id":                          { type: id, anchor: true }
+  "plan_id":                     { type: id, anchor: true }
+  "merchant_account_id":         { type: id, anchor: true }
+  "status":                      { type: preserve }
+  "balance":                     { type: preserve }
+  "price":                       { type: preserve }
+  "currency_iso_code":           { type: preserve }
+  "billing_day_of_month":        { type: preserve }
+  "billing_period_end_date":     { type: isoDate }
+  "billing_period_start_date":   { type: isoDate }
+  "created_at":                  { type: isoDate }
+  "updated_at":                  { type: isoDate }
+  "current_billing_cycle":       { type: preserve }
+  "days_past_due":               { type: preserve }
+  "failure_count":               { type: preserve }
+  "first_billing_date":          { type: isoDate }
+  "never_expires":               { type: preserve }
+  "next_bill_amount":            { type: preserve }
+  "next_billing_date":           { type: isoDate }
+  "next_billing_period_amount":  { type: preserve }
+  "number_of_billing_cycles":    { type: preserve }
+  "paid_through_date":           { type: isoDate }
+  "payment_method_token":        { type: id, anchor: true }
+  "trial_duration":              { type: preserve }
+  "trial_duration_unit":         { type: preserve }
+  "trial_period":                { type: preserve }
+  "description":                 { type: shortText }
+  "descriptor.name":             { type: preserve }
+  "descriptor.phone":            { type: phone }
+  "descriptor.url":              { type: url }
+  "transactions[].id":           { type: id, anchor: true }
+  "transactions[].amount":       { type: preserve }
+  "transactions[].currency_iso_code": { type: preserve }
+  "transactions[].status":       { type: preserve }
+  "transactions[].type":         { type: preserve }
+  "transactions[].created_at":   { type: isoDate }
+  "transactions[].subscription_id": { type: id, anchor: true }
+  "transactions[].plan_id":      { type: id, anchor: true }
+  "transactions[].order_id":     { type: id, anchor: true }
+  "transactions[].credit_card.bin":      { type: id }
+  "transactions[].credit_card.last_4":   { type: id }
+  "transactions[].credit_card.card_type": { type: preserve }
+  "transactions[].credit_card.cardholder_name": { type: fullName }
+  "transactions[].credit_card.expiration_month": { type: preserve }
+  "transactions[].credit_card.expiration_year":  { type: preserve }
+  "transactions[].customer.id":          { type: id, anchor: true }
+  "transactions[].customer.first_name":  { type: firstName }
+  "transactions[].customer.last_name":   { type: lastName }
+  "transactions[].customer.email":       { type: email, anchor: true }
+  "discounts[].id":              { type: id, anchor: true }
+  "discounts[].amount":          { type: preserve }
+  "discounts[].current_billing_cycle": { type: preserve }
+  "discounts[].name":            { type: shortText }
+  "discounts[].never_expires":   { type: preserve }
+  "discounts[].number_of_billing_cycles": { type: preserve }
+  "discounts[].quantity":        { type: preserve }
+  "add_ons[].id":                { type: id, anchor: true }
+  "add_ons[].amount":            { type: preserve }
+  "add_ons[].current_billing_cycle": { type: preserve }
+  "add_ons[].name":              { type: shortText }
+  "add_ons[].never_expires":     { type: preserve }
+  "add_ons[].number_of_billing_cycles": { type: preserve }
+  "add_ons[].quantity":          { type: preserve }
+  "status_history[].timestamp":  { type: isoDate }
+  "status_history[].status":     { type: preserve }
+  "status_history[].balance":    { type: preserve }
+  "status_history[].price":      { type: preserve }
+  "status_history[].user":       { type: id, anchor: true }
+  "status_history[].subscription_source": { type: preserve }
+  "status_history[].currency_iso_code": { type: preserve }
+  "*": { type: auto }

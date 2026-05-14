@@ -1,0 +1,25 @@
+endpoint:
+  method: GET
+  path: /v3/customers/form-field-values
+  description: Get customer form field values
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/customer-form-field-values
+
+# Form field values can be PII (collected at signup) — fake all values generically.
+signature:
+  required_paths:
+    - data[].name
+    - data[].value
+    - data[].customer_id
+    - meta.pagination.total
+  optional_paths: []
+
+fields:
+  "data[].name":                        { type: preserve }
+  "data[].value":                       { type: shortText }
+  "data[].customer_id":                 { type: id, anchor: true }
+  "meta.pagination.total":              { type: preserve }
+  "meta.pagination.count":              { type: preserve }
+  "meta.pagination.per_page":           { type: preserve }
+  "meta.pagination.current_page":       { type: preserve }
+  "meta.pagination.total_pages":        { type: preserve }
+  "*": { type: auto }

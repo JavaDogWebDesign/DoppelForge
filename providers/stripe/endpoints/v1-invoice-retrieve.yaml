@@ -1,0 +1,78 @@
+endpoint:
+  method: GET
+  path: /v1/invoices/{invoice}
+  description: Retrieve an invoice
+  doc_url: https://docs.stripe.com/api/invoices/retrieve
+
+signature:
+  required_paths:
+    - id
+    - object
+    - number
+    - customer
+  optional_paths:
+    - lines
+    - hosted_invoice_url
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "object":                   { type: preserve }
+  "account_country":          { type: countryCode }
+  "account_name":             { type: company }
+  "amount_due":               { type: preserve }
+  "amount_paid":              { type: preserve }
+  "amount_remaining":         { type: preserve }
+  "amount_shipping":          { type: preserve }
+  "auto_advance":             { type: preserve }
+  "billing_reason":           { type: preserve }
+  "charge":                   { type: id, anchor: true }
+  "collection_method":        { type: preserve }
+  "created":                  { type: unixTimestamp }
+  "currency":                 { type: preserve }
+  "customer":                 { type: id, anchor: true }
+  "customer_address.city":         { type: city }
+  "customer_address.country":      { type: countryCode }
+  "customer_address.line1":        { type: street }
+  "customer_address.line2":        { type: streetSecondary }
+  "customer_address.postal_code":  { type: postalCode }
+  "customer_address.state":        { type: stateOrProvince }
+  "customer_email":           { type: email, anchor: true }
+  "customer_name":            { type: fullName }
+  "customer_phone":           { type: phone }
+  "customer_shipping.address.line1": { type: street }
+  "customer_shipping.address.city":  { type: city }
+  "customer_shipping.name":   { type: fullName }
+  "customer_shipping.phone":  { type: phone }
+  "default_payment_method":   { type: id, anchor: true }
+  "description":              { type: shortText }
+  "due_date":                 { type: unixTimestamp }
+  "footer":                   { type: shortText }
+  "hosted_invoice_url":       { type: url }
+  "invoice_pdf":              { type: url }
+  "lines.object":             { type: preserve }
+  "lines.has_more":           { type: preserve }
+  "lines.url":                { type: url }
+  "lines.data[].id":          { type: id, anchor: true }
+  "lines.data[].amount":      { type: preserve }
+  "lines.data[].currency":    { type: preserve }
+  "lines.data[].description": { type: shortText }
+  "lines.data[].invoice":     { type: id, anchor: true }
+  "lines.data[].period.start": { type: unixTimestamp }
+  "lines.data[].period.end":   { type: unixTimestamp }
+  "lines.data[].price.id":    { type: id, anchor: true }
+  "lines.data[].price.product": { type: id, anchor: true }
+  "lines.data[].quantity":    { type: preserve }
+  "lines.data[].subscription": { type: id, anchor: true }
+  "lines.data[].type":        { type: preserve }
+  "livemode":                 { type: preserve }
+  "number":                   { type: id, anchor: true }
+  "paid":                     { type: preserve }
+  "payment_intent":           { type: id, anchor: true }
+  "period_end":               { type: unixTimestamp }
+  "period_start":             { type: unixTimestamp }
+  "receipt_number":           { type: id, anchor: true }
+  "status":                   { type: preserve }
+  "subscription":             { type: id, anchor: true }
+  "subtotal":                 { type: preserve }
+  "total":                    { type: preserve }
+  "*": { type: auto }

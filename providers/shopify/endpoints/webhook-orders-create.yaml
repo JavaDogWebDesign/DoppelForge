@@ -1,0 +1,141 @@
+endpoint:
+  method: POST
+  path: orders/create
+  kind: webhook
+  description: Shopify webhook — order created
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-10/resources/webhook
+
+signature:
+  required_paths:
+    - id
+    - admin_graphql_api_id
+    - name
+    - financial_status
+    - line_items[].id
+    - total_price
+  optional_paths:
+    - customer
+    - billing_address
+    - shipping_address
+
+fields:
+  "id":                            { type: id, anchor: true }
+  "admin_graphql_api_id":          { type: preserve }
+  "app_id":                        { type: id }
+  "browser_ip":                    { type: ipv4 }
+  "buyer_accepts_marketing":       { type: preserve }
+  "cancel_reason":                 { type: preserve }
+  "cancelled_at":                  { type: isoDate }
+  "cart_token":                    { type: id, anchor: true }
+  "checkout_id":                   { type: id, anchor: true }
+  "checkout_token":                { type: id, anchor: true }
+  "closed_at":                     { type: isoDate }
+  "confirmation_number":           { type: id, anchor: true }
+  "confirmed":                     { type: preserve }
+  "contact_email":                 { type: email, anchor: true }
+  "created_at":                    { type: isoDate }
+  "currency":                      { type: preserve }
+  "customer_locale":               { type: preserve }
+  "device_id":                     { type: id, anchor: true }
+  "discount_codes":                { type: preserve }
+  "email":                         { type: email, anchor: true }
+  "estimated_taxes":               { type: preserve }
+  "financial_status":              { type: preserve }
+  "fulfillment_status":            { type: preserve }
+  "gateway":                       { type: preserve }
+  "landing_site":                  { type: url }
+  "landing_site_ref":              { type: preserve }
+  "location_id":                   { type: id, anchor: true }
+  "merchant_of_record_app_id":     { type: id }
+  "name":                          { type: id, anchor: true }
+  "note":                          { type: shortText }
+  "note_attributes":               { type: preserve }
+  "number":                        { type: preserve }
+  "order_number":                  { type: id, anchor: true }
+  "order_status_url":              { type: url }
+  "payment_gateway_names":         { type: preserve }
+  "phone":                         { type: phone }
+  "po_number":                     { type: id }
+  "presentment_currency":          { type: preserve }
+  "processed_at":                  { type: isoDate }
+  "reference":                     { type: id, anchor: true }
+  "referring_site":                { type: url }
+  "source_identifier":             { type: id, anchor: true }
+  "source_name":                   { type: preserve }
+  "source_url":                    { type: url }
+  "subtotal_price":                { type: preserve }
+  "tags":                          { type: preserve }
+  "tax_exempt":                    { type: preserve }
+  "taxes_included":                { type: preserve }
+  "test":                          { type: preserve }
+  "token":                         { type: id, anchor: true }
+  "total_discounts":               { type: preserve }
+  "total_line_items_price":        { type: preserve }
+  "total_outstanding":             { type: preserve }
+  "total_price":                   { type: preserve }
+  "total_tax":                     { type: preserve }
+  "total_tip_received":            { type: preserve }
+  "total_weight":                  { type: preserve }
+  "updated_at":                    { type: isoDate }
+  "user_id":                       { type: id, anchor: true }
+  "customer.id":                   { type: id, anchor: true }
+  "customer.email":                { type: email, anchor: true }
+  "customer.first_name":           { type: firstName }
+  "customer.last_name":            { type: lastName }
+  "customer.phone":                { type: phone }
+  "customer.state":                { type: preserve }
+  "customer.tags":                 { type: preserve }
+  "customer.created_at":           { type: isoDate }
+  "customer.updated_at":           { type: isoDate }
+  "customer.admin_graphql_api_id": { type: preserve }
+  "billing_address.first_name":     { type: firstName }
+  "billing_address.last_name":      { type: lastName }
+  "billing_address.company":        { type: company }
+  "billing_address.address1":       { type: street }
+  "billing_address.address2":       { type: streetSecondary }
+  "billing_address.city":           { type: city }
+  "billing_address.province":       { type: stateOrProvince }
+  "billing_address.province_code":  { type: stateOrProvince }
+  "billing_address.country":        { type: country }
+  "billing_address.country_code":   { type: countryCode }
+  "billing_address.zip":            { type: postalCode }
+  "billing_address.phone":          { type: phone }
+  "billing_address.name":           { type: fullName }
+  "shipping_address.first_name":    { type: firstName }
+  "shipping_address.last_name":     { type: lastName }
+  "shipping_address.company":       { type: company }
+  "shipping_address.address1":      { type: street }
+  "shipping_address.address2":      { type: streetSecondary }
+  "shipping_address.city":          { type: city }
+  "shipping_address.province":      { type: stateOrProvince }
+  "shipping_address.province_code": { type: stateOrProvince }
+  "shipping_address.country":       { type: country }
+  "shipping_address.country_code":  { type: countryCode }
+  "shipping_address.zip":           { type: postalCode }
+  "shipping_address.phone":         { type: phone }
+  "shipping_address.name":          { type: fullName }
+  "line_items[].id":                { type: id, anchor: true }
+  "line_items[].admin_graphql_api_id": { type: preserve }
+  "line_items[].product_id":        { type: id, anchor: true }
+  "line_items[].variant_id":        { type: id, anchor: true }
+  "line_items[].title":             { type: productName }
+  "line_items[].name":              { type: productName }
+  "line_items[].variant_title":     { type: shortText }
+  "line_items[].sku":               { type: sku, anchor: true }
+  "line_items[].vendor":            { type: company }
+  "line_items[].quantity":          { type: preserve }
+  "line_items[].price":             { type: preserve }
+  "line_items[].fulfillment_status": { type: preserve }
+  "line_items[].grams":             { type: preserve }
+  "line_items[].requires_shipping": { type: preserve }
+  "line_items[].taxable":           { type: preserve }
+  "line_items[].gift_card":         { type: preserve }
+  "line_items[].fulfillable_quantity": { type: preserve }
+  "line_items[].fulfillment_service":  { type: preserve }
+  "line_items[].properties":        { type: preserve }
+  "shipping_lines[].id":            { type: id, anchor: true }
+  "shipping_lines[].title":         { type: shortText }
+  "shipping_lines[].code":          { type: preserve }
+  "shipping_lines[].price":         { type: preserve }
+  "shipping_lines[].carrier_identifier": { type: id }
+  "*": { type: auto }

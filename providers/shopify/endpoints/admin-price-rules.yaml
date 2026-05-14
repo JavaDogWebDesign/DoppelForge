@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/price_rules.json
+  description: List price rules (discount campaigns)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/pricerule
+
+signature:
+  required_paths:
+    - price_rules[].id
+    - price_rules[].admin_graphql_api_id
+    - price_rules[].title
+    - price_rules[].value_type
+  optional_paths:
+    - price_rules[].starts_at
+    - price_rules[].usage_limit
+
+fields:
+  "price_rules[].id":                          { type: id, anchor: true }
+  "price_rules[].admin_graphql_api_id":        { type: preserve }
+  "price_rules[].value_type":                  { type: preserve }
+  "price_rules[].value":                       { type: preserve }
+  "price_rules[].customer_selection":          { type: preserve }
+  "price_rules[].target_type":                 { type: preserve }
+  "price_rules[].target_selection":            { type: preserve }
+  "price_rules[].allocation_method":           { type: preserve }
+  "price_rules[].allocation_limit":            { type: preserve }
+  "price_rules[].once_per_customer":           { type: preserve }
+  "price_rules[].usage_limit":                 { type: preserve }
+  "price_rules[].starts_at":                   { type: isoDate }
+  "price_rules[].ends_at":                     { type: isoDate }
+  "price_rules[].created_at":                  { type: isoDate }
+  "price_rules[].updated_at":                  { type: isoDate }
+  "price_rules[].entitled_product_ids":        { type: preserve }
+  "price_rules[].entitled_variant_ids":        { type: preserve }
+  "price_rules[].entitled_collection_ids":     { type: preserve }
+  "price_rules[].entitled_country_ids":        { type: preserve }
+  "price_rules[].prerequisite_product_ids":    { type: preserve }
+  "price_rules[].prerequisite_variant_ids":    { type: preserve }
+  "price_rules[].prerequisite_collection_ids": { type: preserve }
+  "price_rules[].prerequisite_subtotal_range.greater_than_or_equal_to": { type: preserve }
+  "price_rules[].prerequisite_shipping_price_range.less_than_or_equal_to": { type: preserve }
+  "price_rules[].customer_segment_prerequisite_ids": { type: preserve }
+  "price_rules[].prerequisite_customer_ids":   { type: preserve }
+  "price_rules[].prerequisite_to_entitlement_quantity_ratio.prerequisite_quantity": { type: preserve }
+  "price_rules[].prerequisite_to_entitlement_quantity_ratio.entitled_quantity":     { type: preserve }
+  "price_rules[].title":                       { type: shortText }
+  "*": { type: auto }

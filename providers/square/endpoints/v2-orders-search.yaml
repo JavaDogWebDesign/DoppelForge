@@ -1,0 +1,71 @@
+endpoint:
+  method: POST
+  path: /v2/orders/search
+  description: Search orders
+  doc_url: https://developer.squareup.com/reference/square/orders-api/search-orders
+
+signature:
+  required_paths:
+    - orders[].id
+    - orders[].location_id
+    - orders[].state
+    - orders[].created_at
+  optional_paths:
+    - cursor
+    - orders[].customer_id
+    - orders[].line_items
+    - orders[].total_money.amount
+
+fields:
+  "cursor":                  { type: id, anchor: true }
+  "errors":                  { type: preserve }
+  "orders[].id":              { type: id, anchor: true }
+  "orders[].location_id":     { type: id, anchor: true }
+  "orders[].reference_id":    { type: id, anchor: true }
+  "orders[].customer_id":     { type: id, anchor: true }
+  "orders[].source.name":     { type: shortText }
+  "orders[].source.id":       { type: id }
+  "orders[].state":           { type: preserve }
+  "orders[].version":         { type: preserve }
+  "orders[].created_at":      { type: isoDate }
+  "orders[].updated_at":      { type: isoDate }
+  "orders[].closed_at":       { type: isoDate }
+  "orders[].ticket_name":     { type: shortText }
+  "orders[].total_money.amount":         { type: preserve }
+  "orders[].total_money.currency":       { type: currency }
+  "orders[].total_tax_money.amount":     { type: preserve }
+  "orders[].total_discount_money.amount": { type: preserve }
+  "orders[].total_tip_money.amount":     { type: preserve }
+  "orders[].total_service_charge_money.amount": { type: preserve }
+  "orders[].net_amounts.total_money.amount":    { type: preserve }
+  "orders[].line_items[].uid":            { type: id, anchor: true }
+  "orders[].line_items[].catalog_object_id": { type: id, anchor: true }
+  "orders[].line_items[].variation_name": { type: shortText }
+  "orders[].line_items[].name":           { type: productName }
+  "orders[].line_items[].quantity":       { type: preserve }
+  "orders[].line_items[].note":           { type: shortText }
+  "orders[].line_items[].base_price_money.amount":  { type: preserve }
+  "orders[].line_items[].gross_sales_money.amount": { type: preserve }
+  "orders[].line_items[].total_money.amount":       { type: preserve }
+  "orders[].line_items[].total_tax_money.amount":   { type: preserve }
+  "orders[].fulfillments[].uid":          { type: id, anchor: true }
+  "orders[].fulfillments[].type":         { type: preserve }
+  "orders[].fulfillments[].state":        { type: preserve }
+  "orders[].fulfillments[].shipment_details.recipient.display_name": { type: fullName }
+  "orders[].fulfillments[].shipment_details.recipient.email_address": { type: email, anchor: true }
+  "orders[].fulfillments[].shipment_details.recipient.phone_number":  { type: phone }
+  "orders[].fulfillments[].shipment_details.recipient.address.address_line_1": { type: street }
+  "orders[].fulfillments[].shipment_details.recipient.address.locality":       { type: city }
+  "orders[].fulfillments[].shipment_details.recipient.address.administrative_district_level_1": { type: stateOrProvince }
+  "orders[].fulfillments[].shipment_details.recipient.address.postal_code":    { type: postalCode }
+  "orders[].fulfillments[].shipment_details.recipient.address.country":        { type: countryCode }
+  "orders[].fulfillments[].pickup_details.recipient.display_name":  { type: fullName }
+  "orders[].fulfillments[].pickup_details.recipient.email_address": { type: email, anchor: true }
+  "orders[].fulfillments[].pickup_details.recipient.phone_number":  { type: phone }
+  "orders[].tenders[].id":           { type: id, anchor: true }
+  "orders[].tenders[].location_id":  { type: id, anchor: true }
+  "orders[].tenders[].transaction_id": { type: id, anchor: true }
+  "orders[].tenders[].payment_id":   { type: id, anchor: true }
+  "orders[].tenders[].type":         { type: preserve }
+  "orders[].tenders[].amount_money.amount": { type: preserve }
+  "*": { type: auto }

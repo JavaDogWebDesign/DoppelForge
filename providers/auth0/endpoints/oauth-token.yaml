@@ -1,0 +1,27 @@
+endpoint:
+  method: POST
+  path: /oauth/token
+  description: OAuth token exchange response
+  doc_url: https://auth0.com/docs/api/authentication#get-token
+
+# Token responses are pure secrets. Realistic fakes would mislead downstream
+# tools (JWT viewers, decoders) into treating the fake as a real credential,
+# so every secret-bearing field maps to `redact` rather than a faker output.
+signature:
+  required_paths:
+    - access_token
+    - token_type
+    - expires_in
+  optional_paths:
+    - id_token
+    - refresh_token
+    - scope
+
+fields:
+  "access_token":  { type: redact }
+  "id_token":      { type: redact }
+  "refresh_token": { type: redact }
+  "token_type":    { type: preserve }
+  "expires_in":    { type: preserve }
+  "scope":         { type: preserve }
+  "*": { type: auto }

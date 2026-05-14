@@ -1,0 +1,52 @@
+endpoint:
+  method: GET
+  path: /v1/subscriptions/{subscription}
+  description: Retrieve a subscription
+  doc_url: https://docs.stripe.com/api/subscriptions/retrieve
+
+signature:
+  required_paths:
+    - id
+    - object
+    - status
+    - customer
+  optional_paths:
+    - items
+    - latest_invoice
+
+fields:
+  "id":                                   { type: id, anchor: true }
+  "object":                               { type: preserve }
+  "billing_cycle_anchor":                 { type: unixTimestamp }
+  "cancel_at":                            { type: unixTimestamp }
+  "cancel_at_period_end":                 { type: preserve }
+  "canceled_at":                          { type: unixTimestamp }
+  "collection_method":                    { type: preserve }
+  "created":                              { type: unixTimestamp }
+  "currency":                             { type: preserve }
+  "current_period_end":                   { type: unixTimestamp }
+  "current_period_start":                 { type: unixTimestamp }
+  "customer":                             { type: id, anchor: true }
+  "days_until_due":                       { type: preserve }
+  "default_payment_method":               { type: id, anchor: true }
+  "description":                          { type: shortText }
+  "ended_at":                             { type: unixTimestamp }
+  "items.object":                         { type: preserve }
+  "items.has_more":                       { type: preserve }
+  "items.url":                            { type: url }
+  "items.data[].id":                      { type: id, anchor: true }
+  "items.data[].created":                 { type: unixTimestamp }
+  "items.data[].price.id":                { type: id, anchor: true }
+  "items.data[].price.currency":          { type: preserve }
+  "items.data[].price.product":           { type: id, anchor: true }
+  "items.data[].price.unit_amount":       { type: preserve }
+  "items.data[].quantity":                { type: preserve }
+  "items.data[].subscription":            { type: id, anchor: true }
+  "latest_invoice":                       { type: id, anchor: true }
+  "livemode":                             { type: preserve }
+  "metadata":                             { type: preserve }
+  "start_date":                           { type: unixTimestamp }
+  "status":                               { type: preserve }
+  "trial_end":                            { type: unixTimestamp }
+  "trial_start":                          { type: unixTimestamp }
+  "*": { type: auto }

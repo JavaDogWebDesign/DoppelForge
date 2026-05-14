@@ -1,0 +1,6 @@
+id: mailchimp
+name: Mailchimp
+category: marketing
+icon: megaphone
+color: "#FFE01B"
+docs: https://mailchimp.com/developer/marketing/api/

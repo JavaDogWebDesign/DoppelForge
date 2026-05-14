@@ -1,0 +1,39 @@
+endpoint:
+  method: POST
+  path: store/*
+  kind: webhook
+  description: BigCommerce webhook envelope — order, customer, cart, product, sku events share this shape
+  doc_url: https://developer.bigcommerce.com/docs/integrations/webhooks/events
+
+signature:
+  required_paths:
+    - scope
+    - store_id
+    - data.type
+    - data.id
+    - hash
+    - producer
+  optional_paths:
+    - created_at
+    - data.status.previous_status_id
+    - data.status.new_status_id
+    - data.inventory.method
+    - data.inventory.product_id
+
+fields:
+  "scope":      { type: preserve }
+  "store_id":   { type: id, anchor: true }
+  "hash":       { type: id, anchor: true }
+  "created_at": { type: unixTimestamp }
+  "producer":   { type: id, anchor: true }
+  "data.type":  { type: preserve }
+  "data.id":    { type: id, anchor: true }
+  "data.status.previous_status_id": { type: preserve }
+  "data.status.new_status_id":      { type: preserve }
+  "data.inventory.product_id":      { type: id, anchor: true }
+  "data.inventory.variant_id":      { type: id, anchor: true }
+  "data.inventory.method":          { type: preserve }
+  "data.inventory.value":           { type: preserve }
+  "data.sku":                       { type: sku, anchor: true }
+  "data.address.customer_id":       { type: id, anchor: true }
+  "*": { type: auto }

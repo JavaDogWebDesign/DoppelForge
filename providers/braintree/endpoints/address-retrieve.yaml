@@ -1,0 +1,36 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}
+  description: Retrieve a customer address
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/address
+
+signature:
+  required_paths:
+    - id
+    - customer_id
+    - street_address
+  optional_paths:
+    - region
+    - postal_code
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "customer_id":              { type: id, anchor: true }
+  "first_name":               { type: firstName }
+  "last_name":                { type: lastName }
+  "company":                  { type: company }
+  "street_address":           { type: street }
+  "extended_address":         { type: streetSecondary }
+  "locality":                 { type: city }
+  "region":                   { type: stateOrProvince }
+  "postal_code":              { type: postalCode }
+  "country_name":             { type: country }
+  "country_code_alpha2":      { type: countryCode }
+  "country_code_alpha3":      { type: countryCode }
+  "country_code_numeric":     { type: preserve }
+  "phone_number":             { type: phone }
+  "international_phone.country_code": { type: preserve }
+  "international_phone.national_number": { type: phone }
+  "created_at":               { type: isoDate }
+  "updated_at":               { type: isoDate }
+  "*": { type: auto }

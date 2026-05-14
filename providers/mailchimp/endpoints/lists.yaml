@@ -1,0 +1,54 @@
+endpoint:
+  method: GET
+  path: /3.0/lists
+  description: List audiences (lists)
+  doc_url: https://mailchimp.com/developer/marketing/api/lists/get-lists-info/
+
+signature:
+  required_paths:
+    - lists[].id
+    - lists[].name
+    - lists[].date_created
+    - lists[].email_type_option
+    - total_items
+  optional_paths:
+    - lists[].contact
+    - lists[].stats
+    - constraints
+
+fields:
+  "total_items":   { type: preserve }
+  "constraints":   { type: preserve }
+  "_links[].href":   { type: url }
+  "_links[].rel":    { type: preserve }
+  "_links[].method": { type: preserve }
+  "lists[].id":              { type: id, anchor: true }
+  "lists[].web_id":          { type: id, anchor: true }
+  "lists[].name":            { type: shortText }
+  "lists[].contact.company": { type: company }
+  "lists[].contact.address1": { type: street }
+  "lists[].contact.city":    { type: city }
+  "lists[].contact.state":   { type: stateOrProvince }
+  "lists[].contact.zip":     { type: postalCode }
+  "lists[].contact.country": { type: countryCode }
+  "lists[].contact.phone":   { type: phone }
+  "lists[].permission_reminder": { type: longText }
+  "lists[].campaign_defaults.from_name":  { type: fullName }
+  "lists[].campaign_defaults.from_email": { type: email, anchor: true }
+  "lists[].campaign_defaults.subject":    { type: shortText }
+  "lists[].campaign_defaults.language":   { type: preserve }
+  "lists[].notify_on_subscribe":   { type: email, anchor: true }
+  "lists[].notify_on_unsubscribe": { type: email, anchor: true }
+  "lists[].date_created":     { type: isoDate }
+  "lists[].list_rating":      { type: preserve }
+  "lists[].email_type_option": { type: preserve }
+  "lists[].subscribe_url_short": { type: url }
+  "lists[].subscribe_url_long":  { type: url }
+  "lists[].beamer_address":   { type: email, anchor: true }
+  "lists[].visibility":       { type: preserve }
+  "lists[].stats.member_count":      { type: preserve }
+  "lists[].stats.unsubscribe_count": { type: preserve }
+  "lists[].stats.cleaned_count":     { type: preserve }
+  "lists[].stats.open_rate":         { type: preserve }
+  "lists[].stats.click_rate":        { type: preserve }
+  "*": { type: auto }

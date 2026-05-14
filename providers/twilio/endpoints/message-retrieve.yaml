@@ -1,0 +1,40 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}.json
+  description: Retrieve a single message
+  doc_url: https://www.twilio.com/docs/sms/api/message-resource
+
+signature:
+  required_paths:
+    - sid
+    - account_sid
+    - from
+    - to
+    - body
+  optional_paths:
+    - messaging_service_sid
+    - error_code
+
+fields:
+  "sid":                    { type: id, anchor: true }
+  "account_sid":            { type: id, anchor: true }
+  "messaging_service_sid":  { type: id, anchor: true }
+  "from":                   { type: phone }
+  "to":                     { type: phone }
+  "body":                   { type: longText }
+  "status":                 { type: preserve }
+  "direction":              { type: preserve }
+  "api_version":            { type: preserve }
+  "num_segments":           { type: preserve }
+  "num_media":              { type: preserve }
+  "price":                  { type: preserve }
+  "price_unit":             { type: preserve }
+  "error_code":             { type: preserve }
+  "error_message":          { type: shortText }
+  "date_created":           { type: isoDate }
+  "date_sent":              { type: isoDate }
+  "date_updated":           { type: isoDate }
+  "uri":                    { type: url }
+  "subresource_uris.media": { type: url }
+  "subresource_uris.feedback": { type: url }
+  "*": { type: auto }

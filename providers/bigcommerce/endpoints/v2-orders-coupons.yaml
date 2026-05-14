@@ -1,0 +1,25 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/coupons
+  description: List coupons applied to an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-coupons
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].coupon_id"
+    - "[].order_id"
+    - "[].code"
+  optional_paths:
+    - "[].amount"
+    - "[].discount"
+
+fields:
+  "[].id":          { type: id, anchor: true }
+  "[].coupon_id":   { type: id, anchor: true }
+  "[].order_id":    { type: id, anchor: true }
+  "[].code":        { type: id }
+  "[].amount":      { type: preserve }
+  "[].type":        { type: preserve }
+  "[].discount":    { type: preserve }
+  "*": { type: auto }

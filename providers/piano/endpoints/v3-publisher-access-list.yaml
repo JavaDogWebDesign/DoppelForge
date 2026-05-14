@@ -1,0 +1,51 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/access/list
+  description: List user accesses to resources
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - accesses[].access_id
+    - accesses[].user
+    - accesses[].resource
+    - total
+    - code
+  optional_paths:
+    - accesses[].granted
+    - accesses[].expire_date
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "accesses[].access_id":            { type: id, anchor: true }
+  "accesses[].parent_access_id":     { type: id, anchor: true }
+  "accesses[].granted":              { type: preserve }
+  "accesses[].revoked":              { type: preserve }
+  "accesses[].can_revoke_access":    { type: preserve }
+  "accesses[].start_date":           { type: unixTimestamp }
+  "accesses[].expire_date":          { type: unixTimestamp }
+  "accesses[].user.uid":             { type: id, anchor: true }
+  "accesses[].user.email":           { type: email, anchor: true }
+  "accesses[].user.first_name":      { type: firstName }
+  "accesses[].user.last_name":       { type: lastName }
+  "accesses[].user.personal_name":   { type: fullName }
+  "accesses[].user.create_date":     { type: unixTimestamp }
+  "accesses[].resource.rid":         { type: id, anchor: true }
+  "accesses[].resource.aid":         { type: id, anchor: true }
+  "accesses[].resource.name":        { type: shortText }
+  "accesses[].resource.description": { type: shortText }
+  "accesses[].resource.image_url":   { type: url }
+  "accesses[].resource.is_fbia_resource": { type: preserve }
+  "accesses[].resource.disabled":    { type: preserve }
+  "accesses[].resource.create_date": { type: unixTimestamp }
+  "accesses[].resource.update_date": { type: unixTimestamp }
+  "accesses[].resource.bundle_type": { type: preserve }
+  "accesses[].resource.purchase_url": { type: url }
+  "accesses[].resource.type":        { type: preserve }
+  "accesses[].resource.type_label":  { type: preserve }
+  "*": { type: auto }

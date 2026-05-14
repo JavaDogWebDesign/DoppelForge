@@ -1,0 +1,58 @@
+endpoint:
+  method: GET
+  path: /api/v3/publisher/subscription/get
+  description: Get a subscription
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - subscription.subscription_id
+    - subscription.user
+    - subscription.term
+    - code
+  optional_paths:
+    - subscription.next_bill_date
+    - subscription.payment_billing_plan
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "subscription.subscription_id":            { type: id, anchor: true }
+  "subscription.status":                     { type: preserve }
+  "subscription.status_name":                { type: preserve }
+  "subscription.auto_renew":                 { type: preserve }
+  "subscription.start_date":                 { type: unixTimestamp }
+  "subscription.end_date":                   { type: unixTimestamp }
+  "subscription.next_bill_date":             { type: unixTimestamp }
+  "subscription.cancel_date":                { type: unixTimestamp }
+  "subscription.grace_period_start_date":    { type: unixTimestamp }
+  "subscription.payment_billing_plan":       { type: preserve }
+  "subscription.payment_billing_plan_description": { type: shortText }
+  "subscription.payment_billing_plan_descriptor":  { type: preserve }
+  "subscription.upi_ext_customer_id":        { type: id, anchor: true }
+  "subscription.external_api_id":            { type: id, anchor: true }
+  "subscription.external_api_name":          { type: preserve }
+  "subscription.prepaid":                    { type: preserve }
+  "subscription.active":                     { type: preserve }
+  "subscription.user.uid":                   { type: id, anchor: true }
+  "subscription.user.email":                 { type: email, anchor: true }
+  "subscription.user.first_name":            { type: firstName }
+  "subscription.user.last_name":             { type: lastName }
+  "subscription.user.personal_name":         { type: fullName }
+  "subscription.user.create_date":           { type: unixTimestamp }
+  "subscription.user.update_date":           { type: unixTimestamp }
+  "subscription.user.country":               { type: country }
+  "subscription.user.country_iso":           { type: countryCode }
+  "subscription.term.term_id":               { type: id, anchor: true }
+  "subscription.term.aid":                   { type: id, anchor: true }
+  "subscription.term.name":                  { type: shortText }
+  "subscription.term.description":           { type: shortText }
+  "subscription.term.type":                  { type: preserve }
+  "subscription.term.payment_billing_plan":  { type: preserve }
+  "subscription.term.payment_first_amount":  { type: preserve }
+  "subscription.term.payment_currency":      { type: preserve }
+  "subscription.term.create_date":           { type: unixTimestamp }
+  "subscription.term.resource.rid":          { type: id, anchor: true }
+  "subscription.term.resource.name":         { type: shortText }
+  "subscription.term.resource.aid":          { type: id, anchor: true }
+  "*": { type: auto }

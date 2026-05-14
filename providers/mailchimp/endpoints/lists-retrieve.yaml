@@ -1,0 +1,71 @@
+endpoint:
+  method: GET
+  path: /3.0/lists/{list_id}
+  description: Retrieve list (audience) info
+  doc_url: https://mailchimp.com/developer/marketing/api/lists/get-list-info/
+
+signature:
+  required_paths:
+    - id
+    - web_id
+    - name
+    - date_created
+    - permission_reminder
+    - email_type_option
+  optional_paths:
+    - contact
+    - stats
+    - campaign_defaults
+
+fields:
+  "id":              { type: id, anchor: true }
+  "web_id":          { type: id, anchor: true }
+  "name":            { type: shortText }
+  "contact.company":         { type: company }
+  "contact.address1":        { type: street }
+  "contact.address2":        { type: streetSecondary }
+  "contact.city":            { type: city }
+  "contact.state":           { type: stateOrProvince }
+  "contact.zip":             { type: postalCode }
+  "contact.country":         { type: countryCode }
+  "contact.phone":           { type: phone }
+  "permission_reminder":     { type: longText }
+  "use_archive_bar":         { type: preserve }
+  "campaign_defaults.from_name":     { type: fullName }
+  "campaign_defaults.from_email":    { type: email, anchor: true }
+  "campaign_defaults.subject":       { type: shortText }
+  "campaign_defaults.language":      { type: preserve }
+  "notify_on_subscribe":     { type: email, anchor: true }
+  "notify_on_unsubscribe":   { type: email, anchor: true }
+  "date_created":            { type: isoDate }
+  "list_rating":             { type: preserve }
+  "email_type_option":       { type: preserve }
+  "subscribe_url_short":     { type: url }
+  "subscribe_url_long":      { type: url }
+  "beamer_address":          { type: email, anchor: true }
+  "visibility":              { type: preserve }
+  "double_optin":            { type: preserve }
+  "has_welcome":             { type: preserve }
+  "marketing_permissions":   { type: preserve }
+  "modules":                 { type: preserve }
+  "stats.member_count":      { type: preserve }
+  "stats.total_contacts":    { type: preserve }
+  "stats.unsubscribe_count": { type: preserve }
+  "stats.cleaned_count":     { type: preserve }
+  "stats.member_count_since_send": { type: preserve }
+  "stats.unsubscribe_count_since_send": { type: preserve }
+  "stats.cleaned_count_since_send":     { type: preserve }
+  "stats.campaign_count":    { type: preserve }
+  "stats.campaign_last_sent": { type: isoDate }
+  "stats.merge_field_count": { type: preserve }
+  "stats.avg_sub_rate":      { type: preserve }
+  "stats.avg_unsub_rate":    { type: preserve }
+  "stats.target_sub_rate":   { type: preserve }
+  "stats.open_rate":         { type: preserve }
+  "stats.click_rate":        { type: preserve }
+  "stats.last_sub_date":     { type: isoDate }
+  "stats.last_unsub_date":   { type: isoDate }
+  "_links[].href":   { type: url }
+  "_links[].rel":    { type: preserve }
+  "_links[].method": { type: preserve }
+  "*": { type: auto }

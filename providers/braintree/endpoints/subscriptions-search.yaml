@@ -1,0 +1,40 @@
+endpoint:
+  method: POST
+  path: /merchants/{merchant_id}/subscriptions/advanced_search
+  description: Search subscriptions (collection)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/request/subscription/search
+
+signature:
+  required_paths:
+    - subscriptions[].id
+    - subscriptions[].plan_id
+    - subscriptions[].status
+  optional_paths:
+    - subscriptions[].next_bill_amount
+    - subscriptions[].payment_method_token
+
+fields:
+  "subscriptions[].id":                       { type: id, anchor: true }
+  "subscriptions[].plan_id":                  { type: id, anchor: true }
+  "subscriptions[].merchant_account_id":      { type: id, anchor: true }
+  "subscriptions[].status":                   { type: preserve }
+  "subscriptions[].balance":                  { type: preserve }
+  "subscriptions[].price":                    { type: preserve }
+  "subscriptions[].currency_iso_code":        { type: preserve }
+  "subscriptions[].billing_day_of_month":     { type: preserve }
+  "subscriptions[].billing_period_end_date":  { type: isoDate }
+  "subscriptions[].billing_period_start_date": { type: isoDate }
+  "subscriptions[].created_at":               { type: isoDate }
+  "subscriptions[].updated_at":               { type: isoDate }
+  "subscriptions[].first_billing_date":       { type: isoDate }
+  "subscriptions[].next_billing_date":        { type: isoDate }
+  "subscriptions[].next_bill_amount":         { type: preserve }
+  "subscriptions[].paid_through_date":        { type: isoDate }
+  "subscriptions[].payment_method_token":     { type: id, anchor: true }
+  "subscriptions[].failure_count":            { type: preserve }
+  "subscriptions[].description":              { type: shortText }
+  "totalItems":   { type: preserve }
+  "totalCount":   { type: preserve }
+  "pageSize":     { type: preserve }
+  "currentPage":  { type: preserve }
+  "*": { type: auto }

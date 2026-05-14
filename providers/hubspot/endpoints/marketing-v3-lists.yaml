@@ -1,0 +1,35 @@
+endpoint:
+  method: GET
+  path: /crm/v3/lists/search
+  description: Search/list contact lists
+  doc_url: https://developers.hubspot.com/docs/api/crm/lists
+
+signature:
+  required_paths:
+    - lists[].listId
+    - lists[].name
+    - lists[].objectTypeId
+  optional_paths:
+    - lists[].createdAt
+    - total
+
+fields:
+  "total":          { type: preserve }
+  "offset":         { type: preserve }
+  "hasMore":        { type: preserve }
+  "lists[].listId":          { type: id, anchor: true }
+  "lists[].listVersion":     { type: preserve }
+  "lists[].name":            { type: shortText }
+  "lists[].objectTypeId":    { type: preserve }
+  "lists[].processingType":  { type: preserve }
+  "lists[].processingStatus": { type: preserve }
+  "lists[].createdAt":       { type: isoDate }
+  "lists[].updatedAt":       { type: isoDate }
+  "lists[].deletedAt":       { type: isoDate }
+  "lists[].size":            { type: preserve }
+  "lists[].folderId":        { type: id, anchor: true }
+  "lists[].createdById":     { type: id, anchor: true }
+  "lists[].updatedById":     { type: id, anchor: true }
+  "lists[].filtersUpdatedAt": { type: isoDate }
+  "lists[].additionalProperties": { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,89 @@
+endpoint:
+  method: POST
+  path: /admin/api/2024-10/graphql.json (query draftOrders)
+  description: Shopify Admin GraphQL — draftOrders connection (list)
+  doc_url: https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrders
+
+signature:
+  required_paths:
+    - data.draftOrders.edges[].node.id
+    - data.draftOrders.edges[].node.name
+    - data.draftOrders.edges[].node.status
+    - data.draftOrders.edges[].node.totalPriceSet.shopMoney.amount
+    - data.draftOrders.pageInfo.hasNextPage
+  optional_paths:
+    - extensions.cost.actualQueryCost
+    - data.draftOrders.edges[].node.customer
+    - data.draftOrders.edges[].node.invoiceUrl
+
+fields:
+  "extensions.cost.requestedQueryCost":  { type: preserve }
+  "extensions.cost.actualQueryCost":     { type: preserve }
+  "extensions.cost.throttleStatus.maximumAvailable":   { type: preserve }
+  "extensions.cost.throttleStatus.currentlyAvailable": { type: preserve }
+  "extensions.cost.throttleStatus.restoreRate":        { type: preserve }
+  "data.draftOrders.pageInfo.hasNextPage":     { type: preserve }
+  "data.draftOrders.pageInfo.hasPreviousPage": { type: preserve }
+  "data.draftOrders.pageInfo.startCursor":     { type: id }
+  "data.draftOrders.pageInfo.endCursor":       { type: id }
+  "data.draftOrders.edges[].cursor":           { type: id }
+  "data.draftOrders.edges[].node.id":     { type: id, anchor: true }
+  "data.draftOrders.edges[].node.name":   { type: id, anchor: true }
+  "data.draftOrders.edges[].node.email":  { type: email, anchor: true }
+  "data.draftOrders.edges[].node.phone":  { type: phone }
+  "data.draftOrders.edges[].node.note2":  { type: shortText }
+  "data.draftOrders.edges[].node.status": { type: preserve }
+  "data.draftOrders.edges[].node.tags":   { type: preserve }
+  "data.draftOrders.edges[].node.createdAt":   { type: isoDate }
+  "data.draftOrders.edges[].node.updatedAt":   { type: isoDate }
+  "data.draftOrders.edges[].node.completedAt": { type: isoDate }
+  "data.draftOrders.edges[].node.currencyCode":            { type: preserve }
+  "data.draftOrders.edges[].node.presentmentCurrencyCode": { type: preserve }
+  "data.draftOrders.edges[].node.invoiceUrl":              { type: url }
+  "data.draftOrders.edges[].node.invoiceEmailTemplateSubject": { type: shortText }
+  "data.draftOrders.edges[].node.totalPriceSet.shopMoney.amount":       { type: priceAmount }
+  "data.draftOrders.edges[].node.totalPriceSet.shopMoney.currencyCode": { type: preserve }
+  "data.draftOrders.edges[].node.subtotalPriceSet.shopMoney.amount":    { type: priceAmount }
+  "data.draftOrders.edges[].node.totalTaxSet.shopMoney.amount":         { type: priceAmount }
+  "data.draftOrders.edges[].node.totalShippingPriceSet.shopMoney.amount": { type: priceAmount }
+  "data.draftOrders.edges[].node.order.id":           { type: id, anchor: true }
+  "data.draftOrders.edges[].node.customer.id":        { type: id, anchor: true }
+  "data.draftOrders.edges[].node.customer.email":     { type: email, anchor: true }
+  "data.draftOrders.edges[].node.customer.firstName": { type: firstName }
+  "data.draftOrders.edges[].node.customer.lastName":  { type: lastName }
+  "data.draftOrders.edges[].node.customer.displayName": { type: fullName }
+  "data.draftOrders.edges[].node.customer.phone":     { type: phone }
+  "data.draftOrders.edges[].node.billingAddress.firstName":    { type: firstName }
+  "data.draftOrders.edges[].node.billingAddress.lastName":     { type: lastName }
+  "data.draftOrders.edges[].node.billingAddress.name":         { type: fullName }
+  "data.draftOrders.edges[].node.billingAddress.company":      { type: company }
+  "data.draftOrders.edges[].node.billingAddress.address1":     { type: street }
+  "data.draftOrders.edges[].node.billingAddress.address2":     { type: streetSecondary }
+  "data.draftOrders.edges[].node.billingAddress.city":         { type: city }
+  "data.draftOrders.edges[].node.billingAddress.province":     { type: stateOrProvince }
+  "data.draftOrders.edges[].node.billingAddress.zip":          { type: postalCode }
+  "data.draftOrders.edges[].node.billingAddress.country":      { type: country }
+  "data.draftOrders.edges[].node.billingAddress.countryCode":  { type: countryCode }
+  "data.draftOrders.edges[].node.billingAddress.phone":        { type: phone }
+  "data.draftOrders.edges[].node.shippingAddress.firstName":   { type: firstName }
+  "data.draftOrders.edges[].node.shippingAddress.lastName":    { type: lastName }
+  "data.draftOrders.edges[].node.shippingAddress.name":        { type: fullName }
+  "data.draftOrders.edges[].node.shippingAddress.company":     { type: company }
+  "data.draftOrders.edges[].node.shippingAddress.address1":    { type: street }
+  "data.draftOrders.edges[].node.shippingAddress.address2":    { type: streetSecondary }
+  "data.draftOrders.edges[].node.shippingAddress.city":        { type: city }
+  "data.draftOrders.edges[].node.shippingAddress.province":    { type: stateOrProvince }
+  "data.draftOrders.edges[].node.shippingAddress.zip":         { type: postalCode }
+  "data.draftOrders.edges[].node.shippingAddress.country":     { type: country }
+  "data.draftOrders.edges[].node.shippingAddress.countryCode": { type: countryCode }
+  "data.draftOrders.edges[].node.shippingAddress.phone":       { type: phone }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.id":       { type: id, anchor: true }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.title":    { type: productName }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.sku":      { type: sku, anchor: true }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.vendor":   { type: company }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.quantity": { type: preserve }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.variant.id":  { type: id, anchor: true }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.product.id":  { type: id, anchor: true }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.customAttributes[].key":   { type: preserve }
+  "data.draftOrders.edges[].node.lineItems.edges[].node.customAttributes[].value": { type: shortText }
+  "*": { type: auto }

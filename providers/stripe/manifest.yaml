@@ -1,0 +1,6 @@
+id: stripe
+name: Stripe
+category: payments
+icon: credit-card
+color: "#635BFF"
+docs: https://docs.stripe.com/api

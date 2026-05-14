@@ -1,0 +1,82 @@
+endpoint:
+  method: POST
+  path: checkout.session.completed
+  kind: webhook
+  description: Stripe webhook — checkout session completed
+  doc_url: https://docs.stripe.com/api/events/types#event_types-checkout.session.completed
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.amount_total
+    - data.object.mode
+    - data.object.customer_details
+  optional_paths:
+    - data.object.client_reference_id
+    - data.object.expires_at
+    - data.object.payment_intent
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.amount_subtotal":                     { type: preserve }
+  "data.object.amount_total":                        { type: preserve }
+  "data.object.cancel_url":                          { type: url }
+  "data.object.client_reference_id":                 { type: shortText }
+  "data.object.client_secret":                       { type: redact }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.currency":                            { type: preserve }
+  "data.object.customer":                            { type: id, anchor: true }
+  "data.object.customer_account":                    { type: id, anchor: true }
+  "data.object.customer_email":                      { type: email, anchor: true }
+  "data.object.customer_details.email":              { type: email, anchor: true }
+  "data.object.customer_details.name":               { type: fullName }
+  "data.object.customer_details.phone":              { type: phone }
+  "data.object.customer_details.tax_exempt":         { type: preserve }
+  "data.object.customer_details.address.city":       { type: city }
+  "data.object.customer_details.address.country":    { type: countryCode }
+  "data.object.customer_details.address.line1":      { type: street }
+  "data.object.customer_details.address.line2":      { type: streetSecondary }
+  "data.object.customer_details.address.postal_code": { type: postalCode }
+  "data.object.customer_details.address.state":      { type: stateOrProvince }
+  "data.object.customer_details.tax_ids[].type":     { type: preserve }
+  "data.object.customer_details.tax_ids[].value":    { type: auto }
+  "data.object.expires_at":                          { type: unixTimestamp }
+  "data.object.invoice":                             { type: id, anchor: true }
+  "data.object.livemode":                            { type: preserve }
+  "data.object.locale":                              { type: preserve }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.mode":                                { type: preserve }
+  "data.object.payment_intent":                      { type: id, anchor: true }
+  "data.object.payment_link":                        { type: id, anchor: true }
+  "data.object.payment_method_types":                { type: preserve }
+  "data.object.payment_status":                      { type: preserve }
+  "data.object.status":                              { type: preserve }
+  "data.object.subscription":                        { type: id, anchor: true }
+  "data.object.success_url":                         { type: url }
+  "data.object.url":                                 { type: url }
+  "data.object.custom_fields[].key":                 { type: preserve }
+  "data.object.custom_fields[].label.custom":        { type: shortText }
+  "data.object.custom_fields[].text.value":          { type: auto }
+  "data.object.custom_fields[].numeric.value":       { type: auto }
+  "data.object.collected_information.shipping_details.name": { type: fullName }
+  "data.object.collected_information.shipping_details.address.city":        { type: city }
+  "data.object.collected_information.shipping_details.address.country":     { type: countryCode }
+  "data.object.collected_information.shipping_details.address.line1":       { type: street }
+  "data.object.collected_information.shipping_details.address.line2":       { type: streetSecondary }
+  "data.object.collected_information.shipping_details.address.postal_code": { type: postalCode }
+  "data.object.collected_information.shipping_details.address.state":       { type: stateOrProvince }
+  "*": { type: auto }

@@ -1,0 +1,44 @@
+endpoint:
+  method: GET
+  path: /addresses/{object_id}
+  description: Retrieve an address
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Addresses
+
+signature:
+  required_paths:
+    - object_id
+    - is_complete
+    - street1
+    - city
+    - country
+  optional_paths:
+    - email
+    - phone
+    - validation_results
+
+fields:
+  "object_id":      { type: id, anchor: true }
+  "object_created": { type: isoDate }
+  "object_updated": { type: isoDate }
+  "object_owner":   { type: email, anchor: true }
+  "is_complete":    { type: preserve }
+  "name":           { type: fullName }
+  "company":        { type: company }
+  "street1":        { type: street }
+  "street2":        { type: streetSecondary }
+  "street3":        { type: streetSecondary }
+  "street_no":      { type: shortText }
+  "city":           { type: city }
+  "state":          { type: stateOrProvince }
+  "zip":            { type: postalCode }
+  "country":        { type: countryCode }
+  "phone":          { type: phone }
+  "email":          { type: email, anchor: true }
+  "is_residential": { type: preserve }
+  "metadata":       { type: shortText }
+  "test":           { type: preserve }
+  "validation_results.is_valid":  { type: preserve }
+  "validation_results.messages[].source": { type: preserve }
+  "validation_results.messages[].code":   { type: preserve }
+  "validation_results.messages[].text":   { type: shortText }
+  "*": { type: auto }

@@ -1,0 +1,46 @@
+endpoint:
+  method: GET
+  path: /userinfo
+  description: OIDC userinfo endpoint
+  doc_url: https://auth0.com/docs/api/authentication#user-profile
+
+# Distinct from /api/v2/users/{id} — uses OIDC claim names (`sub` instead of
+# `user_id`, no `identities`/`logins_count`/`last_ip`). Required claims are
+# `sub` + `email` per the OIDC spec.
+signature:
+  required_paths:
+    - sub
+    - email
+    - email_verified
+  optional_paths:
+    - name
+    - picture
+    - updated_at
+
+fields:
+  "sub":             { type: id, anchor: true }
+  "email":           { type: email, anchor: true }
+  "email_verified":  { type: preserve }
+  "name":            { type: fullName }
+  "given_name":      { type: firstName }
+  "family_name":     { type: lastName }
+  "middle_name":     { type: firstName }
+  "nickname":        { type: shortText }
+  "preferred_username": { type: id, anchor: true }
+  "profile":         { type: url }
+  "picture":         { type: url }
+  "website":         { type: url }
+  "gender":          { type: preserve }
+  "birthdate":       { type: isoDate }
+  "zoneinfo":        { type: preserve }
+  "locale":          { type: preserve }
+  "phone_number":    { type: phone }
+  "phone_number_verified": { type: preserve }
+  "updated_at":      { type: isoDate }
+  "address.formatted":      { type: street }
+  "address.street_address": { type: street }
+  "address.locality":       { type: city }
+  "address.region":         { type: stateOrProvince }
+  "address.postal_code":    { type: postalCode }
+  "address.country":        { type: country }
+  "*": { type: auto }

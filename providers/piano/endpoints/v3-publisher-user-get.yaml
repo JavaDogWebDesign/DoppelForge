@@ -1,0 +1,41 @@
+endpoint:
+  method: GET
+  path: /api/v3/publisher/user/get
+  description: Get a user
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - user.uid
+    - user.email
+    - code
+  optional_paths:
+    - user.custom_fields
+    - user.personal_name
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "user.uid":                  { type: id, anchor: true }
+  "user.email":                { type: email, anchor: true }
+  "user.first_name":           { type: firstName }
+  "user.last_name":            { type: lastName }
+  "user.personal_name":        { type: fullName }
+  "user.create_date":          { type: unixTimestamp }
+  "user.update_date":          { type: unixTimestamp }
+  "user.last_login_date":      { type: unixTimestamp }
+  "user.last_visit_date":      { type: unixTimestamp }
+  "user.image1":               { type: url }
+  "user.image2":               { type: url }
+  "user.user_role":            { type: preserve }
+  "user.source":               { type: preserve }
+  "user.country":              { type: country }
+  "user.country_iso":          { type: countryCode }
+  "user.deactivated":          { type: preserve }
+  "user.auth_provider":        { type: preserve }
+  "user.external_user_id":     { type: id, anchor: true }
+  "user.custom_fields[].field_name":   { type: preserve }
+  "user.custom_fields[].value":        { type: shortText }
+  "user.custom_fields[].created":      { type: unixTimestamp }
+  "user.custom_fields[].sort_order":   { type: preserve }
+  "*": { type: auto }

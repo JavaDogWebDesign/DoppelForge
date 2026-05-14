@@ -1,0 +1,58 @@
+endpoint:
+  method: POST
+  path: /services/data/v60.0/graphql (query Account)
+  description: Salesforce GraphQL — Account SObject (companies/customers)
+  doc_url: https://developer.salesforce.com/docs/platform/graphql/guide/query-record-objects.html
+
+signature:
+  required_paths:
+    - data.uiapi.query.Account.edges[].node.Id
+    - data.uiapi.query.Account.edges[].node.Name.value
+    - data.uiapi.query.Account.edges[].node.BillingAddress
+    - data.uiapi.query.Account.pageInfo.endCursor
+  optional_paths:
+    - data.uiapi.query.Account.totalCount
+    - data.uiapi.query.Account.edges[].node.ShippingAddress
+    - data.uiapi.query.Account.edges[].node.Industry.value
+
+fields:
+  "data.uiapi.query.Account.totalCount":       { type: preserve }
+  "data.uiapi.query.Account.pageResultCount":  { type: preserve }
+  "data.uiapi.query.Account.pageInfo.hasNextPage":     { type: preserve }
+  "data.uiapi.query.Account.pageInfo.hasPreviousPage": { type: preserve }
+  "data.uiapi.query.Account.pageInfo.startCursor":     { type: id }
+  "data.uiapi.query.Account.pageInfo.endCursor":       { type: id }
+  "data.uiapi.query.Account.edges[].cursor":           { type: id }
+  "data.uiapi.query.Account.edges[].node.Id":             { type: id, anchor: true }
+  "data.uiapi.query.Account.edges[].node.Name.value":     { type: company, anchor: true }
+  "data.uiapi.query.Account.edges[].node.Phone.value":    { type: phone }
+  "data.uiapi.query.Account.edges[].node.Website.value":  { type: url }
+  "data.uiapi.query.Account.edges[].node.Industry.value": { type: preserve }
+  "data.uiapi.query.Account.edges[].node.Type.value":     { type: preserve }
+  "data.uiapi.query.Account.edges[].node.Description.value":      { type: longText }
+  "data.uiapi.query.Account.edges[].node.OwnerId.value":          { type: id, anchor: true }
+  "data.uiapi.query.Account.edges[].node.OwnerId.displayValue":   { type: fullName }
+  "data.uiapi.query.Account.edges[].node.AnnualRevenue.value":          { type: priceAmount }
+  "data.uiapi.query.Account.edges[].node.AnnualRevenue.displayValue":   { type: priceAmount }
+  "data.uiapi.query.Account.edges[].node.NumberOfEmployees.value":      { type: preserve }
+  "data.uiapi.query.Account.edges[].node.LastModifiedDate":             { type: isoDate }
+  "data.uiapi.query.Account.edges[].node.CreatedDate":                  { type: isoDate }
+  "data.uiapi.query.Account.edges[].node.SystemModstamp":               { type: isoDate }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.Street.value":     { type: street }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.City.value":       { type: city }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.State.value":      { type: stateOrProvince }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.StateCode.value":  { type: stateOrProvince }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.PostalCode.value": { type: postalCode }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.Country.value":    { type: country }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.CountryCode.value": { type: countryCode }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.Latitude.value":   { type: preserve }
+  "data.uiapi.query.Account.edges[].node.BillingAddress.Longitude.value":  { type: preserve }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.Street.value":     { type: street }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.City.value":       { type: city }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.State.value":      { type: stateOrProvince }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.StateCode.value":  { type: stateOrProvince }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.PostalCode.value": { type: postalCode }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.Country.value":    { type: country }
+  "data.uiapi.query.Account.edges[].node.ShippingAddress.CountryCode.value": { type: countryCode }
+  "extensions.weakETags":                                                   { type: preserve }
+  "*": { type: auto }

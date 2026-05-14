@@ -1,0 +1,65 @@
+endpoint:
+  method: POST
+  path: setup_intent.succeeded
+  kind: webhook
+  description: Stripe webhook — setup intent succeeded (card saved)
+  doc_url: https://docs.stripe.com/api/events/types#event_types-setup_intent.succeeded
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.client_secret
+    - data.object.flow_directions
+    - data.object.attach_to_self
+  optional_paths:
+    - data.object.usage
+    - data.object.payment_method
+    - data.object.mandate
+    - data.object.single_use_mandate
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.application":                         { type: id, anchor: true }
+  "data.object.attach_to_self":                      { type: preserve }
+  "data.object.automatic_payment_methods.enabled":   { type: preserve }
+  "data.object.automatic_payment_methods.allow_redirects": { type: preserve }
+  "data.object.cancellation_reason":                 { type: preserve }
+  "data.object.client_secret":                       { type: redact }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.customer":                            { type: id, anchor: true }
+  "data.object.customer_account":                    { type: id, anchor: true }
+  "data.object.description":                         { type: shortText }
+  "data.object.excluded_payment_method_types":       { type: preserve }
+  "data.object.flow_directions":                     { type: preserve }
+  "data.object.last_setup_error.code":               { type: preserve }
+  "data.object.last_setup_error.decline_code":       { type: preserve }
+  "data.object.last_setup_error.message":            { type: longText }
+  "data.object.last_setup_error.payment_method":     { type: id, anchor: true }
+  "data.object.latest_attempt":                      { type: id, anchor: true }
+  "data.object.livemode":                            { type: preserve }
+  "data.object.mandate":                             { type: id, anchor: true }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.next_action":                         { type: auto }
+  "data.object.on_behalf_of":                        { type: id, anchor: true }
+  "data.object.payment_method":                      { type: id, anchor: true }
+  "data.object.payment_method_configuration_details.id": { type: id, anchor: true }
+  "data.object.payment_method_options":              { type: auto }
+  "data.object.payment_method_types":                { type: preserve }
+  "data.object.single_use_mandate":                  { type: id, anchor: true }
+  "data.object.status":                              { type: preserve }
+  "data.object.usage":                               { type: preserve }
+  "*": { type: auto }

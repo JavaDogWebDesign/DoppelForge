@@ -1,0 +1,57 @@
+endpoint:
+  method: GET
+  path: /api/v2/tickets
+  description: List tickets
+  doc_url: https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#list-tickets
+
+signature:
+  required_paths:
+    - tickets[].id
+    - tickets[].url
+    - tickets[].subject
+    - tickets[].status
+    - count
+  optional_paths:
+    - next_page
+    - previous_page
+    - tickets[].requester_id
+
+fields:
+  "count":         { type: preserve }
+  "next_page":     { type: url }
+  "previous_page": { type: url }
+  "tickets[].id":                  { type: id, anchor: true }
+  "tickets[].url":                 { type: url }
+  "tickets[].external_id":         { type: id, anchor: true }
+  "tickets[].type":                { type: preserve }
+  "tickets[].subject":             { type: shortText }
+  "tickets[].raw_subject":         { type: shortText }
+  "tickets[].description":         { type: longText }
+  "tickets[].priority":            { type: preserve }
+  "tickets[].status":              { type: preserve }
+  "tickets[].recipient":           { type: email, anchor: true }
+  "tickets[].requester_id":        { type: id, anchor: true }
+  "tickets[].submitter_id":        { type: id, anchor: true }
+  "tickets[].assignee_id":         { type: id, anchor: true }
+  "tickets[].organization_id":     { type: id, anchor: true }
+  "tickets[].group_id":            { type: id, anchor: true }
+  "tickets[].collaborator_ids":    { type: preserve }
+  "tickets[].follower_ids":        { type: preserve }
+  "tickets[].forum_topic_id":      { type: id }
+  "tickets[].problem_id":          { type: id, anchor: true }
+  "tickets[].has_incidents":       { type: preserve }
+  "tickets[].is_public":           { type: preserve }
+  "tickets[].due_at":              { type: isoDate }
+  "tickets[].created_at":          { type: isoDate }
+  "tickets[].updated_at":          { type: isoDate }
+  "tickets[].tags":                { type: preserve }
+  "tickets[].brand_id":            { type: id, anchor: true }
+  "tickets[].satisfaction_rating.id":       { type: id, anchor: true }
+  "tickets[].satisfaction_rating.score":    { type: preserve }
+  "tickets[].satisfaction_rating.comment":  { type: longText }
+  "tickets[].via.channel":         { type: preserve }
+  "tickets[].via.source.from.address": { type: email, anchor: true }
+  "tickets[].via.source.from.name":    { type: fullName }
+  "tickets[].custom_fields[].id":    { type: preserve }
+  "tickets[].custom_fields[].value": { type: auto }
+  "*": { type: auto }

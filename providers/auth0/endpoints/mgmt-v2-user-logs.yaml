@@ -1,0 +1,49 @@
+endpoint:
+  method: GET
+  path: /api/v2/users/{id}/logs
+  description: Get user logs (Management API v2)
+  doc_url: https://auth0.com/docs/api/management/v2/users/get-logs-by-user
+
+# Response is a top-level array of log events. Each event has an `_id`/`log_id`
+# plus event-type metadata, an IP, a user-agent, and location info.
+signature:
+  required_paths:
+    - "[].log_id"
+    - "[].date"
+    - "[].type"
+    - "[].user_id"
+  optional_paths:
+    - "[].ip"
+    - "[].user_agent"
+    - "[].location_info"
+    - "[].details"
+
+fields:
+  "[].log_id":      { type: id, anchor: true }
+  "[]._id":         { type: id, anchor: true }
+  "[].date":        { type: isoDate }
+  "[].type":        { type: preserve }
+  "[].description": { type: shortText }
+  "[].user_id":     { type: id, anchor: true }
+  "[].user_name":   { type: fullName }
+  "[].user_agent":  { type: shortText }
+  "[].ip":          { type: ipv4 }
+  "[].hostname":    { type: id }
+  "[].client_id":   { type: id, anchor: true }
+  "[].client_name": { type: shortText }
+  "[].audience":    { type: id, anchor: true }
+  "[].scope":       { type: preserve }
+  "[].strategy":    { type: preserve }
+  "[].strategy_type": { type: preserve }
+  "[].connection":  { type: preserve }
+  "[].connection_id": { type: id, anchor: true }
+  "[].location_info.country_code":     { type: countryCode }
+  "[].location_info.country_code3":    { type: countryCode }
+  "[].location_info.country_name":     { type: country }
+  "[].location_info.city_name":        { type: city }
+  "[].location_info.latitude":         { type: preserve }
+  "[].location_info.longitude":        { type: preserve }
+  "[].location_info.time_zone":        { type: preserve }
+  "[].location_info.continent_code":   { type: preserve }
+  "[].details":     { type: auto }
+  "*": { type: auto }

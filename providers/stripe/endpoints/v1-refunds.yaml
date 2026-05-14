@@ -1,0 +1,49 @@
+endpoint:
+  method: GET
+  path: /v1/refunds
+  description: List refunds
+  doc_url: https://docs.stripe.com/api/refunds/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - data[].charge
+    - has_more
+  optional_paths:
+    - data[].reason
+    - data[].payment_intent
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                              { type: id, anchor: true }
+  "data[].object":                          { type: preserve }
+  "data[].amount":                          { type: preserve }
+  "data[].balance_transaction":             { type: id, anchor: true }
+  "data[].charge":                          { type: id, anchor: true }
+  "data[].created":                         { type: unixTimestamp }
+  "data[].currency":                        { type: preserve }
+  "data[].description":                     { type: shortText }
+  "data[].destination_details.type":        { type: preserve }
+  "data[].destination_details.card.reference": { type: id, anchor: true }
+  "data[].destination_details.card.reference_status": { type: preserve }
+  "data[].destination_details.card.reference_type":   { type: preserve }
+  "data[].destination_details.card.type":   { type: preserve }
+  "data[].failure_balance_transaction":     { type: id, anchor: true }
+  "data[].failure_reason":                  { type: preserve }
+  "data[].instructions_email":              { type: email, anchor: true }
+  "data[].livemode":                        { type: preserve }
+  "data[].metadata":                        { type: preserve }
+  "data[].next_action.type":                { type: preserve }
+  "data[].payment_intent":                  { type: id, anchor: true }
+  "data[].pending_reason":                  { type: preserve }
+  "data[].reason":                          { type: preserve }
+  "data[].receipt_number":                  { type: id, anchor: true }
+  "data[].source_transfer_reversal":        { type: id, anchor: true }
+  "data[].status":                          { type: preserve }
+  "data[].transfer_reversal":               { type: id, anchor: true }
+  "*": { type: auto }

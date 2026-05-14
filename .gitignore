@@ -1,0 +1,39 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / agents
+.claude/
+.vscode/
+.idea/
+*.swp
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.log
+.cache/
+
+# Docs — kept local, withheld from the public GitHub repo until launch.
+# Restore by deleting the entries below and `git add`-ing the files back.
+/docs/
+/README.md
+/CONTRIBUTING.md
+/SECURITY.md
+/TRADEMARKS.md
+/web/README.md
+/.github/ISSUE_TEMPLATE/

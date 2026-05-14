@@ -1,0 +1,50 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/payment/method/list
+  description: List a user's stored payment methods
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - payment_methods[].id
+    - payment_methods[].user_payment_info_id
+    - code
+  optional_paths:
+    - payment_methods[].card_brand
+    - payment_methods[].last_digits
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "payment_methods[].id":                       { type: id, anchor: true }
+  "payment_methods[].user_payment_info_id":     { type: id, anchor: true }
+  "payment_methods[].payment_method":           { type: preserve }
+  "payment_methods[].card_brand":               { type: preserve }
+  "payment_methods[].card_type":                { type: preserve }
+  "payment_methods[].first_six_digits":         { type: id }
+  "payment_methods[].last_digits":              { type: id }
+  "payment_methods[].last4":                    { type: id }
+  "payment_methods[].bin":                      { type: id }
+  "payment_methods[].iin":                      { type: id }
+  "payment_methods[].expiration_month":         { type: preserve }
+  "payment_methods[].expiration_year":          { type: preserve }
+  "payment_methods[].is_default":               { type: preserve }
+  "payment_methods[].is_expired":               { type: preserve }
+  "payment_methods[].billing_zip":              { type: postalCode }
+  "payment_methods[].billing_country":          { type: country }
+  "payment_methods[].billing_country_iso":      { type: countryCode }
+  "payment_methods[].create_date":              { type: unixTimestamp }
+  "payment_methods[].update_date":              { type: unixTimestamp }
+  "payment_methods[].nickname":                 { type: shortText }
+  "payment_methods[].payment_provider":         { type: preserve }
+  "payment_methods[].payment_provider_token":   { type: id, anchor: true }
+  "payment_methods[].user.uid":                 { type: id, anchor: true }
+  "payment_methods[].user.email":               { type: email, anchor: true }
+  "payment_methods[].user.first_name":          { type: firstName }
+  "payment_methods[].user.last_name":           { type: lastName }
+  "payment_methods[].user.personal_name":       { type: fullName }
+  "*": { type: auto }

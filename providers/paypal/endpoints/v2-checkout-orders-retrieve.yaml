@@ -1,0 +1,87 @@
+endpoint:
+  method: GET
+  path: /v2/checkout/orders/{id}
+  description: Retrieve a PayPal checkout order
+  doc_url: https://developer.paypal.com/docs/api/orders/v2/#orders_get
+
+# PayPal Orders v2 response: bare object at root, not envelope-wrapped.
+# Address compounds use `admin_area_1` (state/region) and `admin_area_2`
+# (city/locality) — non-standard naming worth noting in field maps.
+signature:
+  required_paths:
+    - id
+    - status
+    - intent
+    - create_time
+    - links
+  optional_paths:
+    - payer.email_address
+    - purchase_units
+    - update_time
+
+fields:
+  "id":           { type: id, anchor: true }
+  "status":       { type: preserve }
+  "intent":       { type: preserve }
+  "create_time":  { type: isoDate }
+  "update_time":  { type: isoDate }
+  "processing_instruction": { type: preserve }
+  "payer.payer_id":          { type: id, anchor: true }
+  "payer.email_address":     { type: email, anchor: true }
+  "payer.name.given_name":   { type: firstName }
+  "payer.name.surname":      { type: lastName }
+  "payer.phone.phone_type":  { type: preserve }
+  "payer.phone.phone_number.national_number": { type: phone, anchor: true }
+  "payer.phone.country_code": { type: countryCode }
+  "payer.address.address_line_1":  { type: street }
+  "payer.address.address_line_2":  { type: streetSecondary }
+  "payer.address.admin_area_2":    { type: city }
+  "payer.address.admin_area_1":    { type: stateOrProvince }
+  "payer.address.postal_code":     { type: postalCode }
+  "payer.address.country_code":    { type: countryCode }
+  "payer.birth_date":              { type: isoDate }
+  "payer.tax_info.tax_id":         { type: id, anchor: true }
+  "payer.tax_info.tax_id_type":    { type: preserve }
+  "purchase_units[].reference_id":  { type: id, anchor: true }
+  "purchase_units[].invoice_id":    { type: id, anchor: true }
+  "purchase_units[].custom_id":     { type: id, anchor: true }
+  "purchase_units[].description":   { type: shortText }
+  "purchase_units[].soft_descriptor": { type: shortText }
+  "purchase_units[].amount.currency_code": { type: currency }
+  "purchase_units[].amount.value":  { type: priceAmount }
+  "purchase_units[].amount.breakdown.item_total.value":     { type: priceAmount }
+  "purchase_units[].amount.breakdown.item_total.currency_code": { type: currency }
+  "purchase_units[].amount.breakdown.shipping.value":       { type: priceAmount }
+  "purchase_units[].amount.breakdown.tax_total.value":      { type: priceAmount }
+  "purchase_units[].amount.breakdown.discount.value":       { type: priceAmount }
+  "purchase_units[].amount.breakdown.handling.value":       { type: priceAmount }
+  "purchase_units[].amount.breakdown.insurance.value":      { type: priceAmount }
+  "purchase_units[].payee.email_address":  { type: email, anchor: true }
+  "purchase_units[].payee.merchant_id":    { type: id, anchor: true }
+  "purchase_units[].items[].name":         { type: productName }
+  "purchase_units[].items[].sku":          { type: sku, anchor: true }
+  "purchase_units[].items[].quantity":     { type: preserve }
+  "purchase_units[].items[].description":  { type: shortText }
+  "purchase_units[].items[].category":     { type: preserve }
+  "purchase_units[].items[].unit_amount.value":         { type: priceAmount }
+  "purchase_units[].items[].unit_amount.currency_code": { type: currency }
+  "purchase_units[].items[].tax.value":    { type: priceAmount }
+  "purchase_units[].shipping.name.full_name": { type: fullName }
+  "purchase_units[].shipping.email_address":  { type: email, anchor: true }
+  "purchase_units[].shipping.phone_number.national_number": { type: phone }
+  "purchase_units[].shipping.address.address_line_1": { type: street }
+  "purchase_units[].shipping.address.address_line_2": { type: streetSecondary }
+  "purchase_units[].shipping.address.admin_area_2":   { type: city }
+  "purchase_units[].shipping.address.admin_area_1":   { type: stateOrProvince }
+  "purchase_units[].shipping.address.postal_code":    { type: postalCode }
+  "purchase_units[].shipping.address.country_code":   { type: countryCode }
+  "purchase_units[].payments.captures[].id":     { type: id, anchor: true }
+  "purchase_units[].payments.captures[].status": { type: preserve }
+  "purchase_units[].payments.captures[].amount.value":         { type: priceAmount }
+  "purchase_units[].payments.captures[].amount.currency_code": { type: currency }
+  "purchase_units[].payments.captures[].create_time": { type: isoDate }
+  "purchase_units[].payments.captures[].update_time": { type: isoDate }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,108 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/customers/{customer_id}
+  description: Retrieve a customer
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/customer
+
+signature:
+  required_paths:
+    - id
+    - first_name
+    - created_at
+  optional_paths:
+    - credit_cards
+    - addresses
+
+fields:
+  "id":               { type: id, anchor: true }
+  "first_name":       { type: firstName }
+  "last_name":        { type: lastName }
+  "company":          { type: company }
+  "email":            { type: email, anchor: true }
+  "phone":            { type: phone }
+  "fax":              { type: phone }
+  "website":          { type: url }
+  "created_at":       { type: isoDate }
+  "updated_at":       { type: isoDate }
+  "custom_fields":    { type: preserve }
+  "credit_cards[].token":          { type: id, anchor: true }
+  "credit_cards[].bin":            { type: id }
+  "credit_cards[].last_4":         { type: id }
+  "credit_cards[].card_type":      { type: preserve }
+  "credit_cards[].expiration_month": { type: preserve }
+  "credit_cards[].expiration_year":  { type: preserve }
+  "credit_cards[].cardholder_name": { type: fullName }
+  "credit_cards[].customer_id":    { type: id, anchor: true }
+  "credit_cards[].default":        { type: preserve }
+  "credit_cards[].image_url":      { type: url }
+  "credit_cards[].country_of_issuance": { type: country }
+  "credit_cards[].issuing_bank":   { type: company }
+  "credit_cards[].product_id":     { type: id }
+  "credit_cards[].unique_number_identifier": { type: id, anchor: true }
+  "credit_cards[].prepaid":        { type: preserve }
+  "credit_cards[].healthcare":     { type: preserve }
+  "credit_cards[].durbin_regulated": { type: preserve }
+  "credit_cards[].debit":          { type: preserve }
+  "credit_cards[].commercial":     { type: preserve }
+  "credit_cards[].payroll":        { type: preserve }
+  "credit_cards[].business":       { type: preserve }
+  "credit_cards[].consumer":       { type: preserve }
+  "credit_cards[].corporate":      { type: preserve }
+  "credit_cards[].purchase":       { type: preserve }
+  "credit_cards[].verifications":  { type: preserve }
+  "credit_cards[].billing_address.id": { type: id, anchor: true }
+  "credit_cards[].billing_address.first_name":     { type: firstName }
+  "credit_cards[].billing_address.last_name":      { type: lastName }
+  "credit_cards[].billing_address.company":        { type: company }
+  "credit_cards[].billing_address.street_address": { type: street }
+  "credit_cards[].billing_address.extended_address": { type: streetSecondary }
+  "credit_cards[].billing_address.locality":       { type: city }
+  "credit_cards[].billing_address.region":         { type: stateOrProvince }
+  "credit_cards[].billing_address.postal_code":    { type: postalCode }
+  "credit_cards[].billing_address.country_name":   { type: country }
+  "credit_cards[].billing_address.country_code_alpha2": { type: countryCode }
+  "credit_cards[].billing_address.phone_number":   { type: phone }
+  "paypal_accounts[].token":       { type: id, anchor: true }
+  "paypal_accounts[].email":       { type: email, anchor: true }
+  "paypal_accounts[].payer_id":    { type: id, anchor: true }
+  "paypal_accounts[].image_url":   { type: url }
+  "paypal_accounts[].default":     { type: preserve }
+  "paypal_accounts[].billing_agreement_id": { type: id, anchor: true }
+  "us_bank_accounts[].token":      { type: id, anchor: true }
+  "us_bank_accounts[].last_4":     { type: id }
+  "us_bank_accounts[].routing_number": { type: id }
+  "us_bank_accounts[].account_type": { type: preserve }
+  "us_bank_accounts[].account_holder_name": { type: fullName }
+  "us_bank_accounts[].bank_name":  { type: company }
+  "venmo_accounts[].token":        { type: id, anchor: true }
+  "venmo_accounts[].username":     { type: id, anchor: true }
+  "venmo_accounts[].venmo_user_id": { type: id, anchor: true }
+  "apple_pay_cards[].token":       { type: id, anchor: true }
+  "apple_pay_cards[].last_4":      { type: id }
+  "apple_pay_cards[].card_type":   { type: preserve }
+  "apple_pay_cards[].bin":         { type: id }
+  "apple_pay_cards[].expiration_month": { type: preserve }
+  "apple_pay_cards[].expiration_year":  { type: preserve }
+  "apple_pay_cards[].cardholder_name":  { type: fullName }
+  "android_pay_cards[].token":     { type: id, anchor: true }
+  "android_pay_cards[].source_card_last_4": { type: id }
+  "android_pay_cards[].virtual_card_last_4": { type: id }
+  "android_pay_cards[].source_card_type":    { type: preserve }
+  "android_pay_cards[].virtual_card_type":   { type: preserve }
+  "addresses[].id":                { type: id, anchor: true }
+  "addresses[].customer_id":       { type: id, anchor: true }
+  "addresses[].first_name":        { type: firstName }
+  "addresses[].last_name":         { type: lastName }
+  "addresses[].company":           { type: company }
+  "addresses[].street_address":    { type: street }
+  "addresses[].extended_address":  { type: streetSecondary }
+  "addresses[].locality":          { type: city }
+  "addresses[].region":            { type: stateOrProvince }
+  "addresses[].postal_code":       { type: postalCode }
+  "addresses[].country_name":      { type: country }
+  "addresses[].country_code_alpha2": { type: countryCode }
+  "addresses[].country_code_alpha3": { type: countryCode }
+  "addresses[].phone_number":      { type: phone }
+  "addresses[].created_at":        { type: isoDate }
+  "addresses[].updated_at":        { type: isoDate }
+  "*": { type: auto }

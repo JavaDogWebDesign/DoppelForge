@@ -1,0 +1,52 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/shipping_addresses
+  description: Get shipping addresses for an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-shipping-addresses
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].order_id"
+    - "[].first_name"
+    - "[].street_1"
+    - "[].country_iso2"
+  optional_paths:
+    - "[].shipping_quotes"
+    - "[].shipping_method"
+
+fields:
+  "[].id":                          { type: id, anchor: true }
+  "[].order_id":                    { type: id, anchor: true }
+  "[].items_total":                 { type: preserve }
+  "[].items_shipped":               { type: preserve }
+  "[].base_cost":                   { type: preserve }
+  "[].cost_ex_tax":                 { type: preserve }
+  "[].cost_inc_tax":                { type: preserve }
+  "[].cost_tax":                    { type: preserve }
+  "[].cost_tax_class_id":           { type: preserve }
+  "[].base_handling_cost":          { type: preserve }
+  "[].handling_cost_ex_tax":        { type: preserve }
+  "[].handling_cost_inc_tax":       { type: preserve }
+  "[].handling_cost_tax":           { type: preserve }
+  "[].handling_cost_tax_class_id":  { type: preserve }
+  "[].shipping_zone_id":            { type: preserve }
+  "[].shipping_zone_name":          { type: shortText }
+  "[].shipping_method":             { type: shortText }
+  "[].first_name":                  { type: firstName }
+  "[].last_name":                   { type: lastName }
+  "[].company":                     { type: company }
+  "[].street_1":                    { type: street }
+  "[].street_2":                    { type: streetSecondary }
+  "[].city":                        { type: city }
+  "[].state":                       { type: stateOrProvince }
+  "[].zip":                         { type: postalCode }
+  "[].country":                     { type: country }
+  "[].country_iso2":                { type: countryCode }
+  "[].phone":                       { type: phone }
+  "[].email":                       { type: email, anchor: true }
+  "[].form_fields[].name":          { type: preserve }
+  "[].form_fields[].value":         { type: shortText }
+  "[].shipping_quotes.url":         { type: url }
+  "[].shipping_quotes.resource":    { type: preserve }
+  "*": { type: auto }

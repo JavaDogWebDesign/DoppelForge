@@ -1,0 +1,46 @@
+endpoint:
+  method: GET
+  path: /customers
+  description: List customers (Recharge 2021-11 API)
+  doc_url: https://developer.rechargepayments.com/2021-11/customers
+
+# Recharge envelope: { customers: [...], next_cursor, previous_cursor }
+# `subscriptions_active_count` is Recharge-specific — added to required so this
+# signature doesn't false-match Shopify or Braintree customer collections that
+# also have id/email/created_at on each row.
+signature:
+  required_paths:
+    - customers[].id
+    - customers[].email
+    - customers[].created_at
+    - customers[].subscriptions_active_count
+  optional_paths:
+    - next_cursor
+    - customers[].external_customer_id
+    - customers[].hash
+
+fields:
+  "next_cursor":      { type: id, anchor: true }
+  "previous_cursor":  { type: id, anchor: true }
+  "customers[].id":                          { type: id, anchor: true }
+  "customers[].hash":                        { type: id, anchor: true }
+  "customers[].external_customer_id.ecommerce": { type: id, anchor: true }
+  "customers[].external_payment_processor_customer_id": { type: id, anchor: true }
+  "customers[].email":                       { type: email, anchor: true }
+  "customers[].first_name":                  { type: firstName }
+  "customers[].last_name":                   { type: lastName }
+  "customers[].phone":                       { type: phone }
+  "customers[].tax_exempt":                  { type: preserve }
+  "customers[].has_payment_method_in_dunning": { type: preserve }
+  "customers[].has_valid_payment_method":    { type: preserve }
+  "customers[].subscriptions_active_count":  { type: preserve }
+  "customers[].subscriptions_total_count":   { type: preserve }
+  "customers[].created_at":                  { type: isoDate }
+  "customers[].updated_at":                  { type: isoDate }
+  "customers[].first_charge_processed_at":   { type: isoDate }
+  "customers[].external_created_at":         { type: isoDate }
+  "customers[].external_updated_at":         { type: isoDate }
+  "customers[].apply_credit_to_next_recurring_charge": { type: preserve }
+  "customers[].tax_exemptions":              { type: preserve }
+  "customers[].analytics_data.utm_params":   { type: preserve }
+  "*": { type: auto }

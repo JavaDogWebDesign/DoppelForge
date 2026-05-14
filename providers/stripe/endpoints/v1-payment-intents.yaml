@@ -1,0 +1,75 @@
+endpoint:
+  method: GET
+  path: /v1/payment_intents
+  description: List payment intents
+  doc_url: https://docs.stripe.com/api/payment_intents/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - data[].client_secret
+    - has_more
+  optional_paths:
+    - data[].customer
+    - data[].latest_charge
+
+fields:
+  "object":            { type: preserve }
+  "url":               { type: url }
+  "has_more":          { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].amount":                   { type: preserve }
+  "data[].amount_capturable":        { type: preserve }
+  "data[].amount_details.tip":       { type: preserve }
+  "data[].amount_received":          { type: preserve }
+  "data[].application":              { type: id, anchor: true }
+  "data[].application_fee_amount":   { type: preserve }
+  "data[].automatic_payment_methods.enabled":          { type: preserve }
+  "data[].automatic_payment_methods.allow_redirects":  { type: preserve }
+  "data[].canceled_at":              { type: unixTimestamp }
+  "data[].cancellation_reason":      { type: preserve }
+  "data[].capture_method":           { type: preserve }
+  "data[].client_secret":            { type: redact }
+  "data[].confirmation_method":      { type: preserve }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].customer":                 { type: id, anchor: true }
+  "data[].description":              { type: shortText }
+  "data[].invoice":                  { type: id, anchor: true }
+  "data[].last_payment_error.code":         { type: preserve }
+  "data[].last_payment_error.decline_code": { type: preserve }
+  "data[].last_payment_error.message":      { type: shortText }
+  "data[].last_payment_error.type":         { type: preserve }
+  "data[].last_payment_error.charge":       { type: id, anchor: true }
+  "data[].last_payment_error.payment_method.id": { type: id, anchor: true }
+  "data[].latest_charge":            { type: id, anchor: true }
+  "data[].livemode":                 { type: preserve }
+  "data[].metadata":                 { type: preserve }
+  "data[].next_action.type":         { type: preserve }
+  "data[].on_behalf_of":             { type: id, anchor: true }
+  "data[].payment_method":           { type: id, anchor: true }
+  "data[].payment_method_types":     { type: preserve }
+  "data[].processing":               { type: preserve }
+  "data[].receipt_email":            { type: email, anchor: true }
+  "data[].review":                   { type: id, anchor: true }
+  "data[].setup_future_usage":       { type: preserve }
+  "data[].shipping.address.city":         { type: city }
+  "data[].shipping.address.country":      { type: countryCode }
+  "data[].shipping.address.line1":        { type: street }
+  "data[].shipping.address.line2":        { type: streetSecondary }
+  "data[].shipping.address.postal_code":  { type: postalCode }
+  "data[].shipping.address.state":        { type: stateOrProvince }
+  "data[].shipping.name":            { type: fullName }
+  "data[].shipping.phone":           { type: phone }
+  "data[].shipping.tracking_number": { type: id, anchor: true }
+  "data[].shipping.carrier":         { type: company }
+  "data[].statement_descriptor":     { type: preserve }
+  "data[].statement_descriptor_suffix": { type: preserve }
+  "data[].status":                   { type: preserve }
+  "data[].transfer_data.destination": { type: id, anchor: true }
+  "data[].transfer_group":           { type: id }
+  "*": { type: auto }

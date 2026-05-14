@@ -1,0 +1,74 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/consignments
+  description: List consignments (pickups + shipping + downloads) for an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-consignments
+
+signature:
+  required_paths:
+    - pickups
+    - shipping
+    - downloads
+  optional_paths:
+    - email
+
+fields:
+  "pickups[].id":                                       { type: id, anchor: true }
+  "pickups[].pickup_method_id":                         { type: id }
+  "pickups[].pickup_method_display_name":               { type: shortText }
+  "pickups[].collection_instructions":                  { type: shortText }
+  "pickups[].collection_time_description":              { type: shortText }
+  "pickups[].location.id":                              { type: id, anchor: true }
+  "pickups[].location.name":                            { type: company }
+  "pickups[].location.code":                            { type: id }
+  "pickups[].location.address_line_1":                  { type: street }
+  "pickups[].location.address_line_2":                  { type: streetSecondary }
+  "pickups[].location.city":                            { type: city }
+  "pickups[].location.state":                           { type: stateOrProvince }
+  "pickups[].location.postal_code":                     { type: postalCode }
+  "pickups[].location.country_alpha2":                  { type: countryCode }
+  "pickups[].location.email":                           { type: email, anchor: true }
+  "pickups[].location.phone":                           { type: phone }
+  "pickups[].line_items[].url":                         { type: url }
+  "pickups[].line_items[].resource":                    { type: preserve }
+  "shipping[].id":                                      { type: id, anchor: true }
+  "shipping[].first_name":                              { type: firstName }
+  "shipping[].last_name":                               { type: lastName }
+  "shipping[].company":                                 { type: company }
+  "shipping[].street_1":                                { type: street }
+  "shipping[].street_2":                                { type: streetSecondary }
+  "shipping[].city":                                    { type: city }
+  "shipping[].state":                                   { type: stateOrProvince }
+  "shipping[].zip":                                     { type: postalCode }
+  "shipping[].country":                                 { type: country }
+  "shipping[].country_iso2":                            { type: countryCode }
+  "shipping[].phone":                                   { type: phone }
+  "shipping[].email":                                   { type: email, anchor: true }
+  "shipping[].form_fields[].name":                      { type: preserve }
+  "shipping[].form_fields[].value":                     { type: shortText }
+  "shipping[].line_items[].url":                        { type: url }
+  "shipping[].line_items[].resource":                   { type: preserve }
+  "shipping[].items_total":                             { type: preserve }
+  "shipping[].items_shipped":                           { type: preserve }
+  "shipping[].shipping_method":                         { type: shortText }
+  "shipping[].base_cost":                               { type: preserve }
+  "shipping[].cost_ex_tax":                             { type: preserve }
+  "shipping[].cost_inc_tax":                            { type: preserve }
+  "shipping[].cost_tax":                                { type: preserve }
+  "shipping[].cost_tax_class_id":                       { type: preserve }
+  "shipping[].base_handling_cost":                      { type: preserve }
+  "shipping[].handling_cost_ex_tax":                    { type: preserve }
+  "shipping[].handling_cost_inc_tax":                   { type: preserve }
+  "shipping[].handling_cost_tax":                       { type: preserve }
+  "shipping[].handling_cost_tax_class_id":              { type: preserve }
+  "shipping[].shipping_zone_id":                        { type: preserve }
+  "shipping[].shipping_zone_name":                      { type: shortText }
+  "shipping[].shipping_quotes.url":                     { type: url }
+  "shipping[].shipping_quotes.resource":                { type: preserve }
+  "downloads[].recipient_email":                        { type: email, anchor: true }
+  "downloads[].line_items[].url":                       { type: url }
+  "downloads[].line_items[].resource":                  { type: preserve }
+  "email.gift_certificates[].recipient_email":          { type: email, anchor: true }
+  "email.gift_certificates[].line_items[].url":         { type: url }
+  "email.gift_certificates[].line_items[].resource":    { type: preserve }
+  "*": { type: auto }

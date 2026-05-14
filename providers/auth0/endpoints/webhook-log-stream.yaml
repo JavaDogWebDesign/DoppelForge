@@ -1,0 +1,53 @@
+endpoint:
+  method: POST
+  path: log-stream
+  kind: webhook
+  description: Auth0 Log Stream event — login, signup, MFA, password reset, etc.
+  doc_url: https://auth0.com/docs/customize/log-streams
+
+# Auth0 ships log events to user-configured HTTP endpoints. All event types
+# (success login, failed login, MFA challenge, password change, etc.) share
+# the same { log_id, data: {...} } envelope; the discriminator is `data.type`
+# (a literal code like "s" / "sapi" / "fapi"), which the matcher can't read.
+# One YAML covers them all.
+signature:
+  required_paths:
+    - log_id
+    - data.date
+    - data.type
+    - data.tenant_name
+  optional_paths:
+    - data.user_id
+    - data.client_id
+    - data.ip
+    - data.user_agent
+
+fields:
+  "log_id":              { type: id, anchor: true }
+  "data.date":           { type: isoDate }
+  "data.type":           { type: preserve }
+  "data.description":    { type: shortText }
+  "data.tenant_name":    { type: id, anchor: true }
+  "data.user_id":        { type: id, anchor: true }
+  "data.user_name":      { type: fullName }
+  "data.user_email":     { type: email, anchor: true }
+  "data.client_id":      { type: id, anchor: true }
+  "data.client_name":    { type: shortText }
+  "data.connection":     { type: preserve }
+  "data.connection_id":  { type: id, anchor: true }
+  "data.strategy":       { type: preserve }
+  "data.strategy_type":  { type: preserve }
+  "data.ip":             { type: ipv4 }
+  "data.user_agent":     { type: shortText }
+  "data.hostname":       { type: id }
+  "data.audience":       { type: id, anchor: true }
+  "data.scope":          { type: preserve }
+  "data.auth0_client.name":    { type: preserve }
+  "data.auth0_client.version": { type: preserve }
+  "data.location_info.country_code":   { type: countryCode }
+  "data.location_info.country_name":   { type: country }
+  "data.location_info.city_name":      { type: city }
+  "data.location_info.latitude":       { type: preserve }
+  "data.location_info.longitude":      { type: preserve }
+  "data.details":        { type: auto }
+  "*": { type: auto }

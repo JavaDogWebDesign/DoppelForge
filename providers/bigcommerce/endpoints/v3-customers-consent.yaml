@@ -1,0 +1,18 @@
+endpoint:
+  method: GET
+  path: /v3/customers/{customerId}/consent
+  description: Get a customer's tracking consent preferences
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/customers/customer-consent
+
+signature:
+  required_paths:
+    - allow
+    - deny
+    - updated_at
+  optional_paths: []
+
+fields:
+  "allow":      { type: preserve }
+  "deny":       { type: preserve }
+  "updated_at": { type: isoDate }
+  "*": { type: auto }

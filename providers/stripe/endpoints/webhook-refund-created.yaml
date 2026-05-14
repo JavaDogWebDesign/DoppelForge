@@ -1,0 +1,57 @@
+endpoint:
+  method: POST
+  path: refund.created
+  kind: webhook
+  description: Stripe webhook — refund created
+  doc_url: https://docs.stripe.com/api/events/types#event_types-refund.created
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.charge
+    - data.object.receipt_number
+    - data.object.balance_transaction
+  optional_paths:
+    - data.object.destination_details
+    - data.object.payment_intent
+    - data.object.failure_reason
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.amount":                              { type: preserve }
+  "data.object.balance_transaction":                 { type: id, anchor: true }
+  "data.object.charge":                              { type: id, anchor: true }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.currency":                            { type: preserve }
+  "data.object.description":                         { type: shortText }
+  "data.object.failure_balance_transaction":         { type: id, anchor: true }
+  "data.object.failure_reason":                      { type: preserve }
+  "data.object.instructions_email":                  { type: email, anchor: true }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.next_action":                         { type: auto }
+  "data.object.payment_intent":                      { type: id, anchor: true }
+  "data.object.pending_reason":                      { type: preserve }
+  "data.object.reason":                              { type: preserve }
+  "data.object.receipt_number":                      { type: sku }
+  "data.object.source_transfer_reversal":            { type: id, anchor: true }
+  "data.object.status":                              { type: preserve }
+  "data.object.transfer_reversal":                   { type: id, anchor: true }
+  "data.object.destination_details.type":            { type: preserve }
+  "data.object.destination_details.card.reference":       { type: sku }
+  "data.object.destination_details.card.reference_status": { type: preserve }
+  "data.object.destination_details.card.reference_type":   { type: preserve }
+  "*": { type: auto }

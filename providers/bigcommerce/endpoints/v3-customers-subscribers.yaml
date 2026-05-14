@@ -1,0 +1,33 @@
+endpoint:
+  method: GET
+  path: /v3/customers/subscribers
+  description: List newsletter subscribers
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/subscribers
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].email
+    - data[].source
+    - meta.pagination.total
+  optional_paths:
+    - data[].order_id
+    - data[].channel_id
+
+fields:
+  "data[].id":              { type: id, anchor: true }
+  "data[].email":           { type: email, anchor: true }
+  "data[].first_name":      { type: firstName }
+  "data[].last_name":       { type: lastName }
+  "data[].source":          { type: preserve }
+  "data[].order_id":        { type: id, anchor: true }
+  "data[].channel_id":      { type: preserve }
+  "data[].consents":        { type: preserve }
+  "data[].date_created":    { type: isoDate }
+  "data[].date_modified":   { type: isoDate }
+  "meta.pagination.total":        { type: preserve }
+  "meta.pagination.count":        { type: preserve }
+  "meta.pagination.per_page":     { type: preserve }
+  "meta.pagination.current_page": { type: preserve }
+  "meta.pagination.total_pages":  { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,90 @@
+endpoint:
+  method: POST
+  path: charge.dispute.created
+  kind: webhook
+  description: Stripe webhook — dispute (chargeback) created
+  doc_url: https://docs.stripe.com/api/events/types#event_types-charge.dispute.created
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.reason
+    - data.object.evidence
+    - data.object.evidence_details
+    - data.object.is_charge_refundable
+  optional_paths:
+    - data.object.balance_transactions
+    - data.object.charge
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.amount":                              { type: preserve }
+  "data.object.charge":                              { type: id, anchor: true }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.currency":                            { type: preserve }
+  "data.object.is_charge_refundable":                { type: preserve }
+  "data.object.livemode":                            { type: preserve }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.network_reason_code":                 { type: preserve }
+  "data.object.payment_intent":                      { type: id, anchor: true }
+  "data.object.reason":                              { type: preserve }
+  "data.object.status":                              { type: preserve }
+  "data.object.balance_transactions[].id":           { type: id, anchor: true }
+  "data.object.balance_transactions[].object":       { type: preserve }
+  "data.object.balance_transactions[].amount":       { type: preserve }
+  "data.object.balance_transactions[].available_on": { type: unixTimestamp }
+  "data.object.balance_transactions[].created":      { type: unixTimestamp }
+  "data.object.balance_transactions[].currency":     { type: preserve }
+  "data.object.balance_transactions[].fee":          { type: preserve }
+  "data.object.balance_transactions[].net":          { type: preserve }
+  "data.object.balance_transactions[].status":       { type: preserve }
+  "data.object.balance_transactions[].type":         { type: preserve }
+  "data.object.evidence_details.due_by":             { type: unixTimestamp }
+  "data.object.evidence_details.has_evidence":       { type: preserve }
+  "data.object.evidence_details.past_due":           { type: preserve }
+  "data.object.evidence_details.submission_count":   { type: preserve }
+  "data.object.evidence.access_activity_log":            { type: longText }
+  "data.object.evidence.billing_address":                { type: longText }
+  "data.object.evidence.cancellation_policy":            { type: id, anchor: true }
+  "data.object.evidence.cancellation_policy_disclosure": { type: longText }
+  "data.object.evidence.cancellation_rebuttal":          { type: longText }
+  "data.object.evidence.customer_communication":         { type: id, anchor: true }
+  "data.object.evidence.customer_email_address":         { type: email, anchor: true }
+  "data.object.evidence.customer_name":                  { type: fullName }
+  "data.object.evidence.customer_purchase_ip":           { type: ipv4 }
+  "data.object.evidence.customer_signature":             { type: id, anchor: true }
+  "data.object.evidence.duplicate_charge_documentation": { type: id, anchor: true }
+  "data.object.evidence.duplicate_charge_explanation":   { type: longText }
+  "data.object.evidence.duplicate_charge_id":            { type: id, anchor: true }
+  "data.object.evidence.product_description":            { type: longText }
+  "data.object.evidence.receipt":                        { type: id, anchor: true }
+  "data.object.evidence.refund_policy":                  { type: id, anchor: true }
+  "data.object.evidence.refund_policy_disclosure":       { type: longText }
+  "data.object.evidence.refund_refusal_explanation":     { type: longText }
+  "data.object.evidence.service_date":                   { type: isoDate }
+  "data.object.evidence.service_documentation":          { type: id, anchor: true }
+  "data.object.evidence.shipping_address":               { type: longText }
+  "data.object.evidence.shipping_carrier":               { type: shortText }
+  "data.object.evidence.shipping_date":                  { type: isoDate }
+  "data.object.evidence.shipping_documentation":         { type: id, anchor: true }
+  "data.object.evidence.shipping_tracking_number":       { type: id, anchor: true }
+  "data.object.evidence.uncategorized_file":             { type: id, anchor: true }
+  "data.object.evidence.uncategorized_text":             { type: longText }
+  "data.object.payment_method_details.type":             { type: preserve }
+  "data.object.payment_method_details.card.brand":              { type: preserve }
+  "data.object.payment_method_details.card.network_reason_code": { type: preserve }
+  "*": { type: auto }

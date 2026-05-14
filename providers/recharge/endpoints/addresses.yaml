@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /addresses
+  description: List shipping addresses
+  doc_url: https://developer.rechargepayments.com/2021-11/addresses
+
+signature:
+  # `presentment_currency` is Recharge-specific (their subscription addresses
+  # carry the storefront's display currency); Shopify customer addresses
+  # don't have it. Disambiguates from shopify/admin-customer-addresses, which
+  # shares id + customer_id + address1.
+  required_paths:
+    - addresses[].id
+    - addresses[].customer_id
+    - addresses[].address1
+    - addresses[].presentment_currency
+  optional_paths:
+    - next_cursor
+    - addresses[].payment_method_id
+
+fields:
+  "next_cursor":      { type: id, anchor: true }
+  "previous_cursor":  { type: id, anchor: true }
+  "addresses[].id":                       { type: id, anchor: true }
+  "addresses[].customer_id":              { type: id, anchor: true }
+  "addresses[].payment_method_id":        { type: id, anchor: true }
+  "addresses[].discount_id":              { type: id, anchor: true }
+  "addresses[].first_name":               { type: firstName }
+  "addresses[].last_name":                { type: lastName }
+  "addresses[].company":                  { type: company }
+  "addresses[].address1":                 { type: street }
+  "addresses[].address2":                 { type: streetSecondary }
+  "addresses[].city":                     { type: city }
+  "addresses[].country_code":             { type: countryCode }
+  "addresses[].province":                 { type: stateOrProvince }
+  "addresses[].zip":                      { type: postalCode }
+  "addresses[].phone":                    { type: phone }
+  "addresses[].presentment_currency":     { type: preserve }
+  "addresses[].cart_attributes":          { type: preserve }
+  "addresses[].cart_note":                { type: shortText }
+  "addresses[].note_attributes":          { type: preserve }
+  "addresses[].order_attributes":         { type: preserve }
+  "addresses[].order_note":               { type: shortText }
+  "addresses[].shipping_lines_override":  { type: preserve }
+  "addresses[].created_at":               { type: isoDate }
+  "addresses[].updated_at":               { type: isoDate }
+  "*": { type: auto }

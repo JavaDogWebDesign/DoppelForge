@@ -1,0 +1,20 @@
+{
+  "name": "doppelforge",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Forge identical twins of your API responses. Schema-aware obfuscator that returns a doppelgänger — same shape, safe values. Browser-only, no telemetry.",
+  "homepage": "https://doppelforge.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/javadogwebdesign/doppelforge.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "npm --prefix web install",
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "preview": "npm --prefix web run preview",
+    "lint": "npm --prefix web run lint",
+    "lint:yaml": "npm --prefix web run lint:yaml"
+  }
+}

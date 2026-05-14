@@ -1,0 +1,50 @@
+endpoint:
+  method: GET
+  path: /v1/payment_methods/{payment_method}
+  description: Retrieve a payment method
+  doc_url: https://docs.stripe.com/api/payment_methods/retrieve
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - created
+  optional_paths:
+    - card
+    - us_bank_account
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "object":                   { type: preserve }
+  "billing_details.address.city":         { type: city }
+  "billing_details.address.country":      { type: countryCode }
+  "billing_details.address.line1":        { type: street }
+  "billing_details.address.line2":        { type: streetSecondary }
+  "billing_details.address.postal_code":  { type: postalCode }
+  "billing_details.address.state":        { type: stateOrProvince }
+  "billing_details.email":                { type: email, anchor: true }
+  "billing_details.name":                 { type: fullName }
+  "billing_details.phone":                { type: phone }
+  "card.brand":               { type: preserve }
+  "card.country":             { type: countryCode }
+  "card.exp_month":           { type: preserve }
+  "card.exp_year":            { type: preserve }
+  "card.fingerprint":         { type: id, anchor: true }
+  "card.funding":             { type: preserve }
+  "card.iin":                 { type: id }
+  "card.issuer":              { type: company }
+  "card.last4":               { type: id }
+  "card.network":             { type: preserve }
+  "card.wallet.type":         { type: preserve }
+  "card.wallet.dynamic_last4": { type: id }
+  "created":                  { type: unixTimestamp }
+  "customer":                 { type: id, anchor: true }
+  "livemode":                 { type: preserve }
+  "metadata":                 { type: preserve }
+  "type":                     { type: preserve }
+  "us_bank_account.bank_name": { type: company }
+  "us_bank_account.fingerprint": { type: id, anchor: true }
+  "us_bank_account.last4":     { type: id }
+  "us_bank_account.routing_number": { type: id }
+  "*": { type: auto }

@@ -1,0 +1,42 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/tickets
+  description: List support tickets
+  doc_url: https://developers.hubspot.com/docs/api/crm/tickets
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+    - results[].properties.subject
+  optional_paths:
+    - paging.next.after
+    - results[].properties.content
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                            { type: id, anchor: true }
+  "results[].createdAt":                     { type: isoDate }
+  "results[].updatedAt":                     { type: isoDate }
+  "results[].archived":                      { type: preserve }
+  "results[].properties.hs_object_id":       { type: id, anchor: true }
+  "results[].properties.createdate":         { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.subject":            { type: shortText }
+  "results[].properties.content":            { type: longText }
+  "results[].properties.hs_pipeline":        { type: preserve }
+  "results[].properties.hs_pipeline_stage":  { type: preserve }
+  "results[].properties.hs_ticket_priority": { type: preserve }
+  "results[].properties.hs_ticket_category": { type: preserve }
+  "results[].properties.hs_resolution":      { type: preserve }
+  "results[].properties.source_type":        { type: preserve }
+  "results[].properties.hubspot_owner_id":   { type: id, anchor: true }
+  "results[].properties.hubspot_team_id":    { type: id, anchor: true }
+  "results[].properties.hs_num_times_contacted": { type: preserve }
+  "results[].properties.hs_first_response_time_seconds": { type: preserve }
+  "results[].properties.time_to_close":      { type: preserve }
+  "results[].properties.closed_date":        { type: isoDate }
+  "results[].properties.last_engagement_date": { type: isoDate }
+  "*": { type: auto }

@@ -1,0 +1,50 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/companies
+  description: List companies
+  doc_url: https://developers.hubspot.com/docs/api/crm/companies
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+  optional_paths:
+    - paging.next.after
+    - results[].properties.name
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                            { type: id, anchor: true }
+  "results[].createdAt":                     { type: isoDate }
+  "results[].updatedAt":                     { type: isoDate }
+  "results[].archived":                      { type: preserve }
+  "results[].properties.hs_object_id":       { type: id, anchor: true }
+  "results[].properties.createdate":         { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.name":               { type: company }
+  "results[].properties.domain":             { type: url }
+  "results[].properties.website":            { type: url }
+  "results[].properties.phone":              { type: phone }
+  "results[].properties.industry":           { type: shortText }
+  "results[].properties.numberofemployees":  { type: preserve }
+  "results[].properties.annualrevenue":      { type: preserve }
+  "results[].properties.address":            { type: street }
+  "results[].properties.address2":           { type: streetSecondary }
+  "results[].properties.city":               { type: city }
+  "results[].properties.state":              { type: stateOrProvince }
+  "results[].properties.zip":                { type: postalCode }
+  "results[].properties.country":            { type: country }
+  "results[].properties.description":        { type: longText }
+  "results[].properties.founded_year":       { type: preserve }
+  "results[].properties.lifecyclestage":     { type: preserve }
+  "results[].properties.hs_lead_status":     { type: preserve }
+  "results[].properties.linkedin_company_page": { type: url }
+  "results[].properties.facebook_company_page": { type: url }
+  "results[].properties.twitterhandle":      { type: id, anchor: true }
+  "results[].properties.hubspot_owner_id":   { type: id, anchor: true }
+  "results[].properties.hubspot_team_id":    { type: id, anchor: true }
+  "results[].properties.num_associated_contacts": { type: preserve }
+  "results[].properties.notes_last_contacted": { type: isoDate }
+  "*": { type: auto }

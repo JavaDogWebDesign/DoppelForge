@@ -1,0 +1,52 @@
+endpoint:
+  method: POST
+  path: event
+  kind: webhook
+  description: SendGrid Event Webhook — processed/delivered/open/click/bounce/etc.
+  doc_url: https://www.twilio.com/docs/sendgrid/for-developers/tracking-events/event
+
+# SendGrid posts an array of event objects in a single delivery. Each event
+# has a discriminator string in `event` (processed/delivered/open/click/bounce/
+# dropped/deferred/spamreport/unsubscribe/group_unsubscribe/group_resubscribe).
+# All event types share the same envelope shape so one YAML covers them all.
+signature:
+  required_paths:
+    - "[].email"
+    - "[].timestamp"
+    - "[].event"
+    - "[].sg_event_id"
+    - "[].sg_message_id"
+  optional_paths:
+    - "[].ip"
+    - "[].useragent"
+    - "[].url"
+    - "[].reason"
+
+fields:
+  "[].email":            { type: email, anchor: true }
+  "[].timestamp":        { type: unixTimestamp }
+  "[].event":            { type: preserve }
+  "[].smtp-id":          { type: id, anchor: true }
+  "[].sg_event_id":      { type: id, anchor: true }
+  "[].sg_message_id":    { type: id, anchor: true }
+  "[].sg_template_id":   { type: id, anchor: true }
+  "[].sg_template_name": { type: shortText }
+  "[].category":         { type: preserve }
+  "[].ip":               { type: ipv4 }
+  "[].useragent":        { type: shortText }
+  "[].url":              { type: url }
+  "[].url_offset.index": { type: preserve }
+  "[].url_offset.type":  { type: preserve }
+  "[].reason":           { type: shortText }
+  "[].status":           { type: preserve }
+  "[].response":         { type: shortText }
+  "[].type":             { type: preserve }
+  "[].attempt":          { type: preserve }
+  "[].tls":              { type: preserve }
+  "[].cert_err":         { type: preserve }
+  "[].asm_group_id":     { type: id, anchor: true }
+  "[].pool.name":        { type: id, anchor: true }
+  "[].pool.id":          { type: id, anchor: true }
+  "[].marketing_campaign_id":   { type: id, anchor: true }
+  "[].marketing_campaign_name": { type: shortText }
+  "*": { type: auto }

@@ -1,0 +1,64 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Calls.json
+  description: List voice calls
+  doc_url: https://www.twilio.com/docs/voice/api/call-resource
+
+signature:
+  required_paths:
+    - calls[].sid
+    - calls[].account_sid
+    - calls[].from
+    - calls[].to
+    - calls[].status
+  optional_paths:
+    - next_page_uri
+    - calls[].duration
+
+fields:
+  "page":            { type: preserve }
+  "page_size":       { type: preserve }
+  "first_page_uri":  { type: url }
+  "next_page_uri":   { type: url }
+  "previous_page_uri": { type: url }
+  "uri":             { type: url }
+  "start":           { type: preserve }
+  "end":             { type: preserve }
+  "num_pages":       { type: preserve }
+  "total":           { type: preserve }
+  "calls[].sid":                    { type: id, anchor: true }
+  "calls[].account_sid":            { type: id, anchor: true }
+  "calls[].parent_call_sid":        { type: id, anchor: true }
+  "calls[].from":                   { type: phone }
+  "calls[].from_formatted":         { type: phone }
+  "calls[].to":                     { type: phone }
+  "calls[].to_formatted":           { type: phone }
+  "calls[].phone_number_sid":       { type: id, anchor: true }
+  "calls[].caller_name":            { type: fullName }
+  "calls[].status":                 { type: preserve }
+  "calls[].direction":              { type: preserve }
+  "calls[].answered_by":            { type: preserve }
+  "calls[].api_version":            { type: preserve }
+  "calls[].forwarded_from":         { type: phone }
+  "calls[].group_sid":              { type: id, anchor: true }
+  "calls[].queue_time":             { type: preserve }
+  "calls[].trunk_sid":              { type: id, anchor: true }
+  "calls[].annotation":             { type: shortText }
+  "calls[].start_time":             { type: isoDate }
+  "calls[].end_time":               { type: isoDate }
+  "calls[].date_created":           { type: isoDate }
+  "calls[].date_updated":           { type: isoDate }
+  "calls[].duration":               { type: preserve }
+  "calls[].price":                  { type: preserve }
+  "calls[].price_unit":             { type: preserve }
+  "calls[].uri":                    { type: url }
+  "calls[].subresource_uris.notifications": { type: url }
+  "calls[].subresource_uris.recordings":    { type: url }
+  "calls[].subresource_uris.events":        { type: url }
+  "calls[].subresource_uris.payments":      { type: url }
+  "calls[].subresource_uris.siprec":        { type: url }
+  "calls[].subresource_uris.streams":       { type: url }
+  "calls[].subresource_uris.transcriptions": { type: url }
+  "calls[].subresource_uris.user_defined_message_subscriptions": { type: url }
+  "calls[].subresource_uris.user_defined_messages": { type: url }
+  "*": { type: auto }

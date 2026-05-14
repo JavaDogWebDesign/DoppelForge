@@ -1,0 +1,63 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/draft_orders.json
+  description: List draft orders
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/draftorder
+
+signature:
+  required_paths:
+    - draft_orders[].id
+    - draft_orders[].admin_graphql_api_id
+    - draft_orders[].status
+  optional_paths:
+    - draft_orders[].customer
+    - draft_orders[].invoice_url
+
+fields:
+  "draft_orders[].id":                       { type: id, anchor: true }
+  "draft_orders[].admin_graphql_api_id":     { type: preserve }
+  "draft_orders[].name":                     { type: id, anchor: true }
+  "draft_orders[].order_id":                 { type: id, anchor: true }
+  "draft_orders[].status":                   { type: preserve }
+  "draft_orders[].invoice_sent_at":          { type: isoDate }
+  "draft_orders[].invoice_url":              { type: url }
+  "draft_orders[].created_at":               { type: isoDate }
+  "draft_orders[].updated_at":               { type: isoDate }
+  "draft_orders[].completed_at":             { type: isoDate }
+  "draft_orders[].closed_at":                { type: isoDate }
+  "draft_orders[].currency":                 { type: preserve }
+  "draft_orders[].email":                    { type: email, anchor: true }
+  "draft_orders[].note":                     { type: shortText }
+  "draft_orders[].po_number":                { type: id }
+  "draft_orders[].tags":                     { type: preserve }
+  "draft_orders[].subtotal_price":           { type: preserve }
+  "draft_orders[].total_price":              { type: preserve }
+  "draft_orders[].total_tax":                { type: preserve }
+  "draft_orders[].tax_exempt":               { type: preserve }
+  "draft_orders[].taxes_included":           { type: preserve }
+  "draft_orders[].customer.id":              { type: id, anchor: true }
+  "draft_orders[].customer.email":           { type: email, anchor: true }
+  "draft_orders[].customer.first_name":      { type: firstName }
+  "draft_orders[].customer.last_name":       { type: lastName }
+  "draft_orders[].customer.phone":           { type: phone }
+  "draft_orders[].billing_address.first_name": { type: firstName }
+  "draft_orders[].billing_address.last_name":  { type: lastName }
+  "draft_orders[].billing_address.address1":   { type: street }
+  "draft_orders[].billing_address.city":       { type: city }
+  "draft_orders[].billing_address.zip":        { type: postalCode }
+  "draft_orders[].billing_address.country":    { type: country }
+  "draft_orders[].shipping_address.first_name": { type: firstName }
+  "draft_orders[].shipping_address.last_name":  { type: lastName }
+  "draft_orders[].shipping_address.address1":   { type: street }
+  "draft_orders[].shipping_address.city":       { type: city }
+  "draft_orders[].shipping_address.zip":        { type: postalCode }
+  "draft_orders[].shipping_address.country":    { type: country }
+  "draft_orders[].line_items[].id":          { type: id, anchor: true }
+  "draft_orders[].line_items[].product_id":  { type: id, anchor: true }
+  "draft_orders[].line_items[].variant_id":  { type: id, anchor: true }
+  "draft_orders[].line_items[].title":       { type: productName }
+  "draft_orders[].line_items[].sku":         { type: sku, anchor: true }
+  "draft_orders[].line_items[].quantity":    { type: preserve }
+  "draft_orders[].line_items[].price":       { type: preserve }
+  "draft_orders[].line_items[].vendor":      { type: company }
+  "*": { type: auto }

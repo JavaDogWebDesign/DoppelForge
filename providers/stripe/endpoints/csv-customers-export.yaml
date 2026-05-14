@@ -1,0 +1,57 @@
+endpoint:
+  method: GET
+  path: /dashboard/customers.csv
+  description: Stripe Dashboard CSV export — customers
+  doc_url: https://docs.stripe.com/reports
+
+# CSV column names captured from a real Stripe Dashboard customers export.
+# Stripe occasionally adjusts the columns; if a future export breaks the
+# signature, update the `required_paths` and re-run smoke fixtures.
+signature:
+  required_paths:
+    - "[].id"
+    - "[].Email"
+    - "[].Description"
+    - "[].Created (UTC)"
+  optional_paths:
+    - "[].Default Card"
+    - "[].Card Number"
+    - "[].Card Last 4"
+    - "[].Total Spend"
+
+fields:
+  "[].id":              { type: id, anchor: true }
+  "[].Email":           { type: email, anchor: true }
+  "[].Name":            { type: fullName }
+  "[].Phone":           { type: phone }
+  "[].Description":     { type: shortText }
+  "[].Created (UTC)":   { type: isoDate }
+  "[].Default Card":            { type: id, anchor: true }
+  "[].Card Number":             { type: sku }
+  "[].Card Last 4":             { type: sku }
+  "[].Card Exp Month":          { type: preserve }
+  "[].Card Exp Year":           { type: preserve }
+  "[].Card Type":               { type: preserve }
+  "[].Card Country":            { type: countryCode }
+  "[].Card Address Line1":      { type: street }
+  "[].Card Address Line2":      { type: streetSecondary }
+  "[].Card Address City":       { type: city }
+  "[].Card Address State":      { type: stateOrProvince }
+  "[].Card Address Zip":        { type: postalCode }
+  "[].Card Address Country":    { type: countryCode }
+  "[].Card Fingerprint":        { type: id, anchor: true }
+  "[].Currency":                { type: preserve }
+  "[].Delinquent":              { type: preserve }
+  "[].Account Balance (UTC)":   { type: preserve }
+  "[].Total Spend":             { type: priceAmount }
+  "[].Shipping Name":           { type: fullName }
+  "[].Shipping Phone":          { type: phone }
+  "[].Shipping Address Line1":  { type: street }
+  "[].Shipping Address Line2":  { type: streetSecondary }
+  "[].Shipping Address City":   { type: city }
+  "[].Shipping Address State":  { type: stateOrProvince }
+  "[].Shipping Address Postal Code": { type: postalCode }
+  "[].Shipping Address Country": { type: countryCode }
+  "[].Tax IDs":                 { type: auto }
+  "[].Metadata":                { type: preserve }
+  "*": { type: auto }

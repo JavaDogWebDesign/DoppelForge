@@ -1,0 +1,58 @@
+endpoint:
+  method: POST
+  path: /graphql (query site.products)
+  description: BigCommerce Storefront GraphQL — site.products connection (catalog browse)
+  doc_url: https://developer.bigcommerce.com/docs/storefront/graphql/products
+
+signature:
+  required_paths:
+    - data.site.products.edges[].node.entityId
+    - data.site.products.edges[].node.name
+    - data.site.products.edges[].node.sku
+    - data.site.products.pageInfo.hasNextPage
+  optional_paths:
+    - extensions.complexity
+    - data.site.products.collectionInfo.totalItems
+    - data.site.products.edges[].node.prices
+
+fields:
+  "extensions.complexity":                                      { type: preserve }
+  "data.site.products.collectionInfo.totalItems":               { type: preserve }
+  "data.site.products.pageInfo.hasNextPage":                    { type: preserve }
+  "data.site.products.pageInfo.hasPreviousPage":                { type: preserve }
+  "data.site.products.pageInfo.startCursor":                    { type: id }
+  "data.site.products.pageInfo.endCursor":                      { type: id }
+  "data.site.products.edges[].cursor":                          { type: id }
+  "data.site.products.edges[].node.entityId":                   { type: id, anchor: true }
+  "data.site.products.edges[].node.id":                         { type: id, anchor: true }
+  "data.site.products.edges[].node.name":                       { type: productName }
+  "data.site.products.edges[].node.path":                       { type: url }
+  "data.site.products.edges[].node.sku":                        { type: sku, anchor: true }
+  "data.site.products.edges[].node.upc":                        { type: sku }
+  "data.site.products.edges[].node.gtin":                       { type: sku }
+  "data.site.products.edges[].node.mpn":                        { type: sku }
+  "data.site.products.edges[].node.brand.name":                 { type: company }
+  "data.site.products.edges[].node.brand.entityId":             { type: id, anchor: true }
+  "data.site.products.edges[].node.description":                { type: longText }
+  "data.site.products.edges[].node.plainTextDescription":       { type: longText }
+  "data.site.products.edges[].node.warranty":                   { type: shortText }
+  "data.site.products.edges[].node.condition":                  { type: preserve }
+  "data.site.products.edges[].node.availability":               { type: preserve }
+  "data.site.products.edges[].node.availabilityV2.status":      { type: preserve }
+  "data.site.products.edges[].node.availabilityV2.description": { type: shortText }
+  "data.site.products.edges[].node.inventory.isInStock":        { type: preserve }
+  "data.site.products.edges[].node.inventory.aggregated.availableToSell": { type: preserve }
+  "data.site.products.edges[].node.prices.price.value":         { type: priceAmount }
+  "data.site.products.edges[].node.prices.price.currencyCode":  { type: preserve }
+  "data.site.products.edges[].node.prices.salePrice.value":     { type: priceAmount }
+  "data.site.products.edges[].node.prices.basePrice.value":     { type: priceAmount }
+  "data.site.products.edges[].node.prices.retailPrice.value":   { type: priceAmount }
+  "data.site.products.edges[].node.weight.value":               { type: preserve }
+  "data.site.products.edges[].node.weight.unit":                { type: preserve }
+  "data.site.products.edges[].node.defaultImage.url":           { type: url }
+  "data.site.products.edges[].node.defaultImage.altText":       { type: shortText }
+  "data.site.products.edges[].node.categories.edges[].node.entityId": { type: id, anchor: true }
+  "data.site.products.edges[].node.categories.edges[].node.name":     { type: shortText }
+  "data.site.products.edges[].node.customFields.edges[].node.name":   { type: preserve }
+  "data.site.products.edges[].node.customFields.edges[].node.value":  { type: shortText }
+  "*": { type: auto }

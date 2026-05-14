@@ -1,0 +1,47 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/user/list
+  description: List users
+  doc_url: https://docs.piano.io/api/
+
+# Piano response envelope: code, ts, plus a list key (here `users`) and pagination.
+signature:
+  required_paths:
+    - users[].uid
+    - users[].email
+    - total
+    - code
+  optional_paths:
+    - users[].custom_fields
+    - users[].create_date
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "users[].uid":                    { type: id, anchor: true }
+  "users[].email":                  { type: email, anchor: true }
+  "users[].first_name":             { type: firstName }
+  "users[].last_name":              { type: lastName }
+  "users[].personal_name":          { type: fullName }
+  "users[].create_date":            { type: unixTimestamp }
+  "users[].update_date":            { type: unixTimestamp }
+  "users[].last_login_date":        { type: unixTimestamp }
+  "users[].last_visit_date":        { type: unixTimestamp }
+  "users[].image1":                 { type: url }
+  "users[].image2":                 { type: url }
+  "users[].user_role":              { type: preserve }
+  "users[].source":                 { type: preserve }
+  "users[].country":                { type: country }
+  "users[].country_iso":            { type: countryCode }
+  "users[].deactivated":            { type: preserve }
+  "users[].auth_provider":          { type: preserve }
+  "users[].external_user_id":       { type: id, anchor: true }
+  "users[].custom_fields[].field_name":   { type: preserve }
+  "users[].custom_fields[].value":        { type: shortText }
+  "users[].custom_fields[].created":      { type: unixTimestamp }
+  "users[].custom_fields[].sort_order":   { type: preserve }
+  "*": { type: auto }

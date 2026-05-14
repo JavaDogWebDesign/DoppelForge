@@ -1,0 +1,68 @@
+endpoint:
+  method: GET
+  path: /v1/billing/subscriptions/{subscription_id}
+  description: Retrieve a subscription
+  doc_url: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_get
+
+signature:
+  required_paths:
+    - id
+    - plan_id
+    - status
+    - start_time
+    - create_time
+  optional_paths:
+    - subscriber.email_address
+    - billing_info
+    - shipping_amount
+
+fields:
+  "id":               { type: id, anchor: true }
+  "plan_id":          { type: id, anchor: true }
+  "status":           { type: preserve }
+  "status_change_note": { type: shortText }
+  "status_update_time": { type: isoDate }
+  "start_time":       { type: isoDate }
+  "create_time":      { type: isoDate }
+  "update_time":      { type: isoDate }
+  "quantity":         { type: preserve }
+  "shipping_amount.currency_code": { type: currency }
+  "shipping_amount.value":         { type: priceAmount }
+  "custom_id":        { type: id, anchor: true }
+  "plan_overridden":  { type: preserve }
+  "subscriber.payer_id":         { type: id, anchor: true }
+  "subscriber.email_address":    { type: email, anchor: true }
+  "subscriber.name.given_name":  { type: firstName }
+  "subscriber.name.surname":     { type: lastName }
+  "subscriber.phone.phone_type": { type: preserve }
+  "subscriber.phone.phone_number.national_number": { type: phone, anchor: true }
+  "subscriber.shipping_address.name.full_name": { type: fullName }
+  "subscriber.shipping_address.address.address_line_1":  { type: street }
+  "subscriber.shipping_address.address.address_line_2":  { type: streetSecondary }
+  "subscriber.shipping_address.address.admin_area_2":    { type: city }
+  "subscriber.shipping_address.address.admin_area_1":    { type: stateOrProvince }
+  "subscriber.shipping_address.address.postal_code":     { type: postalCode }
+  "subscriber.shipping_address.address.country_code":    { type: countryCode }
+  "subscriber.payment_source.card.last_digits":     { type: sku }
+  "subscriber.payment_source.card.brand":           { type: preserve }
+  "subscriber.payment_source.card.type":            { type: preserve }
+  "subscriber.payment_source.card.name":            { type: fullName }
+  "subscriber.payment_source.card.expiry":          { type: preserve }
+  "billing_info.outstanding_balance.value":         { type: priceAmount }
+  "billing_info.outstanding_balance.currency_code": { type: currency }
+  "billing_info.cycle_executions[].tenure_type":    { type: preserve }
+  "billing_info.cycle_executions[].sequence":       { type: preserve }
+  "billing_info.cycle_executions[].cycles_completed": { type: preserve }
+  "billing_info.cycle_executions[].cycles_remaining": { type: preserve }
+  "billing_info.cycle_executions[].current_pricing_scheme_version": { type: preserve }
+  "billing_info.cycle_executions[].total_cycles":   { type: preserve }
+  "billing_info.last_payment.amount.value":         { type: priceAmount }
+  "billing_info.last_payment.amount.currency_code": { type: currency }
+  "billing_info.last_payment.time":                 { type: isoDate }
+  "billing_info.next_billing_time":                 { type: isoDate }
+  "billing_info.final_payment_time":                { type: isoDate }
+  "billing_info.failed_payments_count":             { type: preserve }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

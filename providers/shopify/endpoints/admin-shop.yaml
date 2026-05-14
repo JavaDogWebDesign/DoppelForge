@@ -1,0 +1,77 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/shop.json
+  description: Get shop info (the merchant's storefront metadata)
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/shop
+
+signature:
+  # `plan_name` is Shopify-distinctive — Recharge mirrors Shopify's
+  # `myshopify_domain` in their /shop response, so we can't use that to
+  # disambiguate. `plan_name` (basic_plus, shopify_plus, etc.) is unique to
+  # the Shopify Admin API.
+  required_paths:
+    - shop.id
+    - shop.name
+    - shop.email
+    - shop.domain
+    - shop.plan_name
+  optional_paths:
+    - shop.shop_owner
+    - shop.myshopify_domain
+
+fields:
+  "shop.id":                          { type: id, anchor: true }
+  "shop.name":                        { type: company }
+  "shop.email":                       { type: email, anchor: true }
+  "shop.domain":                      { type: url }
+  "shop.province":                    { type: stateOrProvince }
+  "shop.country":                     { type: countryCode }
+  "shop.address1":                    { type: street }
+  "shop.address2":                    { type: streetSecondary }
+  "shop.zip":                         { type: postalCode }
+  "shop.city":                        { type: city }
+  "shop.source":                      { type: preserve }
+  "shop.phone":                       { type: phone }
+  "shop.latitude":                    { type: preserve }
+  "shop.longitude":                   { type: preserve }
+  "shop.primary_locale":              { type: preserve }
+  "shop.country_code":                { type: countryCode }
+  "shop.country_name":                { type: country }
+  "shop.currency":                    { type: preserve }
+  "shop.customer_email":              { type: email, anchor: true }
+  "shop.timezone":                    { type: preserve }
+  "shop.iana_timezone":               { type: preserve }
+  "shop.shop_owner":                  { type: fullName }
+  "shop.money_format":                { type: preserve }
+  "shop.money_with_currency_format":  { type: preserve }
+  "shop.weight_unit":                 { type: preserve }
+  "shop.province_code":               { type: stateOrProvince }
+  "shop.taxes_included":              { type: preserve }
+  "shop.auto_configure_tax_inclusivity": { type: preserve }
+  "shop.tax_shipping":                { type: preserve }
+  "shop.county_taxes":                { type: preserve }
+  "shop.plan_display_name":           { type: preserve }
+  "shop.plan_name":                   { type: preserve }
+  "shop.has_discounts":               { type: preserve }
+  "shop.has_gift_cards":              { type: preserve }
+  "shop.myshopify_domain":            { type: url }
+  "shop.google_apps_domain":          { type: preserve }
+  "shop.google_apps_login_enabled":   { type: preserve }
+  "shop.money_in_emails_format":      { type: preserve }
+  "shop.money_with_currency_in_emails_format": { type: preserve }
+  "shop.eligible_for_payments":       { type: preserve }
+  "shop.requires_extra_payments_agreement": { type: preserve }
+  "shop.password_enabled":            { type: preserve }
+  "shop.has_storefront":              { type: preserve }
+  "shop.eligible_for_card_reader_giveaway": { type: preserve }
+  "shop.finances":                    { type: preserve }
+  "shop.created_at":                  { type: isoDate }
+  "shop.updated_at":                  { type: isoDate }
+  "shop.checkout_api_supported":      { type: preserve }
+  "shop.multi_location_enabled":      { type: preserve }
+  "shop.setup_required":              { type: preserve }
+  "shop.pre_launch_enabled":          { type: preserve }
+  "shop.enabled_presentment_currencies": { type: preserve }
+  "shop.transactional_sms_disabled":  { type: preserve }
+  "shop.marketing_sms_consent_enabled_at_checkout": { type: preserve }
+  "*": { type: auto }

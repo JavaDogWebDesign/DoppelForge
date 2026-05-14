@@ -1,0 +1,56 @@
+endpoint:
+  method: GET
+  path: /api/v2/users/{id}
+  description: Get a user (Management API v2)
+  doc_url: https://auth0.com/docs/api/management/v2/users/get-users-by-id
+
+signature:
+  required_paths:
+    - user_id
+    - email
+    - created_at
+    - updated_at
+  optional_paths:
+    - identities
+    - email_verified
+    - app_metadata
+    - user_metadata
+    - last_login
+
+fields:
+  "user_id":         { type: id, anchor: true }
+  "email":           { type: email, anchor: true }
+  "email_verified":  { type: preserve }
+  "username":        { type: id, anchor: true }
+  "name":            { type: fullName }
+  "given_name":      { type: firstName }
+  "family_name":     { type: lastName }
+  "nickname":        { type: shortText }
+  "picture":         { type: url }
+  "phone_number":    { type: phone }
+  "phone_verified":  { type: preserve }
+  "created_at":      { type: isoDate }
+  "updated_at":      { type: isoDate }
+  "last_login":      { type: isoDate }
+  "last_ip":         { type: ipv4 }
+  "logins_count":    { type: preserve }
+  "blocked":         { type: preserve }
+  "multifactor":     { type: preserve }
+  "multifactor_last_modified": { type: isoDate }
+  "identities[].user_id":      { type: id, anchor: true }
+  "identities[].provider":     { type: preserve }
+  "identities[].connection":   { type: preserve }
+  "identities[].isSocial":     { type: preserve }
+  "identities[].access_token": { type: redact }
+  "identities[].refresh_token": { type: redact }
+  "identities[].profileData.email":      { type: email, anchor: true }
+  "identities[].profileData.email_verified": { type: preserve }
+  "identities[].profileData.given_name": { type: firstName }
+  "identities[].profileData.family_name": { type: lastName }
+  "identities[].profileData.name":       { type: fullName }
+  "identities[].profileData.nickname":   { type: shortText }
+  "identities[].profileData.picture":    { type: url }
+  "identities[].profileData.locale":     { type: preserve }
+  "user_metadata":   { type: auto }
+  "app_metadata":    { type: auto }
+  "*": { type: auto }

@@ -1,0 +1,55 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/conversion/list
+  description: List conversions (purchases / paywall conversions)
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - conversions[].conversion_id
+    - conversions[].user
+    - conversions[].term
+    - total
+    - code
+  optional_paths:
+    - conversions[].amount
+    - conversions[].promotion
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "conversions[].conversion_id":           { type: id, anchor: true }
+  "conversions[].type":                    { type: preserve }
+  "conversions[].type_name":               { type: preserve }
+  "conversions[].create_date":             { type: unixTimestamp }
+  "conversions[].amount":                  { type: preserve }
+  "conversions[].currency":                { type: preserve }
+  "conversions[].browser_id":              { type: id, anchor: true }
+  "conversions[].ip_address":              { type: ipv4 }
+  "conversions[].country":                 { type: country }
+  "conversions[].country_iso":             { type: countryCode }
+  "conversions[].user.uid":                { type: id, anchor: true }
+  "conversions[].user.email":              { type: email, anchor: true }
+  "conversions[].user.first_name":         { type: firstName }
+  "conversions[].user.last_name":          { type: lastName }
+  "conversions[].user.personal_name":      { type: fullName }
+  "conversions[].user.create_date":        { type: unixTimestamp }
+  "conversions[].term.term_id":            { type: id, anchor: true }
+  "conversions[].term.aid":                { type: id, anchor: true }
+  "conversions[].term.name":               { type: shortText }
+  "conversions[].term.description":        { type: shortText }
+  "conversions[].term.type":               { type: preserve }
+  "conversions[].term.payment_billing_plan": { type: preserve }
+  "conversions[].term.payment_currency":   { type: preserve }
+  "conversions[].term.resource.rid":       { type: id, anchor: true }
+  "conversions[].term.resource.name":      { type: shortText }
+  "conversions[].promotion.promotion_id":  { type: id, anchor: true }
+  "conversions[].promotion.name":          { type: shortText }
+  "conversions[].promotion.description":   { type: shortText }
+  "conversions[].promotion.discount_amount": { type: preserve }
+  "conversions[].promotion.discount_currency": { type: preserve }
+  "*": { type: auto }

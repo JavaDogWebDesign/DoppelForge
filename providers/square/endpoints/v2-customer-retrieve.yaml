@@ -1,0 +1,49 @@
+endpoint:
+  method: GET
+  path: /v2/customers/{customer_id}
+  description: Retrieve a customer
+  doc_url: https://developer.squareup.com/reference/square/customers-api/retrieve-customer
+
+signature:
+  required_paths:
+    - customer.id
+    - customer.created_at
+    - customer.updated_at
+    - customer.version
+  optional_paths:
+    - customer.email_address
+    - customer.given_name
+    - customer.address
+
+fields:
+  "customer.id":             { type: id, anchor: true }
+  "customer.created_at":     { type: isoDate }
+  "customer.updated_at":     { type: isoDate }
+  "customer.version":        { type: preserve }
+  "customer.email_address":  { type: email, anchor: true }
+  "customer.given_name":     { type: firstName }
+  "customer.family_name":    { type: lastName }
+  "customer.nickname":       { type: shortText }
+  "customer.company_name":   { type: company }
+  "customer.phone_number":   { type: phone }
+  "customer.reference_id":   { type: id, anchor: true }
+  "customer.note":           { type: shortText }
+  "customer.birthday":       { type: isoDate }
+  "customer.creation_source": { type: preserve }
+  "customer.group_ids":      { type: preserve }
+  "customer.segment_ids":    { type: preserve }
+  "customer.preferences.email_unsubscribed": { type: preserve }
+  "customer.address.address_line_1": { type: street }
+  "customer.address.address_line_2": { type: streetSecondary }
+  "customer.address.address_line_3": { type: streetSecondary }
+  "customer.address.locality":       { type: city }
+  "customer.address.sublocality":    { type: shortText }
+  "customer.address.administrative_district_level_1": { type: stateOrProvince }
+  "customer.address.administrative_district_level_2": { type: stateOrProvince }
+  "customer.address.postal_code":    { type: postalCode }
+  "customer.address.country":        { type: countryCode }
+  "customer.address.first_name":     { type: firstName }
+  "customer.address.last_name":      { type: lastName }
+  "customer.address.organization":   { type: company }
+  "customer.tax_ids.eu_vat":         { type: id, anchor: true }
+  "*": { type: auto }

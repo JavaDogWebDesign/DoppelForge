@@ -1,0 +1,43 @@
+endpoint:
+  method: GET
+  path: /v2/payments/refunds/{refund_id}
+  description: Show details for a refund
+  doc_url: https://developer.paypal.com/docs/api/payments/v2/#refunds_get
+
+signature:
+  required_paths:
+    - id
+    - status
+    - amount.value
+    - amount.currency_code
+    - create_time
+  optional_paths:
+    - invoice_id
+    - note_to_payer
+    - seller_payable_breakdown
+
+fields:
+  "id":               { type: id, anchor: true }
+  "status":           { type: preserve }
+  "status_details.reason": { type: preserve }
+  "amount.currency_code": { type: currency }
+  "amount.value":     { type: priceAmount }
+  "invoice_id":       { type: id, anchor: true }
+  "custom_id":        { type: id, anchor: true }
+  "acquirer_reference_number": { type: id, anchor: true }
+  "note_to_payer":    { type: shortText }
+  "create_time":      { type: isoDate }
+  "update_time":      { type: isoDate }
+  "seller_payable_breakdown.gross_amount.value":         { type: priceAmount }
+  "seller_payable_breakdown.gross_amount.currency_code": { type: currency }
+  "seller_payable_breakdown.paypal_fee.value":           { type: priceAmount }
+  "seller_payable_breakdown.net_amount.value":           { type: priceAmount }
+  "seller_payable_breakdown.total_refunded_amount.value": { type: priceAmount }
+  "payer.email_address":      { type: email, anchor: true }
+  "payer.payer_id":           { type: id, anchor: true }
+  "payer.name.given_name":    { type: firstName }
+  "payer.name.surname":       { type: lastName }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

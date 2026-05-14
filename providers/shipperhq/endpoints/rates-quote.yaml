@@ -1,0 +1,58 @@
+endpoint:
+  method: POST
+  path: /rates (rates response)
+  description: ShipperHQ Rates API — rate quote response
+  doc_url: https://dev.shipperhq.com/rates-service/
+
+# Field set reconstructed from the open-source Magento module
+# (github.com/shipperhq/module-shipper) since the developer-portal schema
+# pages are partner-gated. Verify against a live response if column names
+# diverge.
+signature:
+  required_paths:
+    - globalSettings.transactionId
+    - carrierGroups[].carrierRates[].carrierDetail.carrierCode
+    - carrierGroups[].carrierRates[].methodDetails.methodCode
+    - carrierGroups[].carrierRates[].methodDetails.totalCharges
+  optional_paths:
+    - mergedRateResponse
+    - carrierGroups[].carrierGroupDetail
+    - errors
+
+fields:
+  "globalSettings.transactionId":          { type: id, anchor: true }
+  "globalSettings.responseStatus.code":    { type: preserve }
+  "globalSettings.responseStatus.message": { type: shortText }
+  "carrierGroups[].carrierGroupId":               { type: id, anchor: true }
+  "carrierGroups[].carrierGroupDetail.name":      { type: shortText }
+  "carrierGroups[].carrierGroupDetail.checkoutDescription": { type: shortText }
+  "carrierGroups[].carrierGroupDetail.sortOrder": { type: preserve }
+  "carrierGroups[].carrierRates[].carrierDetail.carrierCode":      { type: preserve }
+  "carrierGroups[].carrierRates[].carrierDetail.carrierTitle":     { type: shortText }
+  "carrierGroups[].carrierRates[].carrierDetail.carrierType":      { type: preserve }
+  "carrierGroups[].carrierRates[].carrierDetail.carrierId":        { type: id, anchor: true }
+  "carrierGroups[].carrierRates[].methodDetails.methodCode":       { type: preserve }
+  "carrierGroups[].carrierRates[].methodDetails.methodTitle":      { type: shortText }
+  "carrierGroups[].carrierRates[].methodDetails.methodDescription": { type: shortText }
+  "carrierGroups[].carrierRates[].methodDetails.totalCharges":     { type: priceAmount }
+  "carrierGroups[].carrierRates[].methodDetails.cost":             { type: priceAmount }
+  "carrierGroups[].carrierRates[].methodDetails.currency":         { type: currency }
+  "carrierGroups[].carrierRates[].methodDetails.dispatchDate":     { type: isoDate }
+  "carrierGroups[].carrierRates[].methodDetails.deliveryDate":     { type: isoDate }
+  "carrierGroups[].carrierRates[].methodDetails.transitDays":      { type: preserve }
+  "mergedRateResponse.totalCharges":  { type: priceAmount }
+  "mergedRateResponse.currency":      { type: currency }
+  "requestEcho.destination.street":   { type: street }
+  "requestEcho.destination.city":     { type: city }
+  "requestEcho.destination.region":   { type: stateOrProvince }
+  "requestEcho.destination.zipcode":  { type: postalCode }
+  "requestEcho.destination.postalCode": { type: postalCode }
+  "requestEcho.destination.country":  { type: countryCode }
+  "requestEcho.destination.validationStatus": { type: preserve }
+  "requestEcho.destination.destinationType":  { type: preserve }
+  "requestEcho.customer.email":       { type: email, anchor: true }
+  "requestEcho.customer.remoteIp":    { type: ipv4 }
+  "errors[].errorCode":               { type: preserve }
+  "errors[].internalErrorMessage":    { type: shortText }
+  "errors[].externalErrorMessage":    { type: shortText }
+  "*": { type: auto }

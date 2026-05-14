@@ -1,0 +1,39 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/line_items
+  description: List line items
+  doc_url: https://developers.hubspot.com/docs/api/crm/line-items
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+  optional_paths:
+    - paging.next.after
+    - results[].properties.amount
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                          { type: id, anchor: true }
+  "results[].createdAt":                   { type: isoDate }
+  "results[].updatedAt":                   { type: isoDate }
+  "results[].archived":                    { type: preserve }
+  "results[].properties.hs_object_id":     { type: id, anchor: true }
+  "results[].properties.createdate":       { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.name":             { type: productName }
+  "results[].properties.description":      { type: shortText }
+  "results[].properties.hs_product_id":    { type: id, anchor: true }
+  "results[].properties.hs_sku":           { type: sku, anchor: true }
+  "results[].properties.price":            { type: preserve }
+  "results[].properties.quantity":         { type: preserve }
+  "results[].properties.amount":           { type: preserve }
+  "results[].properties.hs_discount_percentage": { type: preserve }
+  "results[].properties.discount":         { type: preserve }
+  "results[].properties.tax":              { type: preserve }
+  "results[].properties.hs_term_in_months": { type: preserve }
+  "results[].properties.recurringbillingfrequency": { type: preserve }
+  "results[].properties.hs_recurring_billing_start_date": { type: isoDate }
+  "*": { type: auto }

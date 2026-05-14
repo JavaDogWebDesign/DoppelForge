@@ -1,0 +1,62 @@
+endpoint:
+  method: POST
+  path: /admin/api/2024-10/graphql.json (query customers)
+  description: Shopify Admin GraphQL — customers connection (list)
+  doc_url: https://shopify.dev/docs/api/admin-graphql/latest/queries/customers
+
+signature:
+  required_paths:
+    - data.customers.edges[].node.id
+    - data.customers.edges[].node.displayName
+    - data.customers.edges[].node.numberOfOrders
+    - data.customers.pageInfo.hasNextPage
+    - data.customers.edges[].cursor
+  optional_paths:
+    - extensions.cost.actualQueryCost
+    - data.customers.edges[].node.defaultEmailAddress
+    - data.customers.edges[].node.amountSpent
+
+fields:
+  "extensions.cost.requestedQueryCost":  { type: preserve }
+  "extensions.cost.actualQueryCost":     { type: preserve }
+  "extensions.cost.throttleStatus.maximumAvailable":   { type: preserve }
+  "extensions.cost.throttleStatus.currentlyAvailable": { type: preserve }
+  "extensions.cost.throttleStatus.restoreRate":        { type: preserve }
+  "data.customers.pageInfo.hasNextPage":     { type: preserve }
+  "data.customers.pageInfo.hasPreviousPage": { type: preserve }
+  "data.customers.pageInfo.startCursor":     { type: id }
+  "data.customers.pageInfo.endCursor":       { type: id }
+  "data.customers.edges[].cursor":           { type: id }
+  "data.customers.edges[].node.id":          { type: id, anchor: true }
+  "data.customers.edges[].node.firstName":   { type: firstName }
+  "data.customers.edges[].node.lastName":    { type: lastName }
+  "data.customers.edges[].node.displayName": { type: fullName }
+  "data.customers.edges[].node.email":       { type: email, anchor: true }
+  "data.customers.edges[].node.phone":       { type: phone }
+  "data.customers.edges[].node.defaultEmailAddress.emailAddress":   { type: email, anchor: true }
+  "data.customers.edges[].node.defaultEmailAddress.marketingState": { type: preserve }
+  "data.customers.edges[].node.defaultPhoneNumber.phoneNumber":     { type: phone }
+  "data.customers.edges[].node.defaultPhoneNumber.marketingState":  { type: preserve }
+  "data.customers.edges[].node.numberOfOrders":  { type: preserve }
+  "data.customers.edges[].node.amountSpent.amount":       { type: priceAmount }
+  "data.customers.edges[].node.amountSpent.currencyCode": { type: preserve }
+  "data.customers.edges[].node.note":           { type: shortText }
+  "data.customers.edges[].node.tags":           { type: preserve }
+  "data.customers.edges[].node.taxExempt":      { type: preserve }
+  "data.customers.edges[].node.verifiedEmail":  { type: preserve }
+  "data.customers.edges[].node.createdAt":      { type: isoDate }
+  "data.customers.edges[].node.updatedAt":      { type: isoDate }
+  "data.customers.edges[].node.defaultAddress.firstName":    { type: firstName }
+  "data.customers.edges[].node.defaultAddress.lastName":     { type: lastName }
+  "data.customers.edges[].node.defaultAddress.name":         { type: fullName }
+  "data.customers.edges[].node.defaultAddress.company":      { type: company }
+  "data.customers.edges[].node.defaultAddress.address1":     { type: street }
+  "data.customers.edges[].node.defaultAddress.address2":     { type: streetSecondary }
+  "data.customers.edges[].node.defaultAddress.city":         { type: city }
+  "data.customers.edges[].node.defaultAddress.province":     { type: stateOrProvince }
+  "data.customers.edges[].node.defaultAddress.provinceCode": { type: stateOrProvince }
+  "data.customers.edges[].node.defaultAddress.zip":          { type: postalCode }
+  "data.customers.edges[].node.defaultAddress.country":      { type: country }
+  "data.customers.edges[].node.defaultAddress.countryCode":  { type: countryCode }
+  "data.customers.edges[].node.defaultAddress.phone":        { type: phone }
+  "*": { type: auto }

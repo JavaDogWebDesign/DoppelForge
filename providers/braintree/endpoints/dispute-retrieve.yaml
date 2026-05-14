@@ -1,0 +1,59 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/disputes/{dispute_id}
+  description: Retrieve a dispute
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/dispute
+
+signature:
+  required_paths:
+    - id
+    - amount_disputed
+    - status
+    - reason
+  optional_paths:
+    - transaction
+    - evidence
+
+fields:
+  "id":                       { type: id, anchor: true }
+  "amount_disputed":          { type: preserve }
+  "amount_won":               { type: preserve }
+  "case_number":              { type: id, anchor: true }
+  "currency_iso_code":        { type: preserve }
+  "forwarded_comments":       { type: shortText }
+  "kind":                     { type: preserve }
+  "merchant_account_id":      { type: id, anchor: true }
+  "original_dispute_id":      { type: id, anchor: true }
+  "processor_comments":       { type: shortText }
+  "reason":                   { type: preserve }
+  "reason_code":              { type: preserve }
+  "reason_description":       { type: shortText }
+  "received_date":            { type: isoDate }
+  "reply_by_date":            { type: isoDate }
+  "status":                   { type: preserve }
+  "date_opened":              { type: isoDate }
+  "date_won":                 { type: isoDate }
+  "created_at":               { type: isoDate }
+  "updated_at":               { type: isoDate }
+  "graphql_id":               { type: id, anchor: true }
+  "chargeback_protection_level": { type: preserve }
+  "protection_level":         { type: preserve }
+  "transaction.id":           { type: id, anchor: true }
+  "transaction.amount":       { type: preserve }
+  "transaction.created_at":   { type: isoDate }
+  "transaction.order_id":     { type: id, anchor: true }
+  "transaction.purchase_order_number": { type: id }
+  "transaction.payment_instrument_subtype": { type: preserve }
+  "transaction.installment_count": { type: preserve }
+  "transaction.merchant_account_id": { type: id, anchor: true }
+  "evidence[].id":            { type: id, anchor: true }
+  "evidence[].comment":       { type: longText }
+  "evidence[].url":           { type: url }
+  "evidence[].created_at":    { type: isoDate }
+  "evidence[].sent_to_processor_at": { type: isoDate }
+  "evidence[].category":      { type: preserve }
+  "status_history[].timestamp": { type: isoDate }
+  "status_history[].status":  { type: preserve }
+  "status_history[].effective_date": { type: isoDate }
+  "status_history[].disbursement_date": { type: isoDate }
+  "*": { type: auto }

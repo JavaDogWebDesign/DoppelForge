@@ -1,0 +1,114 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/orders/{order_id}.json
+  description: Get a single order
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/order
+
+signature:
+  required_paths:
+    - order.id
+    - order.admin_graphql_api_id
+    - order.name
+    - order.financial_status
+  optional_paths:
+    - order.customer
+    - order.line_items
+
+fields:
+  "order.id":                            { type: id, anchor: true }
+  "order.admin_graphql_api_id":          { type: preserve }
+  "order.app_id":                        { type: id }
+  "order.browser_ip":                    { type: ipv4 }
+  "order.buyer_accepts_marketing":       { type: preserve }
+  "order.cancel_reason":                 { type: preserve }
+  "order.cancelled_at":                  { type: isoDate }
+  "order.cart_token":                    { type: id, anchor: true }
+  "order.checkout_id":                   { type: id, anchor: true }
+  "order.checkout_token":                { type: id, anchor: true }
+  "order.closed_at":                     { type: isoDate }
+  "order.confirmation_number":           { type: id, anchor: true }
+  "order.confirmed":                     { type: preserve }
+  "order.contact_email":                 { type: email, anchor: true }
+  "order.created_at":                    { type: isoDate }
+  "order.currency":                      { type: preserve }
+  "order.customer_locale":               { type: preserve }
+  "order.device_id":                     { type: id }
+  "order.email":                         { type: email, anchor: true }
+  "order.financial_status":              { type: preserve }
+  "order.fulfillment_status":            { type: preserve }
+  "order.gateway":                       { type: preserve }
+  "order.landing_site":                  { type: url }
+  "order.location_id":                   { type: id, anchor: true }
+  "order.name":                          { type: id, anchor: true }
+  "order.note":                          { type: shortText }
+  "order.order_number":                  { type: id, anchor: true }
+  "order.order_status_url":              { type: url }
+  "order.payment_gateway_names":         { type: preserve }
+  "order.phone":                         { type: phone }
+  "order.presentment_currency":          { type: preserve }
+  "order.processed_at":                  { type: isoDate }
+  "order.referring_site":                { type: url }
+  "order.source_identifier":             { type: id, anchor: true }
+  "order.source_name":                   { type: preserve }
+  "order.source_url":                    { type: url }
+  "order.subtotal_price":                { type: preserve }
+  "order.tags":                          { type: preserve }
+  "order.test":                          { type: preserve }
+  "order.token":                         { type: id, anchor: true }
+  "order.total_discounts":               { type: preserve }
+  "order.total_price":                   { type: preserve }
+  "order.total_tax":                     { type: preserve }
+  "order.total_weight":                  { type: preserve }
+  "order.updated_at":                    { type: isoDate }
+  "order.user_id":                       { type: id, anchor: true }
+  "order.customer.id":                   { type: id, anchor: true }
+  "order.customer.email":                { type: email, anchor: true }
+  "order.customer.first_name":           { type: firstName }
+  "order.customer.last_name":            { type: lastName }
+  "order.customer.phone":                { type: phone }
+  "order.customer.admin_graphql_api_id": { type: preserve }
+  "order.billing_address.first_name":    { type: firstName }
+  "order.billing_address.last_name":     { type: lastName }
+  "order.billing_address.company":       { type: company }
+  "order.billing_address.address1":      { type: street }
+  "order.billing_address.address2":      { type: streetSecondary }
+  "order.billing_address.city":          { type: city }
+  "order.billing_address.province":      { type: stateOrProvince }
+  "order.billing_address.country":       { type: country }
+  "order.billing_address.country_code":  { type: countryCode }
+  "order.billing_address.zip":           { type: postalCode }
+  "order.billing_address.phone":         { type: phone }
+  "order.shipping_address.first_name":   { type: firstName }
+  "order.shipping_address.last_name":    { type: lastName }
+  "order.shipping_address.company":      { type: company }
+  "order.shipping_address.address1":     { type: street }
+  "order.shipping_address.address2":     { type: streetSecondary }
+  "order.shipping_address.city":         { type: city }
+  "order.shipping_address.province":     { type: stateOrProvince }
+  "order.shipping_address.country":      { type: country }
+  "order.shipping_address.country_code": { type: countryCode }
+  "order.shipping_address.zip":          { type: postalCode }
+  "order.shipping_address.phone":        { type: phone }
+  "order.line_items[].id":               { type: id, anchor: true }
+  "order.line_items[].product_id":       { type: id, anchor: true }
+  "order.line_items[].variant_id":       { type: id, anchor: true }
+  "order.line_items[].title":            { type: productName }
+  "order.line_items[].variant_title":    { type: shortText }
+  "order.line_items[].sku":              { type: sku, anchor: true }
+  "order.line_items[].vendor":           { type: company }
+  "order.line_items[].quantity":         { type: preserve }
+  "order.line_items[].price":            { type: preserve }
+  "order.line_items[].properties":       { type: preserve }
+  "order.fulfillments[].id":             { type: id, anchor: true }
+  "order.fulfillments[].order_id":       { type: id, anchor: true }
+  "order.fulfillments[].tracking_number": { type: id, anchor: true }
+  "order.fulfillments[].tracking_company": { type: company }
+  "order.fulfillments[].tracking_url":   { type: url }
+  "order.refunds[].id":                  { type: id, anchor: true }
+  "order.refunds[].order_id":            { type: id, anchor: true }
+  "order.refunds[].note":                { type: shortText }
+  "order.refunds[].created_at":          { type: isoDate }
+  "order.shipping_lines[].id":           { type: id, anchor: true }
+  "order.shipping_lines[].title":        { type: shortText }
+  "order.shipping_lines[].price":        { type: preserve }
+  "*": { type: auto }

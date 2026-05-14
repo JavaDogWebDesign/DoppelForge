@@ -1,0 +1,69 @@
+endpoint:
+  method: POST
+  path: incoming-sms
+  kind: webhook
+  description: Twilio webhook — incoming SMS message (form-encoded)
+  doc_url: https://www.twilio.com/docs/messaging/guides/webhook-request
+
+signature:
+  required_paths:
+    - MessageSid
+    - AccountSid
+    - From
+    - To
+    - Body
+    - NumMedia
+  optional_paths:
+    - MessagingServiceSid
+    - SmsMessageSid
+    - FromCity
+    - FromCountry
+    - NumSegments
+
+fields:
+  "MessageSid":           { type: id, anchor: true }
+  "SmsSid":               { type: id, anchor: true }
+  "SmsMessageSid":        { type: id, anchor: true }
+  "AccountSid":           { type: id, anchor: true }
+  "MessagingServiceSid":  { type: id, anchor: true }
+  "From":                 { type: phone, anchor: true }
+  "To":                   { type: phone, anchor: true }
+  "Body":                 { type: shortText }
+  "NumMedia":             { type: preserve }
+  "NumSegments":          { type: preserve }
+  "FromCity":             { type: city }
+  "FromState":            { type: stateOrProvince }
+  "FromZip":              { type: postalCode }
+  "FromCountry":          { type: countryCode }
+  "ToCity":               { type: city }
+  "ToState":              { type: stateOrProvince }
+  "ToZip":                { type: postalCode }
+  "ToCountry":            { type: countryCode }
+  "ApiVersion":           { type: preserve }
+  "ProfileName":          { type: shortText }
+  "WaId":                 { type: id, anchor: true }
+  "Forwarded":            { type: preserve }
+  "FrequentlyForwarded":  { type: preserve }
+  "OriginalRepliedMessageSid":    { type: id, anchor: true }
+  "OriginalRepliedMessageSender": { type: phone, anchor: true }
+  "MediaUrl0":            { type: url }
+  "MediaUrl1":            { type: url }
+  "MediaUrl2":            { type: url }
+  "MediaUrl3":            { type: url }
+  "MediaUrl4":            { type: url }
+  "MediaUrl5":            { type: url }
+  "MediaUrl6":            { type: url }
+  "MediaUrl7":            { type: url }
+  "MediaUrl8":            { type: url }
+  "MediaUrl9":            { type: url }
+  "MediaContentType0":    { type: preserve }
+  "MediaContentType1":    { type: preserve }
+  "MediaContentType2":    { type: preserve }
+  "MediaContentType3":    { type: preserve }
+  "MediaContentType4":    { type: preserve }
+  "MediaContentType5":    { type: preserve }
+  "MediaContentType6":    { type: preserve }
+  "MediaContentType7":    { type: preserve }
+  "MediaContentType8":    { type: preserve }
+  "MediaContentType9":    { type: preserve }
+  "*": { type: auto }

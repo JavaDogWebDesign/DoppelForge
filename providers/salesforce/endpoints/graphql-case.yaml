@@ -1,0 +1,56 @@
+endpoint:
+  method: POST
+  path: /services/data/v60.0/graphql (query Case)
+  description: Salesforce GraphQL — Case SObject (support tickets)
+  doc_url: https://developer.salesforce.com/docs/platform/graphql/guide/query-record-objects.html
+
+# Case has no compound address. Customer-facing PII lives on the
+# Supplied{Name,Email,Phone,Company} fields. Description is the highest-risk
+# free-text field in the SObject catalogue.
+signature:
+  required_paths:
+    - data.uiapi.query.Case.edges[].node.Id
+    - data.uiapi.query.Case.edges[].node.CaseNumber.value
+    - data.uiapi.query.Case.edges[].node.Subject.value
+    - data.uiapi.query.Case.edges[].node.Status.value
+    - data.uiapi.query.Case.pageInfo.endCursor
+  optional_paths:
+    - data.uiapi.query.Case.totalCount
+    - data.uiapi.query.Case.edges[].node.Priority.value
+    - data.uiapi.query.Case.edges[].node.ContactId.value
+
+fields:
+  "data.uiapi.query.Case.totalCount":       { type: preserve }
+  "data.uiapi.query.Case.pageResultCount":  { type: preserve }
+  "data.uiapi.query.Case.pageInfo.hasNextPage":     { type: preserve }
+  "data.uiapi.query.Case.pageInfo.hasPreviousPage": { type: preserve }
+  "data.uiapi.query.Case.pageInfo.startCursor":     { type: id }
+  "data.uiapi.query.Case.pageInfo.endCursor":       { type: id }
+  "data.uiapi.query.Case.edges[].cursor":           { type: id }
+  "data.uiapi.query.Case.edges[].node.Id":                       { type: id, anchor: true }
+  "data.uiapi.query.Case.edges[].node.CaseNumber.value":         { type: id, anchor: true }
+  "data.uiapi.query.Case.edges[].node.Subject.value":            { type: shortText, anchor: true }
+  "data.uiapi.query.Case.edges[].node.Description.value":        { type: longText }
+  "data.uiapi.query.Case.edges[].node.Status.value":             { type: preserve }
+  "data.uiapi.query.Case.edges[].node.Priority.value":           { type: preserve }
+  "data.uiapi.query.Case.edges[].node.Origin.value":             { type: preserve }
+  "data.uiapi.query.Case.edges[].node.Type.value":               { type: preserve }
+  "data.uiapi.query.Case.edges[].node.Reason.value":             { type: preserve }
+  "data.uiapi.query.Case.edges[].node.ContactId.value":          { type: id, anchor: true }
+  "data.uiapi.query.Case.edges[].node.ContactId.displayValue":   { type: fullName }
+  "data.uiapi.query.Case.edges[].node.AccountId.value":          { type: id, anchor: true }
+  "data.uiapi.query.Case.edges[].node.AccountId.displayValue":   { type: company }
+  "data.uiapi.query.Case.edges[].node.OwnerId.value":            { type: id, anchor: true }
+  "data.uiapi.query.Case.edges[].node.OwnerId.displayValue":     { type: fullName }
+  "data.uiapi.query.Case.edges[].node.SuppliedName.value":       { type: fullName }
+  "data.uiapi.query.Case.edges[].node.SuppliedEmail.value":      { type: email, anchor: true }
+  "data.uiapi.query.Case.edges[].node.SuppliedPhone.value":      { type: phone }
+  "data.uiapi.query.Case.edges[].node.SuppliedCompany.value":    { type: company }
+  "data.uiapi.query.Case.edges[].node.ClosedDate.value":         { type: isoDate }
+  "data.uiapi.query.Case.edges[].node.LastModifiedDate":         { type: isoDate }
+  "data.uiapi.query.Case.edges[].node.CreatedDate":              { type: isoDate }
+  "data.uiapi.query.Case.edges[].node.SystemModstamp":           { type: isoDate }
+  "data.uiapi.query.Case.edges[].node.IsClosed.value":           { type: preserve }
+  "data.uiapi.query.Case.edges[].node.IsEscalated.value":        { type: preserve }
+  "extensions.weakETags":                                        { type: preserve }
+  "*": { type: auto }

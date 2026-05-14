@@ -1,0 +1,62 @@
+endpoint:
+  method: GET
+  path: /api/v2/tickets/{id}
+  description: Retrieve a ticket
+  doc_url: https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#show-ticket
+
+signature:
+  required_paths:
+    - ticket.id
+    - ticket.url
+    - ticket.subject
+    - ticket.status
+  optional_paths:
+    - ticket.description
+    - ticket.requester_id
+    - ticket.assignee_id
+
+fields:
+  "ticket.id":                  { type: id, anchor: true }
+  "ticket.url":                 { type: url }
+  "ticket.external_id":         { type: id, anchor: true }
+  "ticket.type":                { type: preserve }
+  "ticket.subject":             { type: shortText }
+  "ticket.raw_subject":         { type: shortText }
+  "ticket.description":         { type: longText }
+  "ticket.priority":            { type: preserve }
+  "ticket.status":              { type: preserve }
+  "ticket.recipient":           { type: email, anchor: true }
+  "ticket.requester_id":        { type: id, anchor: true }
+  "ticket.submitter_id":        { type: id, anchor: true }
+  "ticket.assignee_id":         { type: id, anchor: true }
+  "ticket.organization_id":     { type: id, anchor: true }
+  "ticket.group_id":            { type: id, anchor: true }
+  "ticket.collaborator_ids":    { type: preserve }
+  "ticket.follower_ids":        { type: preserve }
+  "ticket.email_cc_ids":        { type: preserve }
+  "ticket.forum_topic_id":      { type: id }
+  "ticket.problem_id":          { type: id, anchor: true }
+  "ticket.has_incidents":       { type: preserve }
+  "ticket.is_public":           { type: preserve }
+  "ticket.due_at":              { type: isoDate }
+  "ticket.created_at":          { type: isoDate }
+  "ticket.updated_at":          { type: isoDate }
+  "ticket.tags":                { type: preserve }
+  "ticket.custom_fields[].id":    { type: preserve }
+  "ticket.custom_fields[].value": { type: auto }
+  "ticket.fields[].id":         { type: preserve }
+  "ticket.fields[].value":      { type: auto }
+  "ticket.satisfaction_rating.id":       { type: id, anchor: true }
+  "ticket.satisfaction_rating.score":    { type: preserve }
+  "ticket.satisfaction_rating.comment":  { type: longText }
+  "ticket.sharing_agreement_ids": { type: preserve }
+  "ticket.brand_id":            { type: id, anchor: true }
+  "ticket.allow_channelback":   { type: preserve }
+  "ticket.allow_attachments":   { type: preserve }
+  "ticket.via.channel":         { type: preserve }
+  "ticket.via.source.from.address": { type: email, anchor: true }
+  "ticket.via.source.from.name":    { type: fullName }
+  "ticket.via.source.to.address":   { type: email, anchor: true }
+  "ticket.via.source.to.name":      { type: fullName }
+  "ticket.via.source.rel":      { type: preserve }
+  "*": { type: auto }

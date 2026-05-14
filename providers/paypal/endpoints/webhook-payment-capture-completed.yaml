@@ -1,0 +1,64 @@
+endpoint:
+  method: POST
+  path: PAYMENT.CAPTURE.*
+  kind: webhook
+  description: PayPal webhook — payment capture events (COMPLETED / DENIED / REFUNDED / REVERSED share envelope)
+  doc_url: https://developer.paypal.com/api/rest/webhooks/event-names/#link-paymentcapturecompleted
+
+# PayPal webhook envelope: { id, event_version, event_type, resource_type,
+# create_time, summary, resource: {...} }. The `event_type` literal varies
+# (PAYMENT.CAPTURE.COMPLETED / .DENIED / .REFUNDED / .REVERSED / .PENDING)
+# but the body shape under `resource` is the same Capture object — one YAML
+# covers all five.
+signature:
+  required_paths:
+    - id
+    - event_version
+    - event_type
+    - resource_type
+    - create_time
+    - summary
+    - resource.id
+    - resource.status
+  optional_paths:
+    - resource.amount.value
+    - resource.seller_protection
+    - resource.seller_receivable_breakdown
+
+fields:
+  "id":              { type: id, anchor: true }
+  "event_version":   { type: preserve }
+  "event_type":      { type: preserve }
+  "resource_type":   { type: preserve }
+  "resource_version": { type: preserve }
+  "create_time":     { type: isoDate }
+  "summary":         { type: shortText }
+  "resource.id":              { type: id, anchor: true }
+  "resource.status":          { type: preserve }
+  "resource.amount.currency_code": { type: currency }
+  "resource.amount.value":    { type: priceAmount }
+  "resource.invoice_id":      { type: id, anchor: true }
+  "resource.custom_id":       { type: id, anchor: true }
+  "resource.final_capture":   { type: preserve }
+  "resource.disbursement_mode": { type: preserve }
+  "resource.create_time":     { type: isoDate }
+  "resource.update_time":     { type: isoDate }
+  "resource.seller_protection.status":            { type: preserve }
+  "resource.seller_protection.dispute_categories": { type: preserve }
+  "resource.seller_receivable_breakdown.gross_amount.value":         { type: priceAmount }
+  "resource.seller_receivable_breakdown.gross_amount.currency_code": { type: currency }
+  "resource.seller_receivable_breakdown.paypal_fee.value":           { type: priceAmount }
+  "resource.seller_receivable_breakdown.net_amount.value":           { type: priceAmount }
+  "resource.supplementary_data.related_ids.order_id":         { type: id, anchor: true }
+  "resource.supplementary_data.related_ids.authorization_id": { type: id, anchor: true }
+  "resource.payer.email_address":   { type: email, anchor: true }
+  "resource.payer.payer_id":        { type: id, anchor: true }
+  "resource.payer.name.given_name": { type: firstName }
+  "resource.payer.name.surname":    { type: lastName }
+  "resource.links[].href":   { type: url }
+  "resource.links[].rel":    { type: preserve }
+  "resource.links[].method": { type: preserve }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

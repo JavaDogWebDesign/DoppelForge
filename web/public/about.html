@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d0e13" />
+    <meta name="referrer" content="no-referrer" />
+
+    <!-- Primary SEO -->
+    <title>About DoppelForge - How it works, security, and how to contribute</title>
+    <meta name="description" content="DoppelForge crafts doppelgängers of your API responses - identical structure, safe values. Learn the name's origin, the workshop voice, the security guarantees (CSP-enforced no network egress), and how to add a new provider in a single YAML file." />
+    <meta name="keywords" content="api response doppelganger, api response obfuscator, fake api data, json obfuscator, xml obfuscator, shopify api anonymizer, stripe api obfuscator, llm pii sanitizer, chatgpt safe data, claude safe data, cursor safe data, browser-only privacy tool, synthetic api responses, contribute open source, csp connect-src none" />
+    <meta name="author" content="Patrick Seypura" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://doppelforge.com/about" />
+
+    <link rel="icon" type="image/svg+xml" href="/doppel-favicon.svg" />
+    <link rel="apple-touch-icon" href="/doppel-favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="About DoppelForge - How it works, security, and how to contribute" />
+    <meta property="og:description" content="DoppelForge forges identical twins of your API responses. Browser-only, CSP-enforced no network egress, MIT licensed. Counterfeit, with consent." />
+    <meta property="og:url" content="https://doppelforge.com/about" />
+    <meta property="og:site_name" content="DoppelForge" />
+    <meta property="og:image" content="https://doppelforge.com/doppel-og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DoppelForge - Forge identical twins of your API responses" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="About DoppelForge - How it works, security, and how to contribute" />
+    <meta name="twitter:description" content="DoppelForge forges identical twins of your API responses. Browser-only, CSP-enforced no network egress, MIT licensed." />
+    <meta name="twitter:image" content="https://doppelforge.com/doppel-og-card.png" />
+    <meta name="twitter:image:alt" content="DoppelForge - Forge identical twins of your API responses" />
+
+    <!-- Structured data: TechArticle for richer search snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "About DoppelForge - How it works, security, and how to contribute",
+        "description": "DoppelForge crafts doppelgängers of your API responses - identical structure, safe values. CSP-enforced no network egress, MIT licensed, contributor-friendly.",
+        "image": "https://doppelforge.com/doppel-og-card.png",
+        "url": "https://doppelforge.com/about",
+        "mainEntityOfPage": "https://doppelforge.com/about",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "name": "Patrick Seypura",
+          "url": "https://github.com/javadogwebdesign"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "DoppelForge",
+          "url": "https://doppelforge.com"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "about": [
+          { "@type": "Thing", "name": "API response doppelgängers" },
+          { "@type": "Thing", "name": "PII sanitization" },
+          { "@type": "Thing", "name": "Browser-only developer tools" }
+        ]
+      }
+    </script>
+
+    <style>
+      :root {
+        --bg: #0d0e13;
+        --bg-elev: #14151c;
+        --bg-pane: #181a22;
+        --border: #2a2d39;
+        --text: #b4b8c2;
+        --text-dim: #9197a4;
+        --text-h: #d6d9e1;
+        --text-code: #a3a8b4;
+        --accent: #a875e0;
+        --accent-soft: rgba(168, 117, 224, 0.12);
+        --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono: ui-monospace, "SF Mono", Consolas, monospace;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .page {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+      .topnav {
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-elev);
+      }
+      .topnav-inner {
+        max-width: 720px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .topnav a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .topnav a:hover { color: var(--text-h); }
+      .topnav .brand {
+        color: var(--text-h);
+        font-weight: 600;
+      }
+      h1 {
+        color: var(--text-h);
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 24px 0 8px;
+      }
+      h2 {
+        color: var(--text-h);
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 40px 0 8px;
+      }
+      h3 {
+        color: var(--text-h);
+        font-size: 15px;
+        font-weight: 600;
+        margin: 24px 0 4px;
+      }
+      .lede {
+        color: var(--text);
+        font-size: 17px;
+        margin: 0 0 8px;
+      }
+      .tagline {
+        color: var(--text-h);
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0 0 16px;
+      }
+      p { margin: 0 0 12px; }
+      a { color: var(--accent); }
+      a:hover { color: var(--text-h); }
+      ol, ul { padding-left: 22px; margin: 8px 0 16px; }
+      li { margin: 4px 0; }
+      code {
+        font-family: var(--mono);
+        font-size: 13px;
+        background: var(--bg-pane);
+        color: var(--text-code);
+        padding: 1px 5px;
+        border-radius: 3px;
+        border: 1px solid var(--border);
+      }
+      .callout {
+        margin: 16px 0;
+        padding: 12px 16px;
+        background: var(--accent-soft);
+        border-left: 3px solid var(--accent);
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .callout strong { color: var(--text-h); }
+      .feature {
+        margin: 0 0 16px;
+        padding: 12px 16px;
+        background: var(--bg-elev);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+      }
+      .feature h3 {
+        margin: 0 0 4px;
+      }
+      .feature p {
+        margin: 0;
+      }
+      footer.site {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px;
+        border-top: 1px solid var(--border);
+        color: var(--text-dim);
+        font-size: 13px;
+      }
+      footer.site a { color: var(--text-dim); }
+      footer.site a:hover { color: var(--text-h); }
+      .storage-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 16px;
+        font-size: 13px;
+      }
+      .storage-table th,
+      .storage-table td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .storage-table th {
+        color: var(--text-dim);
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: var(--bg-pane);
+      }
+      .storage-table td code {
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topnav" aria-label="Primary">
+      <div class="topnav-inner">
+        <span class="brand">DoppelForge</span>
+        <a href="/">Open the tool →</a>
+      </div>
+    </nav>
+
+    <article class="page">
+      <h1>Forge identical twins of your API responses.</h1>
+      <p class="lede">
+        Drop in a response from BigCommerce, Shopify, Piano, Stripe, or one
+        of seven other platforms. DoppelForge returns a doppelgänger -
+        identical structure, safe values - ready to paste into a blog post,
+        support ticket, Stack Overflow answer, or your favorite LLM.
+      </p>
+
+      <h2>Why this exists</h2>
+      <p>
+        Real API responses are leaky. They carry emails, prices, tokens,
+        customer IDs - anything you'd never want in a public gist. But
+        hand-redacting every field is tedious, error-prone, and breaks the
+        shape of the data.
+      </p>
+      <p>
+        DoppelForge solves both problems at once. The output looks identical
+        to the original. The values don't put anyone at risk.
+      </p>
+      <p class="tagline">Same shape. Safe values. Counterfeit, with consent.</p>
+
+      <h2>The name</h2>
+      <p>
+        <strong>DoppelForge</strong> is a portmanteau. <em>Doppel</em> from the
+        German <em>doppelgänger</em> - an apparition or counterpart that looks
+        identical to a living person. <em>Forge</em> from Latin <em>faber</em>,
+        smith - a verb that means both <em>to create through skilled craft</em>
+        (a blacksmith forges iron) and <em>to counterfeit convincingly</em>
+        (forge a signature). Both meanings apply. DoppelForge forges
+        doppelgängers of your API responses: counterfeits skilled enough to
+        pass as real, while keeping every byte of sensitive data behind the
+        workshop doors.
+      </p>
+
+      <h2>What you get</h2>
+
+      <div class="feature">
+        <h3>Paste mode</h3>
+        <p>Paste a single response. Get a doppelgänger instantly. No upload, no signup, no servers.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Batch mode</h3>
+        <p>Drop in a folder of JSON files. Pick which fields stay raw and which get transformed. Export the whole set as safe-to-share files - with a single seed reused across files so cross-file IDs stay consistent.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Platform-aware</h3>
+        <p>DoppelForge knows the shape of API responses from BigCommerce, Shopify, Stripe, Piano.io, HubSpot, Recharge, Braintree, Twilio, SendGrid, Salesforce, and Auth0. It transforms the right fields without breaking the structure.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Runs in your browser</h3>
+        <p>Your responses never touch a server. DoppelForge is a static web app - every transformation happens locally, and a strict Content Security Policy stops any rogue dependency from changing that.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Schema generators</h3>
+        <p>From the same payload, DoppelForge can also emit a TypeScript type, a Zod schema, or a JSON Schema. Forge the doppelgänger, hand it to the LLM, then validate the LLM's parser against the schema.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Open source</h3>
+        <p>MIT licensed. Audit the code, fork it, or <a href="#contribute">contribute</a> on GitHub.</p>
+      </div>
+
+      <h2>How to use it</h2>
+      <ol>
+        <li>
+          <strong>Open the tool.</strong> The two-pane editor loads with the
+          original on the left and the forged twin on the right.
+        </li>
+        <li>
+          <strong>Paste a real API response.</strong> JSON or XML, from any
+          supported provider. Auto-detection promotes the right field map;
+          you can also pick a provider manually from the sidebar.
+        </li>
+        <li>
+          <strong>Copy the doppelgänger.</strong> Send it onward with
+          confidence - no real names, emails, phones, addresses, or IDs go
+          with it.
+        </li>
+        <li>
+          <strong>Tweak fields if needed.</strong> The field-controls panel
+          lets you toggle individual fields on or off if a particular value
+          should pass through untouched.
+        </li>
+      </ol>
+
+      <h2>Why it's different from redact or find/replace</h2>
+      <ul>
+        <li>
+          <strong>Schema-aware.</strong> Knows that <code>customer_group_id</code>
+          is a non-PII business field and shouldn't be touched, while
+          <code>data[].email</code> is PII and should be faked. A regex can't
+          make that distinction.
+        </li>
+        <li>
+          <strong>Referentially consistent.</strong> The same
+          <code>customer_id</code> appearing at <code>data[0].id</code> and
+          nested in <code>orders[5].customer_id</code> becomes the same fake ID
+          everywhere - so the LLM (or downstream parser) can still reason
+          about joins.
+        </li>
+        <li>
+          <strong>Realistic fakes.</strong> Faker generates believable names
+          and emails. The string <code>"REDACTED"</code> doesn't pattern-match
+          to anything useful.
+        </li>
+      </ul>
+
+      <h2>Supported providers</h2>
+      <p>
+        Eleven providers, ~190 endpoints. Each provider ships with
+        hand-curated field maps that distinguish PII from business identifiers
+        across multiple endpoints, plus webhooks and (where applicable)
+        GraphQL, CSV exports, and form-encoded payloads.
+      </p>
+      <ul>
+        <li><strong>Auth0</strong> - users, tenants, clients, roles, organizations, logs</li>
+        <li><strong>BigCommerce</strong> - customers, addresses, subscribers, orders, carts, products, transactions, refunds</li>
+        <li><strong>Braintree</strong> - customers, transactions, subscriptions, disputes, payment methods, merchant accounts</li>
+        <li><strong>HubSpot</strong> - contacts, companies, deals, tickets, products, line items, quotes, lists, forms</li>
+        <li><strong>Piano.io</strong> - users, accesses, subscriptions, terms, offers, resources, conversions, payments</li>
+        <li><strong>Recharge</strong> - customers, subscriptions, charges, orders, addresses, payment methods</li>
+        <li><strong>Salesforce</strong> - contacts, accounts, leads, opportunities, cases (REST + GraphQL)</li>
+        <li><strong>SendGrid</strong> - contacts, lists, segments, mail send, suppressions, events</li>
+        <li><strong>Shopify</strong> - customers, orders, products, draft orders, fulfillments, discounts, inventory, gift cards</li>
+        <li><strong>Stripe</strong> - customers, charges, payment intents, subscriptions, invoices, payouts, refunds, disputes</li>
+        <li><strong>Twilio</strong> - messages, calls, conferences, recordings, phone numbers</li>
+      </ul>
+      <p>
+        Unknown endpoints fall back to a generic pattern detector - still
+        useful, just lower fidelity. Adding a new provider is one YAML file
+        per endpoint; no engine changes required. See
+        <a href="#contribute">how to contribute</a>.
+      </p>
+
+      <h2>Security &amp; privacy</h2>
+      <p>
+        Privacy is the product, so it's enforced by construction - not by
+        promise. Three layers:
+      </p>
+      <ol>
+        <li>
+          <strong>No network code in the bundle.</strong> The application
+          source contains zero <code>fetch()</code>, <code>XMLHttpRequest</code>,
+          <code>WebSocket</code>, <code>EventSource</code>, or
+          <code>navigator.sendBeacon</code> calls. The build deliberately
+          strips Vite's modulepreload polyfill so that no <code>fetch()</code>
+          remains in the production bundle to grep for.
+        </li>
+        <li>
+          <strong>CSP-enforced at the browser.</strong> The deployed site ships
+          with a strict Content Security Policy:
+          <code>connect-src 'none'</code>, <code>frame-ancestors 'none'</code>,
+          <code>object-src 'none'</code>. Even a hypothetically compromised
+          dependency couldn't open a network connection - the browser would
+          refuse it before any bytes left your machine.
+        </li>
+        <li>
+          <strong>CI-gated.</strong> Every commit runs a bundle audit step
+          that fails the build if any of those network primitives sneak back
+          in. The privacy claim has automated enforcement, not just code
+          review.
+        </li>
+      </ol>
+      <p>
+        No analytics, no telemetry, no error reporting libraries are
+        dependencies. The only thing that ever crosses the network is the
+        initial download of the static bundle from Cloudflare Pages.
+      </p>
+      <div class="callout">
+        <p style="margin:0">
+          <strong>Reporting a security issue:</strong>
+          if you find a way to make real data leave the tab, please email
+          <a href="mailto:security@doppelforge.com"><code>security@doppelforge.com</code></a>
+          rather than opening a public GitHub issue. We acknowledge within 3
+          business days and aim to ship a fix within 14 days for confirmed
+          vulnerabilities. Full policy in
+          <a href="https://github.com/javadogwebdesign/doppelforge/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a>.
+        </p>
+      </div>
+      <p>
+        Don't trust the deployed site? Run it locally:
+        <code>git clone</code>, <code>cd web</code>, <code>npm install</code>,
+        <code>npm run dev</code>.
+      </p>
+
+      <h2 id="storage">What's stored on your device</h2>
+      <p>
+        DoppelForge uses <code>localStorage</code> on this origin only. Nothing
+        is sent off-device, ever. Every key the app writes is namespaced under
+        <code>doppelforge.</code>; the table below is the complete list.
+      </p>
+      <table class="storage-table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>What's in it</th>
+            <th>How to clear</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>doppelforge.inputHistory</code></td>
+            <td>
+              Up to 5 recent pasted responses (the real ones, before
+              obfuscation). Auto-clears after the retention TTL you choose
+              in the History dropdown — default <strong>1 hour</strong>.
+              Pastes over 200K chars are skipped.
+            </td>
+            <td>"Clear all" in the History dropdown, or set retention to "Off".</td>
+          </tr>
+          <tr>
+            <td><code>doppelforge.history.retention</code></td>
+            <td>Your chosen retention mode: <code>off</code> / <code>1h</code> / <code>24h</code> / <code>persistent</code>.</td>
+            <td>Retention dropdown in History panel.</td>
+          </tr>
+          <tr>
+            <td><code>doppelforge.overrides.&lt;scope&gt;</code></td>
+            <td>
+              Per-endpoint field toggles plus any custom literal values you
+              typed. One entry per endpoint you've configured. Persistent
+              until you reset that endpoint.
+            </td>
+            <td>"Reset N" button in the Field controls panel for that endpoint.</td>
+          </tr>
+          <tr>
+            <td><code>doppelforge.{splitRatio, fieldsPaneWidth, linked, mode, sidebar.collapsed, batch.splitRatio, mobileWarning.dismissed}</code></td>
+            <td>UI preferences — pane widths, current mode, link toggle, etc. No payload data.</td>
+            <td>Browser site-data settings, or the panic button below.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Want everything gone in one shot? The
+        <strong>"Forget everything"</strong> button in the footer of the app
+        wipes every <code>doppelforge.*</code> key from this browser and
+        reloads. Use it when you're done, on a shared machine, or just to
+        prove the privacy claim to yourself.
+      </p>
+      <p>
+        No cookies. No <code>sessionStorage</code>. No <code>IndexedDB</code>.
+        No service worker. No <code>navigator.userAgent</code> sniffing.
+      </p>
+
+      <h2 id="contribute">How to contribute</h2>
+      <p>
+        Most contributions to DoppelForge are <strong>new field maps</strong>
+        for endpoints we don't yet cover. That's the durable, high-leverage
+        work - the engine itself is intentionally thin, and the field-map
+        library is the long-lived community asset. The smith builds the tool;
+        the community builds the catalog.
+      </p>
+      <h3>Add support for a new endpoint</h3>
+      <p>
+        Drop a single YAML file at
+        <code>providers/&lt;provider&gt;/endpoints/&lt;slug&gt;.yaml</code>.
+        It declares the endpoint metadata, a signature for auto-detection,
+        and a field-by-field obfuscation map using a typed vocabulary
+        (<code>email</code>, <code>fullName</code>, <code>id</code>,
+        <code>preserve</code>, <code>auto</code>, …). No engine code changes.
+        Webhooks, GraphQL, CSV exports, and form-encoded bodies are all
+        supported.
+      </p>
+      <p>
+        The full schema, type vocabulary, conventions, and best practices for
+        marking PII fields live in
+        <a href="https://github.com/javadogwebdesign/doppelforge/blob/main/CONTRIBUTING.md" rel="noopener">CONTRIBUTING.md</a>.
+      </p>
+      <h3>Request a new provider</h3>
+      <p>
+        Open a
+        <a href="https://github.com/javadogwebdesign/doppelforge/issues/new?template=new-provider.md" rel="noopener">new provider request</a>
+        on GitHub with the platform name, docs URL, and the endpoints you
+        most want to see covered. A sanitized sample response makes forging
+        the field map dramatically faster.
+      </p>
+      <h3>Report a field-map bug</h3>
+      <p>
+        If a real response from a supported endpoint comes back with PII
+        leaked or its shape broken, open a
+        <a href="https://github.com/javadogwebdesign/doppelforge/issues/new?template=field-map-bug.md" rel="noopener">field-map bug</a>.
+        Include a sanitized example of the input and the unexpected output.
+      </p>
+      <h3>Sponsor the workshop</h3>
+      <p>
+        DoppelForge is open source, MIT licensed, and tip-jar funded - no
+        paid tiers, no telemetry, no priority queue for paying providers. If
+        the tool earns its keep for you, you can support it via
+        <a href="https://github.com/sponsors/javadogwebdesign" rel="noopener">GitHub Sponsors</a>
+        (recurring, zero-fee) or
+        <a href="https://buymeacoffee.com/TODO-bmc-username" rel="noopener">Buy Me a Coffee</a>
+        (one-tap tip).
+      </p>
+
+      <h2>Under the hood</h2>
+      <ul>
+        <li><strong>Stack:</strong> React 19 · Vite · TypeScript</li>
+        <li><strong>Editor:</strong> CodeMirror 6</li>
+        <li><strong>Fake data:</strong> @faker-js/faker</li>
+        <li><strong>Parsing:</strong> fast-xml-parser, native JSON</li>
+        <li><strong>Field maps:</strong> YAML (js-yaml)</li>
+        <li><strong>Hosting:</strong> Cloudflare Pages (static, no Functions)</li>
+      </ul>
+      <p>
+        MIT licensed.
+        <a href="https://github.com/javadogwebdesign/doppelforge" rel="noopener">View the full source on GitHub →</a>
+      </p>
+    </article>
+
+    <footer class="site">
+      <p>
+        MIT licensed ·
+        <a href="https://github.com/javadogwebdesign/doppelforge" rel="noopener">GitHub</a> ·
+        <a href="https://github.com/sponsors/javadogwebdesign" rel="noopener">Sponsor</a> ·
+        <a href="/">Open the tool</a>
+      </p>
+    </footer>
+  </body>
+</html>

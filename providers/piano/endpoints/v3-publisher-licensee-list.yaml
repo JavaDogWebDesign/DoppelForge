@@ -1,0 +1,39 @@
+endpoint:
+  method: POST
+  path: /api/v3/publisher/licensee/list
+  description: List licensees (B2B corporate access)
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - licensees[].licensee_id
+    - licensees[].aid
+    - licensees[].name
+    - total
+    - code
+  optional_paths:
+    - licensees[].description
+    - licensees[].managers
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "total":  { type: preserve }
+  "count":  { type: preserve }
+  "offset": { type: preserve }
+  "limit":  { type: preserve }
+  "licensees[].licensee_id":             { type: id, anchor: true }
+  "licensees[].aid":                     { type: id, anchor: true }
+  "licensees[].name":                    { type: company }
+  "licensees[].description":             { type: shortText }
+  "licensees[].logo_url":                { type: url }
+  "licensees[].create_date":             { type: unixTimestamp }
+  "licensees[].update_date":             { type: unixTimestamp }
+  "licensees[].managers[].uid":          { type: id, anchor: true }
+  "licensees[].managers[].email":        { type: email, anchor: true }
+  "licensees[].managers[].first_name":   { type: firstName }
+  "licensees[].managers[].last_name":    { type: lastName }
+  "licensees[].managers[].personal_name": { type: fullName }
+  "licensees[].representatives[].uid":   { type: id, anchor: true }
+  "licensees[].representatives[].email": { type: email, anchor: true }
+  "*": { type: auto }

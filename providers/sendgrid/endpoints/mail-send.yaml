@@ -1,0 +1,53 @@
+endpoint:
+  method: POST
+  path: /v3/mail/send
+  description: Mail Send request body (response is empty + X-Message-Id header)
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send
+
+# The HTTP response from /v3/mail/send is an empty 202 body — there's no
+# payload to obfuscate. What developers paste here is the *request* body
+# (the personalizations/from/subject/content tree they're sending). It's
+# captured for obfuscation because that's what they'd share with an LLM
+# when debugging delivery issues.
+signature:
+  required_paths:
+    - personalizations[].to
+    - from.email
+    - subject
+    - content[].type
+  optional_paths:
+    - personalizations[].subject
+    - reply_to.email
+    - template_id
+
+fields:
+  "personalizations[].to[].email":      { type: email, anchor: true }
+  "personalizations[].to[].name":       { type: fullName }
+  "personalizations[].cc[].email":      { type: email, anchor: true }
+  "personalizations[].cc[].name":       { type: fullName }
+  "personalizations[].bcc[].email":     { type: email, anchor: true }
+  "personalizations[].bcc[].name":      { type: fullName }
+  "personalizations[].subject":         { type: shortText }
+  "personalizations[].dynamic_template_data": { type: auto }
+  "personalizations[].substitutions":   { type: auto }
+  "personalizations[].custom_args":     { type: auto }
+  "personalizations[].send_at":         { type: unixTimestamp }
+  "from.email":     { type: email, anchor: true }
+  "from.name":      { type: fullName }
+  "reply_to.email": { type: email, anchor: true }
+  "reply_to.name":  { type: fullName }
+  "subject":        { type: shortText }
+  "content[].type": { type: preserve }
+  "content[].value": { type: longText }
+  "template_id":    { type: id, anchor: true }
+  "asm.group_id":   { type: id, anchor: true }
+  "asm.groups_to_display": { type: preserve }
+  "ip_pool_name":   { type: id }
+  "send_at":        { type: unixTimestamp }
+  "batch_id":       { type: id, anchor: true }
+  "categories":     { type: preserve }
+  "custom_args":    { type: auto }
+  "headers":        { type: preserve }
+  "tracking_settings": { type: preserve }
+  "mail_settings":  { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,54 @@
+endpoint:
+  method: GET
+  path: /id/api/v1/publisher/user/get
+  description: Piano ID — get a user's identity profile
+  doc_url: https://docs.piano.io/api/
+
+# Piano's ID API has a slightly different shape from the Publisher API. It
+# focuses on identity/authentication rather than commerce. Often returns
+# nested provider data (sso providers, social logins, etc.).
+signature:
+  required_paths:
+    - uid
+    - email
+    - code
+  optional_paths:
+    - providers
+    - country
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "uid":                 { type: id, anchor: true }
+  "email":               { type: email, anchor: true }
+  "first_name":          { type: firstName }
+  "last_name":           { type: lastName }
+  "personal_name":       { type: fullName }
+  "username":            { type: id, anchor: true }
+  "image1":              { type: url }
+  "image2":              { type: url }
+  "create_date":         { type: unixTimestamp }
+  "update_date":         { type: unixTimestamp }
+  "last_login":          { type: unixTimestamp }
+  "country":             { type: country }
+  "country_iso":         { type: countryCode }
+  "deactivated":         { type: preserve }
+  "is_verified":         { type: preserve }
+  "is_email_verified":   { type: preserve }
+  "auth_provider":       { type: preserve }
+  "external_user_id":    { type: id, anchor: true }
+  "passwordless":        { type: preserve }
+  "phone":               { type: phone }
+  "phone_verified":      { type: preserve }
+  "linked_accounts[].provider":   { type: preserve }
+  "linked_accounts[].uid":        { type: id, anchor: true }
+  "linked_accounts[].email":      { type: email, anchor: true }
+  "linked_accounts[].verified":   { type: preserve }
+  "custom_fields[].field_name":   { type: preserve }
+  "custom_fields[].value":        { type: shortText }
+  "custom_fields[].created":      { type: unixTimestamp }
+  "consents[].consent_id":        { type: id, anchor: true }
+  "consents[].field_id":          { type: preserve }
+  "consents[].create_date":       { type: unixTimestamp }
+  "consents[].enabled":           { type: preserve }
+  "*": { type: auto }

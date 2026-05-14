@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 84" role="img" aria-label="DoppelForge">
+  <title>DoppelForge</title>
+  <defs>
+    <style>
+      .word {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        font-weight: 800;
+        font-size: 56px;
+        letter-spacing: -1.5px;
+      }
+    </style>
+  </defs>
+  <!-- back word: hollow "ghost" outline implying the original is being copied away -->
+  <text x="4" y="50" class="word" fill="none" stroke="#a875e0" stroke-width="1.25" stroke-opacity="0.55">DoppelForge</text>
+  <!-- front word: solid copy, offset -->
+  <text x="18" y="62" class="word" fill="#a875e0">DoppelForge</text>
+</svg>

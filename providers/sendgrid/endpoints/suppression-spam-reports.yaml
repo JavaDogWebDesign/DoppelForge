@@ -1,0 +1,19 @@
+endpoint:
+  method: GET
+  path: /v3/suppression/spam_reports
+  description: List spam report email addresses
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/spam-reports-api/retrieve-all-spam-reports
+
+# Same array-of-{email, ip, created} shape used by /v3/suppression/blocks and
+# /v3/suppression/spam_reports — `ip` is the distinguishing path vs bounces.
+signature:
+  required_paths:
+    - "[].email"
+    - "[].created"
+    - "[].ip"
+
+fields:
+  "[].email":   { type: email, anchor: true }
+  "[].created": { type: unixTimestamp }
+  "[].ip":      { type: ipv4 }
+  "*": { type: auto }

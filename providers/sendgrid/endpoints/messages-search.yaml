@@ -1,0 +1,38 @@
+endpoint:
+  method: GET
+  path: /v3/messages
+  description: Email Activity API — message search
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/e-mail-activity/filter-all-messages
+
+# Response is { messages: [...] }. Each message carries the from/to emails,
+# subject, status, plus delivery counters and the most recent event time.
+signature:
+  required_paths:
+    - messages[].msg_id
+    - messages[].from_email
+    - messages[].subject
+    - messages[].to_email
+    - messages[].status
+  optional_paths:
+    - messages[].opens_count
+    - messages[].clicks_count
+
+fields:
+  "messages[].msg_id":           { type: id, anchor: true }
+  "messages[].from_email":       { type: email, anchor: true }
+  "messages[].subject":          { type: shortText }
+  "messages[].to_email":         { type: email, anchor: true }
+  "messages[].status":           { type: preserve }
+  "messages[].opens_count":      { type: preserve }
+  "messages[].clicks_count":     { type: preserve }
+  "messages[].last_event_time":  { type: isoDate }
+  "messages[].api_key_id":       { type: id, anchor: true }
+  "messages[].asm_group_id":     { type: id, anchor: true }
+  "messages[].categories":       { type: preserve }
+  "messages[].unique_args":      { type: auto }
+  "messages[].outbound_ip":      { type: ipv4 }
+  "messages[].outbound_ip_type": { type: preserve }
+  "messages[].marketing_campaign_id": { type: id, anchor: true }
+  "messages[].marketing_campaign_name": { type: shortText }
+  "messages[].teammate":         { type: id, anchor: true }
+  "*": { type: auto }

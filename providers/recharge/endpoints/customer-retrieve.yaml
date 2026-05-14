@@ -1,0 +1,37 @@
+endpoint:
+  method: GET
+  path: /customers/{customer_id}
+  description: Retrieve a customer
+  doc_url: https://developer.rechargepayments.com/2021-11/customers/customers_retrieve
+
+signature:
+  required_paths:
+    - customer.id
+    - customer.email
+    - customer.created_at
+    - customer.subscriptions_active_count
+  optional_paths:
+    - customer.hash
+    - customer.external_customer_id
+
+fields:
+  "customer.id":                          { type: id, anchor: true }
+  "customer.hash":                        { type: id, anchor: true }
+  "customer.external_customer_id.ecommerce": { type: id, anchor: true }
+  "customer.external_payment_processor_customer_id": { type: id, anchor: true }
+  "customer.email":                       { type: email, anchor: true }
+  "customer.first_name":                  { type: firstName }
+  "customer.last_name":                   { type: lastName }
+  "customer.phone":                       { type: phone }
+  "customer.tax_exempt":                  { type: preserve }
+  "customer.has_payment_method_in_dunning": { type: preserve }
+  "customer.has_valid_payment_method":    { type: preserve }
+  "customer.subscriptions_active_count":  { type: preserve }
+  "customer.subscriptions_total_count":   { type: preserve }
+  "customer.created_at":                  { type: isoDate }
+  "customer.updated_at":                  { type: isoDate }
+  "customer.first_charge_processed_at":   { type: isoDate }
+  "customer.external_created_at":         { type: isoDate }
+  "customer.external_updated_at":         { type: isoDate }
+  "customer.tax_exemptions":              { type: preserve }
+  "*": { type: auto }

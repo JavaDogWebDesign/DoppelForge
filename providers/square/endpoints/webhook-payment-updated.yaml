@@ -1,0 +1,71 @@
+endpoint:
+  method: POST
+  path: payment.*
+  kind: webhook
+  description: Square webhook — payment.created / .updated share envelope (data.type=payment)
+  doc_url: https://developer.squareup.com/docs/webhooks/v2/event-types
+
+# Square webhook envelope: { merchant_id, type, event_id, created_at,
+# data: { type, id, object: { payment: {...} } } }. The `type` literal
+# varies (payment.created, payment.updated, refund.updated, etc.) but the
+# body shape only differs by which resource sits under data.object.
+# This YAML covers payment.* events; data.object.payment ID-anchors the
+# core resource. Refund/dispute/order webhooks should get their own YAMLs
+# since data.object.<key> is the discriminator path.
+signature:
+  required_paths:
+    - merchant_id
+    - type
+    - event_id
+    - created_at
+    - data.type
+    - data.id
+    - data.object.payment.id
+  optional_paths:
+    - data.object.payment.amount_money.amount
+    - data.object.payment.card_details
+    - data.object.payment.customer_id
+
+fields:
+  "merchant_id":   { type: id, anchor: true }
+  "type":          { type: preserve }
+  "event_id":      { type: id, anchor: true }
+  "created_at":    { type: isoDate }
+  "data.type":     { type: preserve }
+  "data.id":       { type: id, anchor: true }
+  "data.object.payment.id":         { type: id, anchor: true }
+  "data.object.payment.created_at": { type: isoDate }
+  "data.object.payment.updated_at": { type: isoDate }
+  "data.object.payment.amount_money.amount":   { type: preserve }
+  "data.object.payment.amount_money.currency": { type: currency }
+  "data.object.payment.total_money.amount":    { type: preserve }
+  "data.object.payment.total_money.currency":  { type: currency }
+  "data.object.payment.status":       { type: preserve }
+  "data.object.payment.source_type":  { type: preserve }
+  "data.object.payment.location_id":  { type: id, anchor: true }
+  "data.object.payment.order_id":     { type: id, anchor: true }
+  "data.object.payment.customer_id":  { type: id, anchor: true }
+  "data.object.payment.reference_id": { type: id, anchor: true }
+  "data.object.payment.receipt_number": { type: sku }
+  "data.object.payment.receipt_url":    { type: url }
+  "data.object.payment.buyer_email_address": { type: email, anchor: true }
+  "data.object.payment.note":         { type: shortText }
+  "data.object.payment.card_details.status":          { type: preserve }
+  "data.object.payment.card_details.entry_method":    { type: preserve }
+  "data.object.payment.card_details.cvv_status":      { type: preserve }
+  "data.object.payment.card_details.avs_status":      { type: preserve }
+  "data.object.payment.card_details.card.card_brand": { type: preserve }
+  "data.object.payment.card_details.card.last_4":     { type: sku }
+  "data.object.payment.card_details.card.exp_month":  { type: preserve }
+  "data.object.payment.card_details.card.exp_year":   { type: preserve }
+  "data.object.payment.card_details.card.fingerprint": { type: id, anchor: true }
+  "data.object.payment.card_details.card.cardholder_name": { type: fullName }
+  "data.object.payment.billing_address.address_line_1": { type: street }
+  "data.object.payment.billing_address.locality":       { type: city }
+  "data.object.payment.billing_address.administrative_district_level_1": { type: stateOrProvince }
+  "data.object.payment.billing_address.postal_code":    { type: postalCode }
+  "data.object.payment.billing_address.country":        { type: countryCode }
+  "data.object.payment.billing_address.first_name":     { type: firstName }
+  "data.object.payment.billing_address.last_name":      { type: lastName }
+  "data.object.payment.version_token": { type: id, anchor: true }
+  "*": { type: auto }

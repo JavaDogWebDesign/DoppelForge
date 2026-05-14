@@ -1,0 +1,52 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}/Messages.json
+  description: List SMS/MMS messages
+  doc_url: https://www.twilio.com/docs/sms/api/message-resource
+
+# Twilio's REST API uses PascalCase keys on individual resource fields,
+# but the list envelope uses snake_case (messages, page, num_pages...).
+signature:
+  required_paths:
+    - messages[].sid
+    - messages[].account_sid
+    - messages[].from
+    - messages[].to
+    - messages[].body
+  optional_paths:
+    - next_page_uri
+    - messages[].messaging_service_sid
+
+fields:
+  "page":            { type: preserve }
+  "page_size":       { type: preserve }
+  "first_page_uri":  { type: url }
+  "next_page_uri":   { type: url }
+  "previous_page_uri": { type: url }
+  "uri":             { type: url }
+  "start":           { type: preserve }
+  "end":             { type: preserve }
+  "num_pages":       { type: preserve }
+  "total":           { type: preserve }
+  "messages[].sid":                    { type: id, anchor: true }
+  "messages[].account_sid":            { type: id, anchor: true }
+  "messages[].messaging_service_sid":  { type: id, anchor: true }
+  "messages[].from":                   { type: phone }
+  "messages[].to":                     { type: phone }
+  "messages[].body":                   { type: longText }
+  "messages[].status":                 { type: preserve }
+  "messages[].direction":              { type: preserve }
+  "messages[].api_version":            { type: preserve }
+  "messages[].num_segments":           { type: preserve }
+  "messages[].num_media":              { type: preserve }
+  "messages[].price":                  { type: preserve }
+  "messages[].price_unit":             { type: preserve }
+  "messages[].error_code":             { type: preserve }
+  "messages[].error_message":          { type: shortText }
+  "messages[].date_created":           { type: isoDate }
+  "messages[].date_sent":              { type: isoDate }
+  "messages[].date_updated":           { type: isoDate }
+  "messages[].uri":                    { type: url }
+  "messages[].subresource_uris.media": { type: url }
+  "messages[].subresource_uris.feedback": { type: url }
+  "*": { type: auto }

@@ -1,0 +1,54 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/merchant_accounts/{id}
+  description: Retrieve a merchant account (sub-merchant onboarding metadata)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/merchant-account
+
+signature:
+  required_paths:
+    - id
+    - status
+    - currency_iso_code
+  optional_paths:
+    - individual
+    - business
+
+fields:
+  "id":                    { type: id, anchor: true }
+  "status":                { type: preserve }
+  "currency_iso_code":     { type: preserve }
+  "default":               { type: preserve }
+  "master_merchant_account.id":     { type: id, anchor: true }
+  "master_merchant_account.status": { type: preserve }
+  "master_merchant_account.currency_iso_code": { type: preserve }
+  "individual.first_name":            { type: firstName }
+  "individual.last_name":             { type: lastName }
+  "individual.email":                 { type: email, anchor: true }
+  "individual.phone":                 { type: phone }
+  "individual.date_of_birth":         { type: isoDate }
+  "individual.ssn_last_4":            { type: id }
+  "individual.ssn":                   { type: redact }
+  "individual.address.street_address": { type: street }
+  "individual.address.extended_address": { type: streetSecondary }
+  "individual.address.locality":      { type: city }
+  "individual.address.region":        { type: stateOrProvince }
+  "individual.address.postal_code":   { type: postalCode }
+  "individual.address.country_name":  { type: country }
+  "individual.address.country_code_alpha2": { type: countryCode }
+  "business.legal_name":              { type: company }
+  "business.dba_name":                { type: company }
+  "business.tax_id":                  { type: redact }
+  "business.address.street_address":  { type: street }
+  "business.address.extended_address": { type: streetSecondary }
+  "business.address.locality":        { type: city }
+  "business.address.region":          { type: stateOrProvince }
+  "business.address.postal_code":     { type: postalCode }
+  "business.address.country_name":    { type: country }
+  "business.address.country_code_alpha2": { type: countryCode }
+  "funding.descriptor":               { type: preserve }
+  "funding.destination":              { type: preserve }
+  "funding.email":                    { type: email, anchor: true }
+  "funding.mobile_phone":             { type: phone }
+  "funding.account_number_last_4":    { type: id }
+  "funding.routing_number":           { type: id }
+  "*": { type: auto }

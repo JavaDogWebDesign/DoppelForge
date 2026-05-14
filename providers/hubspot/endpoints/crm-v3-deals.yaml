@@ -1,0 +1,52 @@
+endpoint:
+  method: GET
+  path: /crm/v3/objects/deals
+  description: List deals
+  doc_url: https://developers.hubspot.com/docs/api/crm/deals
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].createdAt
+    - results[].properties
+    - results[].properties.dealname
+  optional_paths:
+    - paging.next.after
+    - results[].properties.amount
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                          { type: id, anchor: true }
+  "results[].createdAt":                   { type: isoDate }
+  "results[].updatedAt":                   { type: isoDate }
+  "results[].archived":                    { type: preserve }
+  "results[].properties.hs_object_id":     { type: id, anchor: true }
+  "results[].properties.createdate":       { type: isoDate }
+  "results[].properties.hs_lastmodifieddate": { type: isoDate }
+  "results[].properties.dealname":         { type: shortText }
+  "results[].properties.amount":           { type: preserve }
+  "results[].properties.amount_in_home_currency": { type: preserve }
+  "results[].properties.deal_currency_code": { type: preserve }
+  "results[].properties.closedate":        { type: isoDate }
+  "results[].properties.dealstage":        { type: preserve }
+  "results[].properties.pipeline":         { type: preserve }
+  "results[].properties.dealtype":         { type: preserve }
+  "results[].properties.description":      { type: longText }
+  "results[].properties.hs_priority":      { type: preserve }
+  "results[].properties.hs_deal_stage_probability": { type: preserve }
+  "results[].properties.hs_forecast_amount": { type: preserve }
+  "results[].properties.hs_forecast_probability": { type: preserve }
+  "results[].properties.hs_is_closed":     { type: preserve }
+  "results[].properties.hs_is_closed_won": { type: preserve }
+  "results[].properties.hs_closed_won_count": { type: preserve }
+  "results[].properties.hs_acv":           { type: preserve }
+  "results[].properties.hs_arr":           { type: preserve }
+  "results[].properties.hs_mrr":           { type: preserve }
+  "results[].properties.hs_tcv":           { type: preserve }
+  "results[].properties.hubspot_owner_id": { type: id, anchor: true }
+  "results[].properties.hubspot_team_id":  { type: id, anchor: true }
+  "results[].properties.hs_deal_source_id": { type: id, anchor: true }
+  "results[].properties.num_associated_contacts": { type: preserve }
+  "results[].properties.notes_last_contacted":    { type: isoDate }
+  "*": { type: auto }

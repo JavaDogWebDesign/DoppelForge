@@ -1,0 +1,22 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/price_rules/{price_rule_id}/discount_codes.json
+  description: List discount codes for a price rule
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/discountcode
+
+signature:
+  required_paths:
+    - discount_codes[].id
+    - discount_codes[].price_rule_id
+    - discount_codes[].code
+  optional_paths:
+    - discount_codes[].usage_count
+
+fields:
+  "discount_codes[].id":             { type: id, anchor: true }
+  "discount_codes[].price_rule_id":  { type: id, anchor: true }
+  "discount_codes[].code":           { type: id }
+  "discount_codes[].usage_count":    { type: preserve }
+  "discount_codes[].created_at":     { type: isoDate }
+  "discount_codes[].updated_at":     { type: isoDate }
+  "*": { type: auto }

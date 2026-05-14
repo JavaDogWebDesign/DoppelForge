@@ -1,0 +1,58 @@
+endpoint:
+  method: GET
+  path: /3.0/lists/{list_id}/members
+  description: List members of a list (subscribers)
+  doc_url: https://mailchimp.com/developer/marketing/api/list-members/list-members-info/
+
+signature:
+  required_paths:
+    - members[].id
+    - members[].email_address
+    - members[].status
+    - members[].list_id
+    - list_id
+    - total_items
+  optional_paths:
+    - members[].merge_fields
+    - members[].stats
+
+fields:
+  "list_id":     { type: id, anchor: true }
+  "total_items": { type: preserve }
+  "_links[].href":   { type: url }
+  "_links[].rel":    { type: preserve }
+  "_links[].method": { type: preserve }
+  "members[].id":              { type: id, anchor: true }
+  "members[].email_address":   { type: email, anchor: true }
+  "members[].unique_email_id": { type: id, anchor: true }
+  "members[].contact_id":      { type: id, anchor: true }
+  "members[].full_name":       { type: fullName }
+  "members[].web_id":          { type: id, anchor: true }
+  "members[].email_type":      { type: preserve }
+  "members[].status":          { type: preserve }
+  "members[].ip_signup":       { type: ipv4 }
+  "members[].timestamp_signup": { type: isoDate }
+  "members[].ip_opt":          { type: ipv4 }
+  "members[].timestamp_opt":   { type: isoDate }
+  "members[].member_rating":   { type: preserve }
+  "members[].last_changed":    { type: isoDate }
+  "members[].language":        { type: preserve }
+  "members[].vip":             { type: preserve }
+  "members[].email_client":    { type: shortText }
+  "members[].list_id":         { type: id, anchor: true }
+  "members[].source":          { type: preserve }
+  "members[].tags_count":      { type: preserve }
+  "members[].tags[].id":       { type: id, anchor: true }
+  "members[].tags[].name":     { type: shortText }
+  "members[].location.country_code": { type: countryCode }
+  "members[].location.region":       { type: stateOrProvince }
+  "members[].merge_fields.FNAME":    { type: firstName }
+  "members[].merge_fields.LNAME":    { type: lastName }
+  "members[].merge_fields.PHONE":    { type: phone }
+  "members[].merge_fields.BIRTHDAY": { type: isoDate }
+  "members[].merge_fields.ADDRESS.addr1":   { type: street }
+  "members[].merge_fields.ADDRESS.city":    { type: city }
+  "members[].merge_fields.ADDRESS.state":   { type: stateOrProvince }
+  "members[].merge_fields.ADDRESS.zip":     { type: postalCode }
+  "members[].merge_fields.ADDRESS.country": { type: countryCode }
+  "*": { type: auto }

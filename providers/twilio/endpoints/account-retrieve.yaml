@@ -1,0 +1,49 @@
+endpoint:
+  method: GET
+  path: /2010-04-01/Accounts/{AccountSid}.json
+  description: Retrieve an account
+  doc_url: https://www.twilio.com/docs/iam/api/account
+
+signature:
+  required_paths:
+    - sid
+    - friendly_name
+    - status
+    - type
+  optional_paths:
+    - owner_account_sid
+    - auth_token
+
+fields:
+  "sid":                    { type: id, anchor: true }
+  "owner_account_sid":      { type: id, anchor: true }
+  "friendly_name":          { type: company }
+  "status":                 { type: preserve }
+  "type":                   { type: preserve }
+  "auth_token":             { type: redact }
+  "date_created":           { type: isoDate }
+  "date_updated":           { type: isoDate }
+  "uri":                    { type: url }
+  "subresource_uris.addresses":           { type: url }
+  "subresource_uris.applications":        { type: url }
+  "subresource_uris.authorized_connect_apps": { type: url }
+  "subresource_uris.available_phone_numbers": { type: url }
+  "subresource_uris.balance":             { type: url }
+  "subresource_uris.calls":               { type: url }
+  "subresource_uris.conferences":         { type: url }
+  "subresource_uris.connect_apps":        { type: url }
+  "subresource_uris.incoming_phone_numbers": { type: url }
+  "subresource_uris.keys":                { type: url }
+  "subresource_uris.messages":            { type: url }
+  "subresource_uris.notifications":       { type: url }
+  "subresource_uris.outgoing_caller_ids": { type: url }
+  "subresource_uris.queues":              { type: url }
+  "subresource_uris.recordings":          { type: url }
+  "subresource_uris.short_codes":         { type: url }
+  "subresource_uris.signing_keys":        { type: url }
+  "subresource_uris.sip":                 { type: url }
+  "subresource_uris.tokens":              { type: url }
+  "subresource_uris.transcriptions":      { type: url }
+  "subresource_uris.usage":               { type: url }
+  "subresource_uris.validation_requests": { type: url }
+  "*": { type: auto }

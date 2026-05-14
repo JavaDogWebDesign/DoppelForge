@@ -1,0 +1,56 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/orders/{order_id}/refunds.json
+  description: List refunds for an order
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/refund
+
+signature:
+  required_paths:
+    - refunds[].id
+    - refunds[].order_id
+    - refunds[].admin_graphql_api_id
+  optional_paths:
+    - refunds[].transactions
+    - refunds[].refund_line_items
+
+fields:
+  "refunds[].id":                          { type: id, anchor: true }
+  "refunds[].order_id":                    { type: id, anchor: true }
+  "refunds[].admin_graphql_api_id":        { type: preserve }
+  "refunds[].user_id":                     { type: id, anchor: true }
+  "refunds[].note":                        { type: shortText }
+  "refunds[].created_at":                  { type: isoDate }
+  "refunds[].processed_at":                { type: isoDate }
+  "refunds[].restock":                     { type: preserve }
+  "refunds[].duties":                      { type: preserve }
+  "refunds[].refund_line_items[].id":      { type: id, anchor: true }
+  "refunds[].refund_line_items[].line_item_id": { type: id, anchor: true }
+  "refunds[].refund_line_items[].quantity":     { type: preserve }
+  "refunds[].refund_line_items[].restock_type": { type: preserve }
+  "refunds[].refund_line_items[].location_id":  { type: id, anchor: true }
+  "refunds[].refund_line_items[].subtotal":     { type: preserve }
+  "refunds[].refund_line_items[].total_tax":    { type: preserve }
+  "refunds[].refund_line_items[].line_item.id":            { type: id, anchor: true }
+  "refunds[].refund_line_items[].line_item.product_id":    { type: id, anchor: true }
+  "refunds[].refund_line_items[].line_item.variant_id":    { type: id, anchor: true }
+  "refunds[].refund_line_items[].line_item.title":         { type: productName }
+  "refunds[].refund_line_items[].line_item.sku":           { type: sku, anchor: true }
+  "refunds[].refund_line_items[].line_item.quantity":      { type: preserve }
+  "refunds[].refund_line_items[].line_item.price":         { type: preserve }
+  "refunds[].transactions[].id":           { type: id, anchor: true }
+  "refunds[].transactions[].order_id":     { type: id, anchor: true }
+  "refunds[].transactions[].parent_id":    { type: id, anchor: true }
+  "refunds[].transactions[].kind":         { type: preserve }
+  "refunds[].transactions[].gateway":      { type: preserve }
+  "refunds[].transactions[].status":       { type: preserve }
+  "refunds[].transactions[].amount":       { type: preserve }
+  "refunds[].transactions[].currency":     { type: preserve }
+  "refunds[].transactions[].created_at":   { type: isoDate }
+  "refunds[].transactions[].processed_at": { type: isoDate }
+  "refunds[].order_adjustments[].id":      { type: id, anchor: true }
+  "refunds[].order_adjustments[].order_id": { type: id, anchor: true }
+  "refunds[].order_adjustments[].refund_id": { type: id, anchor: true }
+  "refunds[].order_adjustments[].kind":    { type: preserve }
+  "refunds[].order_adjustments[].reason":  { type: shortText }
+  "refunds[].order_adjustments[].amount":  { type: preserve }
+  "*": { type: auto }

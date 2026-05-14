@@ -1,0 +1,78 @@
+endpoint:
+  method: POST
+  path: order/*
+  kind: webhook
+  description: Recharge webhook — order body (created/processed/upcoming share shape)
+  doc_url: https://developer.rechargepayments.com/2021-11/webhooks/webhooks_explanation
+
+signature:
+  required_paths:
+    - order.id
+    - order.customer_id
+    - order.charge_id
+    - order.status
+    - order.total_price
+  optional_paths:
+    - order.external_order_id
+    - order.line_items
+
+fields:
+  "order.id":                          { type: id, anchor: true }
+  "order.address_id":                  { type: id, anchor: true }
+  "order.charge_id":                   { type: id, anchor: true }
+  "order.customer_id":                 { type: id, anchor: true }
+  "order.external_order_id.ecommerce": { type: id, anchor: true }
+  "order.external_order_number.ecommerce": { type: id, anchor: true }
+  "order.email":                       { type: email, anchor: true }
+  "order.billing_address.first_name":  { type: firstName }
+  "order.billing_address.last_name":   { type: lastName }
+  "order.billing_address.address1":    { type: street }
+  "order.billing_address.address2":    { type: streetSecondary }
+  "order.billing_address.city":        { type: city }
+  "order.billing_address.province":    { type: stateOrProvince }
+  "order.billing_address.country_code": { type: countryCode }
+  "order.billing_address.zip":         { type: postalCode }
+  "order.billing_address.phone":       { type: phone }
+  "order.shipping_address.first_name": { type: firstName }
+  "order.shipping_address.last_name":  { type: lastName }
+  "order.shipping_address.address1":   { type: street }
+  "order.shipping_address.address2":   { type: streetSecondary }
+  "order.shipping_address.city":       { type: city }
+  "order.shipping_address.province":   { type: stateOrProvince }
+  "order.shipping_address.country_code": { type: countryCode }
+  "order.shipping_address.zip":        { type: postalCode }
+  "order.shipping_address.phone":      { type: phone }
+  "order.client_details.browser_ip":   { type: ipv4 }
+  "order.client_details.user_agent":   { type: shortText }
+  "order.created_at":                  { type: isoDate }
+  "order.updated_at":                  { type: isoDate }
+  "order.processed_at":                { type: isoDate }
+  "order.scheduled_at":                { type: isoDate }
+  "order.shipped_date":                { type: isoDate }
+  "order.currency":                    { type: preserve }
+  "order.order_number":                { type: id, anchor: true }
+  "order.is_prepaid":                  { type: preserve }
+  "order.payment_processor":           { type: preserve }
+  "order.status":                      { type: preserve }
+  "order.subtotal_price":              { type: preserve }
+  "order.total_discounts":             { type: preserve }
+  "order.total_line_items_price":      { type: preserve }
+  "order.total_price":                 { type: preserve }
+  "order.total_refunds":               { type: preserve }
+  "order.total_tax":                   { type: preserve }
+  "order.total_weight_grams":          { type: preserve }
+  "order.type":                        { type: preserve }
+  "order.note":                        { type: shortText }
+  "order.notes":                       { type: shortText }
+  "order.tags":                        { type: preserve }
+  "order.line_items[].purchase_item_id": { type: id, anchor: true }
+  "order.line_items[].title":          { type: productName }
+  "order.line_items[].variant_title":  { type: shortText }
+  "order.line_items[].sku":            { type: sku, anchor: true }
+  "order.line_items[].quantity":       { type: preserve }
+  "order.line_items[].unit_price":     { type: preserve }
+  "order.line_items[].total_price":    { type: preserve }
+  "order.line_items[].external_product_id.ecommerce": { type: id, anchor: true }
+  "order.line_items[].external_variant_id.ecommerce": { type: id, anchor: true }
+  "order.line_items[].properties":     { type: auto }
+  "*": { type: auto }

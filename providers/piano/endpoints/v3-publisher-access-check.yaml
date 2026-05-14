@@ -1,0 +1,32 @@
+endpoint:
+  method: GET
+  path: /api/v3/publisher/access/check
+  description: Check whether a user has access to a resource
+  doc_url: https://docs.piano.io/api/
+
+signature:
+  required_paths:
+    - access
+    - code
+  optional_paths:
+    - access.user
+    - access.resource
+
+fields:
+  "code":   { type: preserve }
+  "ts":     { type: preserve }
+  "access.access_id":            { type: id, anchor: true }
+  "access.granted":              { type: preserve }
+  "access.revoked":              { type: preserve }
+  "access.start_date":           { type: unixTimestamp }
+  "access.expire_date":          { type: unixTimestamp }
+  "access.user.uid":             { type: id, anchor: true }
+  "access.user.email":           { type: email, anchor: true }
+  "access.user.first_name":      { type: firstName }
+  "access.user.last_name":       { type: lastName }
+  "access.user.personal_name":   { type: fullName }
+  "access.resource.rid":         { type: id, anchor: true }
+  "access.resource.aid":         { type: id, anchor: true }
+  "access.resource.name":        { type: shortText }
+  "access.resource.description": { type: shortText }
+  "*": { type: auto }

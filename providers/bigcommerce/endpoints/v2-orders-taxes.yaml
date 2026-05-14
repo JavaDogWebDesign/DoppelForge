@@ -1,0 +1,32 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/taxes
+  description: List taxes applied to an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-taxes
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].order_id"
+    - "[].tax_class_id"
+    - "[].rate"
+    - "[].line_amount"
+  optional_paths:
+    - "[].tax_rate_id"
+    - "[].class"
+
+fields:
+  "[].id":                  { type: id, anchor: true }
+  "[].order_id":            { type: id, anchor: true }
+  "[].order_address_id":    { type: id, anchor: true }
+  "[].tax_rate_id":         { type: id }
+  "[].tax_class_id":        { type: preserve }
+  "[].name":                { type: shortText }
+  "[].class":               { type: preserve }
+  "[].rate":                { type: preserve }
+  "[].priority":            { type: preserve }
+  "[].priority_amount":     { type: preserve }
+  "[].line_amount":         { type: preserve }
+  "[].order_product_id":    { type: id, anchor: true }
+  "[].line_item_type":      { type: preserve }
+  "*": { type: auto }

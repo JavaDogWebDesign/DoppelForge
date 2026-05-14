@@ -1,0 +1,42 @@
+endpoint:
+  method: GET
+  path: /v1/balance_transactions
+  description: List balance transactions (per-Stripe-balance ledger entries)
+  doc_url: https://docs.stripe.com/api/balance_transactions/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - data[].available_on
+    - has_more
+  optional_paths:
+    - data[].source
+    - data[].type
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].amount":                   { type: preserve }
+  "data[].available_on":             { type: unixTimestamp }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].description":              { type: shortText }
+  "data[].exchange_rate":            { type: preserve }
+  "data[].fee":                      { type: preserve }
+  "data[].fee_details[].amount":     { type: preserve }
+  "data[].fee_details[].application": { type: id, anchor: true }
+  "data[].fee_details[].currency":   { type: preserve }
+  "data[].fee_details[].description": { type: shortText }
+  "data[].fee_details[].type":       { type: preserve }
+  "data[].net":                      { type: preserve }
+  "data[].reporting_category":       { type: preserve }
+  "data[].source":                   { type: id, anchor: true }
+  "data[].status":                   { type: preserve }
+  "data[].type":                     { type: preserve }
+  "*": { type: auto }

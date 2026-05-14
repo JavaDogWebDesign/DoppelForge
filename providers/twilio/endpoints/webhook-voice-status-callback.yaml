@@ -1,0 +1,50 @@
+endpoint:
+  method: POST
+  path: voice-status-callback
+  kind: webhook
+  description: Twilio webhook — voice call status callback (form-encoded)
+  doc_url: https://www.twilio.com/docs/voice/api/call-resource#statuscallback-parameter
+
+signature:
+  required_paths:
+    - CallSid
+    - AccountSid
+    - From
+    - To
+    - CallStatus
+    - CallDuration
+  optional_paths:
+    - Timestamp
+    - SipResponseCode
+    - CallbackSource
+    - SequenceNumber
+    - RecordingSid
+
+fields:
+  "CallSid":          { type: id, anchor: true }
+  "AccountSid":       { type: id, anchor: true }
+  "ParentCallSid":    { type: id, anchor: true }
+  "From":             { type: phone, anchor: true }
+  "To":               { type: phone, anchor: true }
+  "ForwardedFrom":    { type: phone, anchor: true }
+  "CallStatus":       { type: preserve }
+  "Direction":        { type: preserve }
+  "ApiVersion":       { type: preserve }
+  "CallDuration":     { type: preserve }
+  "Duration":         { type: preserve }
+  "SipResponseCode":  { type: preserve }
+  "Timestamp":        { type: preserve }
+  "CallbackSource":   { type: preserve }
+  "SequenceNumber":   { type: preserve }
+  "RecordingUrl":     { type: url }
+  "RecordingSid":     { type: id, anchor: true }
+  "RecordingDuration": { type: preserve }
+  "FromCity":         { type: city }
+  "FromState":        { type: stateOrProvince }
+  "FromZip":          { type: postalCode }
+  "FromCountry":      { type: countryCode }
+  "ToCity":           { type: city }
+  "ToState":          { type: stateOrProvince }
+  "ToZip":            { type: postalCode }
+  "ToCountry":        { type: countryCode }
+  "*": { type: auto }

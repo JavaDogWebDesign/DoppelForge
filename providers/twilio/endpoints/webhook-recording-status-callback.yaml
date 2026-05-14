@@ -1,0 +1,33 @@
+endpoint:
+  method: POST
+  path: recording-status-callback
+  kind: webhook
+  description: Twilio webhook — recording status callback (form-encoded)
+  doc_url: https://www.twilio.com/docs/voice/api/recording
+
+signature:
+  required_paths:
+    - RecordingSid
+    - RecordingUrl
+    - RecordingStatus
+    - AccountSid
+    - CallSid
+    - RecordingDuration
+  optional_paths:
+    - RecordingStartTime
+    - RecordingSource
+    - RecordingChannels
+    - RecordingTrack
+
+fields:
+  "RecordingSid":      { type: id, anchor: true }
+  "AccountSid":        { type: id, anchor: true }
+  "CallSid":           { type: id, anchor: true }
+  "RecordingUrl":      { type: url }
+  "RecordingStatus":   { type: preserve }
+  "RecordingDuration": { type: preserve }
+  "RecordingChannels": { type: preserve }
+  "RecordingStartTime": { type: isoDate }
+  "RecordingSource":   { type: preserve }
+  "RecordingTrack":    { type: preserve }
+  "*": { type: auto }

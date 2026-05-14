@@ -1,0 +1,39 @@
+endpoint:
+  method: POST
+  path: sms-status-callback
+  kind: webhook
+  description: Twilio webhook — SMS status callback / delivery receipt (form-encoded)
+  doc_url: https://www.twilio.com/docs/messaging/api/message-resource#message-status-values
+
+signature:
+  required_paths:
+    - MessageSid
+    - MessageStatus
+    - SmsStatus
+    - AccountSid
+    - From
+    - To
+  optional_paths:
+    - ErrorCode
+    - ErrorMessage
+    - RawDlrDoneDate
+    - ApiVersion
+
+fields:
+  "MessageSid":          { type: id, anchor: true }
+  "SmsSid":              { type: id, anchor: true }
+  "AccountSid":          { type: id, anchor: true }
+  "MessagingServiceSid": { type: id, anchor: true }
+  "From":                { type: phone, anchor: true }
+  "To":                  { type: phone, anchor: true }
+  "MessageStatus":       { type: preserve }
+  "SmsStatus":           { type: preserve }
+  "ApiVersion":          { type: preserve }
+  "ErrorCode":           { type: preserve }
+  "ErrorMessage":        { type: shortText }
+  "RawDlrDoneDate":      { type: preserve }
+  "ChannelInstallSid":   { type: id, anchor: true }
+  "ChannelPrefix":       { type: preserve }
+  "ChannelStatusMessage": { type: shortText }
+  "EventType":           { type: preserve }
+  "*": { type: auto }

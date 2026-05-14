@@ -1,0 +1,42 @@
+endpoint:
+  method: GET
+  path: /transactions/{object_id}
+  description: Retrieve a transaction (label purchase)
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Transactions
+
+signature:
+  required_paths:
+    - object_id
+    - object_state
+    - status
+    - rate
+    - tracking_number
+  optional_paths:
+    - label_url
+    - tracking_url_provider
+    - commercial_invoice_url
+
+fields:
+  "object_id":         { type: id, anchor: true }
+  "object_state":      { type: preserve }
+  "object_created":    { type: isoDate }
+  "object_updated":    { type: isoDate }
+  "object_owner":      { type: email, anchor: true }
+  "status":            { type: preserve }
+  "rate":              { type: id, anchor: true }
+  "tracking_number":   { type: id, anchor: true }
+  "tracking_status":   { type: preserve }
+  "tracking_url_provider": { type: url }
+  "eta":               { type: isoDate }
+  "label_url":         { type: url }
+  "commercial_invoice_url": { type: url }
+  "qr_code_url":       { type: url }
+  "label_file_type":   { type: preserve }
+  "label_resolution":  { type: preserve }
+  "label_size":        { type: preserve }
+  "messages[].source": { type: preserve }
+  "messages[].code":   { type: preserve }
+  "messages[].text":   { type: shortText }
+  "metadata":          { type: shortText }
+  "test":              { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,199 @@
+endpoint:
+  method: GET
+  path: /merchants/{merchant_id}/transactions/{transaction_id}
+  description: Retrieve a transaction (SDK Transaction.find — flat object)
+  doc_url: https://developer.paypal.com/braintree/docs/reference/response/transaction
+
+# Braintree SDKs (Ruby/Node/Python/PHP/Java) return Transaction objects that
+# serialize as a flat JSON object — no top-level "transaction" wrapper. Raw
+# REST/XML responses do wrap; users mostly see the flat form in logs.
+signature:
+  required_paths:
+    - id
+    - type
+    - amount
+    - status
+    - currency_iso_code
+  optional_paths:
+    - credit_card
+    - billing
+    - customer
+
+fields:
+  "id":                          { type: id, anchor: true }
+  "type":                        { type: preserve }
+  "status":                      { type: preserve }
+  "amount":                      { type: preserve }
+  "currency_iso_code":           { type: preserve }
+  "merchant_account_id":         { type: id, anchor: true }
+  "order_id":                    { type: id, anchor: true }
+  "purchase_order_number":       { type: id, anchor: true }
+  "created_at":                  { type: isoDate }
+  "updated_at":                  { type: isoDate }
+  "channel":                     { type: preserve }
+  "tax_amount":                  { type: preserve }
+  "tax_exempt":                  { type: preserve }
+  "product_sku":                 { type: sku, anchor: true }
+  "service_fee_amount":          { type: preserve }
+  "master_merchant_account_id":  { type: id, anchor: true }
+  "sub_merchant_account_id":     { type: id, anchor: true }
+  "settlement_batch_id":         { type: id, anchor: true }
+  "voice_referral_number":       { type: id }
+  "additional_processor_response": { type: shortText }
+  "processor_authorization_code": { type: id }
+  "processor_response_code":     { type: preserve }
+  "processor_response_text":     { type: shortText }
+  "processor_response_type":     { type: preserve }
+  "processor_settlement_response_code": { type: preserve }
+  "processor_settlement_response_text": { type: shortText }
+  "network_response_code":       { type: preserve }
+  "network_response_text":       { type: shortText }
+  "network_transaction_id":      { type: id, anchor: true }
+  "gateway_rejection_reason":    { type: preserve }
+  "escrow_status":               { type: preserve }
+  "recurring":                   { type: preserve }
+  "declined_first_time":         { type: preserve }
+  "prepaid_reloadable":          { type: preserve }
+  "ach_return_code":             { type: preserve }
+  "avs_error_response_code":               { type: avsCode }
+  "avs_street_address_response_code":      { type: avsCode }
+  "avs_postal_code_response_code":         { type: avsCode }
+  "cvv_response_code":                     { type: cvvCode }
+  "subscription_id":             { type: id, anchor: true }
+  "plan_id":                     { type: id, anchor: true }
+  "refunded_transaction_id":     { type: id, anchor: true }
+  "authorized_transaction_id":   { type: id, anchor: true }
+  "retried_transaction_id":      { type: id, anchor: true }
+  "refund_ids":                  { type: preserve }
+  "partial_settlement_transaction_ids": { type: preserve }
+  "retry_ids":                   { type: preserve }
+  "payment_method_token":        { type: id, anchor: true }
+  "payment_method_nonce":        { type: id, anchor: true }
+  "payment_instrument_type":     { type: preserve }
+  "credit_card.token":           { type: id, anchor: true }
+  "credit_card.bin":             { type: id }
+  "credit_card.last_4":          { type: id }
+  "credit_card.card_type":       { type: preserve }
+  "credit_card.expiration_month": { type: preserve }
+  "credit_card.expiration_year": { type: preserve }
+  "credit_card.cardholder_name": { type: fullName }
+  "credit_card.customer_location": { type: preserve }
+  "credit_card.prepaid":         { type: preserve }
+  "credit_card.healthcare":      { type: preserve }
+  "credit_card.durbin_regulated": { type: preserve }
+  "credit_card.debit":           { type: preserve }
+  "credit_card.commercial":      { type: preserve }
+  "credit_card.payroll":         { type: preserve }
+  "credit_card.business":        { type: preserve }
+  "credit_card.consumer":        { type: preserve }
+  "credit_card.corporate":       { type: preserve }
+  "credit_card.purchase":        { type: preserve }
+  "credit_card.country_of_issuance": { type: country }
+  "credit_card.issuing_bank":    { type: company }
+  "credit_card.product_id":      { type: id }
+  "credit_card.image_url":       { type: url }
+  "credit_card.unique_number_identifier": { type: id, anchor: true }
+  "credit_card.venmo_sdk":       { type: preserve }
+  "credit_card.account_type":    { type: preserve }
+  "credit_card.account_balance": { type: preserve }
+  "credit_card.source_description": { type: shortText }
+  "paypal.token":                { type: id, anchor: true }
+  "paypal.payer_email":          { type: email, anchor: true }
+  "paypal.payer_first_name":     { type: firstName }
+  "paypal.payer_last_name":      { type: lastName }
+  "paypal.payer_id":             { type: id, anchor: true }
+  "paypal.payment_id":           { type: id, anchor: true }
+  "paypal.authorization_id":     { type: id, anchor: true }
+  "paypal.capture_id":           { type: id, anchor: true }
+  "paypal.refund_id":            { type: id, anchor: true }
+  "paypal.transaction_fee_amount": { type: preserve }
+  "paypal.transaction_fee_currency_iso_code": { type: preserve }
+  "paypal.seller_protection_status": { type: preserve }
+  "paypal.image_url":            { type: url }
+  "paypal.description":          { type: shortText }
+  "us_bank_account.token":       { type: id, anchor: true }
+  "us_bank_account.last_4":      { type: id }
+  "us_bank_account.routing_number": { type: id }
+  "us_bank_account.account_type":   { type: preserve }
+  "us_bank_account.account_holder_name": { type: fullName }
+  "us_bank_account.bank_name":   { type: company }
+  "us_bank_account.business_name": { type: company }
+  "billing.id":                  { type: id, anchor: true }
+  "billing.first_name":          { type: firstName }
+  "billing.last_name":           { type: lastName }
+  "billing.company":             { type: company }
+  "billing.street_address":      { type: street }
+  "billing.extended_address":    { type: streetSecondary }
+  "billing.locality":            { type: city }
+  "billing.region":              { type: stateOrProvince }
+  "billing.postal_code":         { type: postalCode }
+  "billing.country_name":        { type: country }
+  "billing.country_code_alpha2": { type: countryCode }
+  "billing.country_code_alpha3": { type: countryCode }
+  "billing.country_code_numeric": { type: preserve }
+  "billing.phone_number":        { type: phone }
+  "billing_details.id":          { type: id, anchor: true }
+  "billing_details.first_name":  { type: firstName }
+  "billing_details.last_name":   { type: lastName }
+  "billing_details.company":     { type: company }
+  "billing_details.street_address": { type: street }
+  "billing_details.extended_address": { type: streetSecondary }
+  "billing_details.locality":    { type: city }
+  "billing_details.region":      { type: stateOrProvince }
+  "billing_details.postal_code": { type: postalCode }
+  "billing_details.country_name": { type: country }
+  "billing_details.country_code_alpha2": { type: countryCode }
+  "shipping.id":                 { type: id, anchor: true }
+  "shipping.first_name":         { type: firstName }
+  "shipping.last_name":          { type: lastName }
+  "shipping.company":            { type: company }
+  "shipping.street_address":     { type: street }
+  "shipping.extended_address":   { type: streetSecondary }
+  "shipping.locality":           { type: city }
+  "shipping.region":             { type: stateOrProvince }
+  "shipping.postal_code":        { type: postalCode }
+  "shipping.country_name":       { type: country }
+  "shipping.country_code_alpha2": { type: countryCode }
+  "shipping.country_code_alpha3": { type: countryCode }
+  "shipping.phone_number":       { type: phone }
+  "shipping_details.id":         { type: id, anchor: true }
+  "shipping_details.first_name": { type: firstName }
+  "shipping_details.last_name":  { type: lastName }
+  "shipping_details.street_address": { type: street }
+  "shipping_details.locality":   { type: city }
+  "shipping_details.postal_code": { type: postalCode }
+  "customer.id":                 { type: id, anchor: true }
+  "customer.first_name":         { type: firstName }
+  "customer.last_name":          { type: lastName }
+  "customer.company":            { type: company }
+  "customer.email":              { type: email, anchor: true }
+  "customer.phone":              { type: phone }
+  "customer.fax":                { type: phone }
+  "customer.website":            { type: url }
+  "customer_details.id":         { type: id, anchor: true }
+  "customer_details.first_name": { type: firstName }
+  "customer_details.last_name":  { type: lastName }
+  "customer_details.email":      { type: email, anchor: true }
+  "customer_details.phone":      { type: phone }
+  "customer_details.company":    { type: company }
+  "disbursement_details.disbursement_date": { type: isoDate }
+  "disbursement_details.settlement_amount": { type: preserve }
+  "disbursement_details.settlement_currency_iso_code": { type: preserve }
+  "disbursement_details.settlement_currency_exchange_rate": { type: preserve }
+  "disbursement_details.funds_held": { type: preserve }
+  "disbursement_details.success": { type: preserve }
+  "disputes[].id":               { type: id, anchor: true }
+  "disputes[].amount":           { type: preserve }
+  "disputes[].currency_iso_code": { type: preserve }
+  "disputes[].reason":           { type: preserve }
+  "disputes[].status":           { type: preserve }
+  "disputes[].kind":             { type: preserve }
+  "disputes[].received_date":    { type: isoDate }
+  "disputes[].reply_by_date":    { type: isoDate }
+  "status_history[].timestamp":  { type: isoDate }
+  "status_history[].status":     { type: preserve }
+  "status_history[].amount":     { type: preserve }
+  "status_history[].user":       { type: id, anchor: true }
+  "status_history[].transaction_source": { type: preserve }
+  "custom_fields":               { type: preserve }
+  "*": { type: auto }

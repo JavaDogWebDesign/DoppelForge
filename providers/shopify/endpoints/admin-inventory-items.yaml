@@ -1,0 +1,29 @@
+endpoint:
+  method: GET
+  path: /admin/api/2024-01/inventory_items.json
+  description: List inventory items
+  doc_url: https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventoryitem
+
+signature:
+  required_paths:
+    - inventory_items[].id
+    - inventory_items[].admin_graphql_api_id
+    - inventory_items[].sku
+  optional_paths:
+    - inventory_items[].tracked
+    - inventory_items[].cost
+
+fields:
+  "inventory_items[].id":                  { type: id, anchor: true }
+  "inventory_items[].admin_graphql_api_id": { type: preserve }
+  "inventory_items[].sku":                 { type: sku, anchor: true }
+  "inventory_items[].created_at":          { type: isoDate }
+  "inventory_items[].updated_at":          { type: isoDate }
+  "inventory_items[].requires_shipping":   { type: preserve }
+  "inventory_items[].cost":                { type: preserve }
+  "inventory_items[].country_code_of_origin": { type: countryCode }
+  "inventory_items[].province_code_of_origin": { type: stateOrProvince }
+  "inventory_items[].harmonized_system_code": { type: preserve }
+  "inventory_items[].tracked":             { type: preserve }
+  "inventory_items[].country_harmonized_system_codes": { type: preserve }
+  "*": { type: auto }

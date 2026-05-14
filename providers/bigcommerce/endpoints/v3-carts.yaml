@@ -1,0 +1,69 @@
+endpoint:
+  method: GET
+  path: /v3/carts/{cartId}
+  description: Get a cart
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/carts
+
+signature:
+  required_paths:
+    - data.id
+    - data.customer_id
+    - data.line_items
+  optional_paths:
+    - data.coupons
+    - data.email
+
+fields:
+  "data.id":                        { type: uuid, anchor: true }
+  "data.parent_id":                 { type: uuid, anchor: true }
+  "data.customer_id":               { type: id, anchor: true }
+  "data.email":                     { type: email, anchor: true }
+  "data.currency.code":             { type: preserve }
+  "data.tax_included":              { type: preserve }
+  "data.base_amount":               { type: preserve }
+  "data.discount_amount":           { type: preserve }
+  "data.cart_amount":               { type: preserve }
+  "data.channel_id":                { type: preserve }
+  "data.coupons":                   { type: preserve }
+  "data.created_time":              { type: isoDate }
+  "data.updated_time":              { type: isoDate }
+  "data.locale":                    { type: preserve }
+  "data.line_items.physical_items[].id":         { type: uuid, anchor: true }
+  "data.line_items.physical_items[].parent_id":  { type: uuid, anchor: true }
+  "data.line_items.physical_items[].variant_id": { type: id, anchor: true }
+  "data.line_items.physical_items[].product_id": { type: id, anchor: true }
+  "data.line_items.physical_items[].sku":        { type: sku, anchor: true }
+  "data.line_items.physical_items[].name":       { type: productName }
+  "data.line_items.physical_items[].url":        { type: url }
+  "data.line_items.physical_items[].quantity":   { type: preserve }
+  "data.line_items.physical_items[].taxable":    { type: preserve }
+  "data.line_items.physical_items[].image_url":  { type: url }
+  "data.line_items.physical_items[].discounts":  { type: preserve }
+  "data.line_items.physical_items[].coupons":    { type: preserve }
+  "data.line_items.physical_items[].discount_amount":    { type: preserve }
+  "data.line_items.physical_items[].coupon_amount":      { type: preserve }
+  "data.line_items.physical_items[].list_price":         { type: preserve }
+  "data.line_items.physical_items[].sale_price":         { type: preserve }
+  "data.line_items.physical_items[].extended_list_price": { type: preserve }
+  "data.line_items.physical_items[].extended_sale_price": { type: preserve }
+  "data.line_items.physical_items[].is_require_shipping": { type: preserve }
+  "data.line_items.physical_items[].is_mutable":          { type: preserve }
+  "data.line_items.digital_items[].id":          { type: uuid, anchor: true }
+  "data.line_items.digital_items[].variant_id":  { type: id, anchor: true }
+  "data.line_items.digital_items[].product_id":  { type: id, anchor: true }
+  "data.line_items.digital_items[].sku":         { type: sku, anchor: true }
+  "data.line_items.digital_items[].name":        { type: productName }
+  "data.line_items.digital_items[].url":         { type: url }
+  "data.line_items.digital_items[].quantity":    { type: preserve }
+  "data.line_items.digital_items[].taxable":     { type: preserve }
+  "data.line_items.digital_items[].image_url":   { type: url }
+  "data.line_items.gift_certificates[].id":      { type: uuid, anchor: true }
+  "data.line_items.gift_certificates[].name":    { type: shortText }
+  "data.line_items.gift_certificates[].theme":   { type: preserve }
+  "data.line_items.gift_certificates[].amount":  { type: preserve }
+  "data.line_items.gift_certificates[].sender.name":     { type: fullName }
+  "data.line_items.gift_certificates[].sender.email":    { type: email, anchor: true }
+  "data.line_items.gift_certificates[].recipient.name":  { type: fullName }
+  "data.line_items.gift_certificates[].recipient.email": { type: email, anchor: true }
+  "data.line_items.gift_certificates[].message":         { type: shortText }
+  "*": { type: auto }

@@ -1,0 +1,46 @@
+endpoint:
+  method: GET
+  path: /rates/{object_id}
+  description: Retrieve a rate
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Rates
+
+signature:
+  required_paths:
+    - object_id
+    - object_created
+    - amount
+    - currency
+    - provider
+    - servicelevel.token
+  optional_paths:
+    - estimated_days
+    - carrier_account
+    - shipment
+
+fields:
+  "object_id":         { type: id, anchor: true }
+  "object_created":    { type: isoDate }
+  "object_updated":    { type: isoDate }
+  "object_owner":      { type: email, anchor: true }
+  "shipment":          { type: id, anchor: true }
+  "amount":            { type: priceAmount }
+  "currency":          { type: currency }
+  "amount_local":      { type: priceAmount }
+  "currency_local":    { type: currency }
+  "provider":          { type: company }
+  "provider_image_75": { type: url }
+  "provider_image_200": { type: url }
+  "servicelevel.name":    { type: shortText }
+  "servicelevel.token":   { type: preserve }
+  "servicelevel.terms":   { type: shortText }
+  "servicelevel.parent_service_class_token": { type: preserve }
+  "days":              { type: preserve }
+  "estimated_days":    { type: preserve }
+  "duration_terms":    { type: shortText }
+  "carrier_account":   { type: id, anchor: true }
+  "zone":              { type: preserve }
+  "messages":          { type: preserve }
+  "attributes":        { type: preserve }
+  "arrives_by":        { type: isoDate }
+  "test":              { type: preserve }
+  "*": { type: auto }

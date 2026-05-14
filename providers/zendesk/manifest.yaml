@@ -1,0 +1,6 @@
+id: zendesk
+name: Zendesk
+category: support
+icon: life-buoy
+color: "#03363D"
+docs: https://developer.zendesk.com/api-reference/ticketing/introduction/

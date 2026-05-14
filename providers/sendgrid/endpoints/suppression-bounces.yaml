@@ -1,0 +1,20 @@
+endpoint:
+  method: GET
+  path: /v3/suppression/bounces
+  description: List bounced email addresses
+  doc_url: https://www.twilio.com/docs/sendgrid/api-reference/bounces-api/retrieve-all-bounces
+
+# Response is a top-level array of { email, created, reason, status } objects.
+signature:
+  required_paths:
+    - "[].email"
+    - "[].created"
+    - "[].reason"
+    - "[].status"
+
+fields:
+  "[].email":   { type: email, anchor: true }
+  "[].created": { type: unixTimestamp }
+  "[].reason":  { type: shortText }
+  "[].status":  { type: preserve }
+  "*": { type: auto }

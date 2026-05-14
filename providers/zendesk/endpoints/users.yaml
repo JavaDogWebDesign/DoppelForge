@@ -1,0 +1,48 @@
+endpoint:
+  method: GET
+  path: /api/v2/users
+  description: List users
+  doc_url: https://developer.zendesk.com/api-reference/ticketing/users/users/#list-users
+
+signature:
+  required_paths:
+    - users[].id
+    - users[].url
+    - users[].email
+    - users[].role
+    - count
+  optional_paths:
+    - next_page
+    - previous_page
+    - users[].name
+
+fields:
+  "count":         { type: preserve }
+  "next_page":     { type: url }
+  "previous_page": { type: url }
+  "users[].id":              { type: id, anchor: true }
+  "users[].url":             { type: url }
+  "users[].external_id":     { type: id, anchor: true }
+  "users[].email":           { type: email, anchor: true }
+  "users[].name":            { type: fullName }
+  "users[].alias":           { type: shortText }
+  "users[].phone":           { type: phone }
+  "users[].role":            { type: preserve }
+  "users[].role_type":       { type: preserve }
+  "users[].organization_id": { type: id, anchor: true }
+  "users[].default_group_id": { type: id, anchor: true }
+  "users[].locale":          { type: preserve }
+  "users[].time_zone":       { type: preserve }
+  "users[].notes":           { type: longText }
+  "users[].details":         { type: longText }
+  "users[].signature":       { type: longText }
+  "users[].created_at":      { type: isoDate }
+  "users[].updated_at":      { type: isoDate }
+  "users[].last_login_at":   { type: isoDate }
+  "users[].tags":            { type: preserve }
+  "users[].suspended":       { type: preserve }
+  "users[].verified":        { type: preserve }
+  "users[].active":          { type: preserve }
+  "users[].moderator":       { type: preserve }
+  "users[].user_fields":     { type: auto }
+  "*": { type: auto }

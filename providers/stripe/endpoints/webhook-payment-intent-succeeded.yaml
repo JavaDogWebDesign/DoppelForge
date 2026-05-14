@@ -1,0 +1,73 @@
+endpoint:
+  method: POST
+  path: payment_intent.succeeded
+  kind: webhook
+  description: Stripe webhook — payment intent succeeded
+  doc_url: https://docs.stripe.com/api/events/types#event_types-payment_intent.succeeded
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.amount_received
+  optional_paths:
+    - data.object.client_secret
+    - data.object.latest_charge
+    - data.object.capture_method
+
+fields:
+  "id":                                       { type: id, anchor: true }
+  "object":                                   { type: preserve }
+  "api_version":                              { type: preserve }
+  "created":                                  { type: unixTimestamp }
+  "livemode":                                 { type: preserve }
+  "pending_webhooks":                         { type: preserve }
+  "type":                                     { type: preserve }
+  "account":                                  { type: id, anchor: true }
+  "request.id":                               { type: id, anchor: true }
+  "request.idempotency_key":                  { type: id, anchor: true }
+  "data.object.id":                           { type: id, anchor: true }
+  "data.object.object":                       { type: preserve }
+  "data.object.amount":                       { type: preserve }
+  "data.object.amount_capturable":            { type: preserve }
+  "data.object.amount_received":              { type: preserve }
+  "data.object.application":                  { type: id, anchor: true }
+  "data.object.application_fee_amount":       { type: preserve }
+  "data.object.canceled_at":                  { type: unixTimestamp }
+  "data.object.cancellation_reason":          { type: preserve }
+  "data.object.capture_method":               { type: preserve }
+  "data.object.client_secret":                { type: redact }
+  "data.object.confirmation_method":          { type: preserve }
+  "data.object.created":                      { type: unixTimestamp }
+  "data.object.currency":                     { type: preserve }
+  "data.object.customer":                     { type: id, anchor: true }
+  "data.object.description":                  { type: shortText }
+  "data.object.invoice":                      { type: id, anchor: true }
+  "data.object.latest_charge":                { type: id, anchor: true }
+  "data.object.livemode":                     { type: preserve }
+  "data.object.metadata":                     { type: preserve }
+  "data.object.on_behalf_of":                 { type: id, anchor: true }
+  "data.object.payment_method":               { type: id, anchor: true }
+  "data.object.payment_method_types":         { type: preserve }
+  "data.object.processing":                   { type: preserve }
+  "data.object.receipt_email":                { type: email, anchor: true }
+  "data.object.review":                       { type: id, anchor: true }
+  "data.object.setup_future_usage":           { type: preserve }
+  "data.object.shipping.address.city":        { type: city }
+  "data.object.shipping.address.country":     { type: countryCode }
+  "data.object.shipping.address.line1":       { type: street }
+  "data.object.shipping.address.line2":       { type: streetSecondary }
+  "data.object.shipping.address.postal_code": { type: postalCode }
+  "data.object.shipping.address.state":       { type: stateOrProvince }
+  "data.object.shipping.name":                { type: fullName }
+  "data.object.shipping.phone":               { type: phone }
+  "data.object.shipping.tracking_number":     { type: id, anchor: true }
+  "data.object.shipping.carrier":             { type: company }
+  "data.object.statement_descriptor":         { type: preserve }
+  "data.object.statement_descriptor_suffix":  { type: preserve }
+  "data.object.status":                       { type: preserve }
+  "data.object.transfer_data":                { type: preserve }
+  "data.object.transfer_group":               { type: id }
+  "*": { type: auto }

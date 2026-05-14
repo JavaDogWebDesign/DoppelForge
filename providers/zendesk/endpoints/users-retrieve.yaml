@@ -1,0 +1,62 @@
+endpoint:
+  method: GET
+  path: /api/v2/users/{id}
+  description: Retrieve a user
+  doc_url: https://developer.zendesk.com/api-reference/ticketing/users/users/#show-user
+
+signature:
+  required_paths:
+    - user.id
+    - user.url
+    - user.email
+    - user.role
+  optional_paths:
+    - user.name
+    - user.phone
+    - user.organization_id
+
+fields:
+  "user.id":              { type: id, anchor: true }
+  "user.url":             { type: url }
+  "user.external_id":     { type: id, anchor: true }
+  "user.email":           { type: email, anchor: true }
+  "user.name":            { type: fullName }
+  "user.alias":           { type: shortText }
+  "user.phone":           { type: phone }
+  "user.shared_phone_number": { type: preserve }
+  "user.role":            { type: preserve }
+  "user.role_type":       { type: preserve }
+  "user.organization_id": { type: id, anchor: true }
+  "user.default_group_id": { type: id, anchor: true }
+  "user.locale":          { type: preserve }
+  "user.locale_id":       { type: preserve }
+  "user.time_zone":       { type: preserve }
+  "user.iana_time_zone":  { type: preserve }
+  "user.notes":           { type: longText }
+  "user.details":         { type: longText }
+  "user.signature":       { type: longText }
+  "user.photo.id":        { type: id, anchor: true }
+  "user.photo.url":       { type: url }
+  "user.photo.content_url": { type: url }
+  "user.photo.thumbnails[].url": { type: url }
+  "user.photo.thumbnails[].content_url": { type: url }
+  "user.created_at":      { type: isoDate }
+  "user.updated_at":      { type: isoDate }
+  "user.last_login_at":   { type: isoDate }
+  "user.tags":            { type: preserve }
+  "user.suspended":       { type: preserve }
+  "user.shared":          { type: preserve }
+  "user.verified":        { type: preserve }
+  "user.active":          { type: preserve }
+  "user.moderator":       { type: preserve }
+  "user.only_private_comments": { type: preserve }
+  "user.restricted_agent": { type: preserve }
+  "user.ticket_restriction": { type: preserve }
+  "user.user_fields":     { type: auto }
+  "user.identities[].id":         { type: id, anchor: true }
+  "user.identities[].user_id":    { type: id, anchor: true }
+  "user.identities[].type":       { type: preserve }
+  "user.identities[].value":      { type: email, anchor: true }
+  "user.identities[].verified":   { type: preserve }
+  "user.identities[].primary":    { type: preserve }
+  "*": { type: auto }

@@ -1,0 +1,54 @@
+endpoint:
+  method: POST
+  path: incoming-voice
+  kind: webhook
+  description: Twilio webhook — incoming voice call (form-encoded)
+  doc_url: https://www.twilio.com/docs/voice/twiml
+
+signature:
+  required_paths:
+    - CallSid
+    - AccountSid
+    - From
+    - To
+    - CallStatus
+    - Direction
+  optional_paths:
+    - ApiVersion
+    - Caller
+    - Called
+    - CallerName
+    - FromCity
+    - ForwardedFrom
+
+fields:
+  "CallSid":         { type: id, anchor: true }
+  "AccountSid":      { type: id, anchor: true }
+  "ParentCallSid":   { type: id, anchor: true }
+  "From":            { type: phone, anchor: true }
+  "To":              { type: phone, anchor: true }
+  "Caller":          { type: phone, anchor: true }
+  "Called":          { type: phone, anchor: true }
+  "ForwardedFrom":   { type: phone, anchor: true }
+  "CallStatus":      { type: preserve }
+  "Direction":       { type: preserve }
+  "ApiVersion":      { type: preserve }
+  "CallerName":      { type: fullName }
+  "CallToken":       { type: id, anchor: true }
+  "FromCity":        { type: city }
+  "FromState":       { type: stateOrProvince }
+  "FromZip":         { type: postalCode }
+  "FromCountry":     { type: countryCode }
+  "CallerCity":      { type: city }
+  "CallerState":     { type: stateOrProvince }
+  "CallerZip":       { type: postalCode }
+  "CallerCountry":   { type: countryCode }
+  "ToCity":          { type: city }
+  "ToState":         { type: stateOrProvince }
+  "ToZip":           { type: postalCode }
+  "ToCountry":       { type: countryCode }
+  "CalledCity":      { type: city }
+  "CalledState":     { type: stateOrProvince }
+  "CalledZip":       { type: postalCode }
+  "CalledCountry":   { type: countryCode }
+  "*": { type: auto }

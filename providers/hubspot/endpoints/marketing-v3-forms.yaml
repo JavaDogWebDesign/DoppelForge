@@ -1,0 +1,47 @@
+endpoint:
+  method: GET
+  path: /marketing/v3/forms
+  description: List marketing forms
+  doc_url: https://developers.hubspot.com/docs/api/marketing/forms
+
+signature:
+  required_paths:
+    - results[].id
+    - results[].name
+    - results[].createdAt
+  optional_paths:
+    - paging.next.after
+    - results[].fieldGroups
+
+fields:
+  "paging.next.after":            { type: id, anchor: true }
+  "paging.next.link":             { type: url }
+  "results[].id":                      { type: id, anchor: true }
+  "results[].name":                    { type: shortText }
+  "results[].formType":                { type: preserve }
+  "results[].createdAt":               { type: isoDate }
+  "results[].updatedAt":               { type: isoDate }
+  "results[].archived":                { type: preserve }
+  "results[].fieldGroups[].fields[].name":         { type: preserve }
+  "results[].fieldGroups[].fields[].label":        { type: shortText }
+  "results[].fieldGroups[].fields[].objectTypeId": { type: preserve }
+  "results[].fieldGroups[].fields[].required":     { type: preserve }
+  "results[].fieldGroups[].fields[].hidden":       { type: preserve }
+  "results[].fieldGroups[].fields[].defaultValue": { type: shortText }
+  "results[].fieldGroups[].fields[].placeholder":  { type: shortText }
+  "results[].fieldGroups[].fields[].description":  { type: shortText }
+  "results[].fieldGroups[].fields[].fieldType":    { type: preserve }
+  "results[].configuration.language":              { type: preserve }
+  "results[].configuration.cloneable":             { type: preserve }
+  "results[].configuration.allowLinkToResetKnownValues": { type: preserve }
+  "results[].configuration.notifyContactOwner":    { type: preserve }
+  "results[].configuration.notifyRecipients":      { type: preserve }
+  "results[].configuration.createNewContactForNewEmail": { type: preserve }
+  "results[].configuration.postSubmitAction.type": { type: preserve }
+  "results[].configuration.postSubmitAction.value": { type: url }
+  "results[].displayOptions.renderRawHtml":        { type: preserve }
+  "results[].displayOptions.cssClass":             { type: preserve }
+  "results[].displayOptions.theme":                { type: preserve }
+  "results[].displayOptions.submitButtonText":     { type: shortText }
+  "results[].displayOptions.style.fontFamily":     { type: preserve }
+  "*": { type: auto }

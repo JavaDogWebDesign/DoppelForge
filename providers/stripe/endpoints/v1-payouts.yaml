@@ -1,0 +1,48 @@
+endpoint:
+  method: GET
+  path: /v1/payouts
+  description: List payouts
+  doc_url: https://docs.stripe.com/api/payouts/list
+
+signature:
+  required_paths:
+    - object
+    - data[].id
+    - data[].object
+    - data[].amount
+    - data[].arrival_date
+    - has_more
+  optional_paths:
+    - data[].destination
+    - data[].status
+
+fields:
+  "object":   { type: preserve }
+  "url":      { type: url }
+  "has_more": { type: preserve }
+  "data[].id":                       { type: id, anchor: true }
+  "data[].object":                   { type: preserve }
+  "data[].amount":                   { type: preserve }
+  "data[].application_fee":          { type: id, anchor: true }
+  "data[].application_fee_amount":   { type: preserve }
+  "data[].arrival_date":             { type: unixTimestamp }
+  "data[].automatic":                { type: preserve }
+  "data[].balance_transaction":      { type: id, anchor: true }
+  "data[].created":                  { type: unixTimestamp }
+  "data[].currency":                 { type: preserve }
+  "data[].description":              { type: shortText }
+  "data[].destination":              { type: id, anchor: true }
+  "data[].failure_balance_transaction": { type: id, anchor: true }
+  "data[].failure_code":             { type: preserve }
+  "data[].failure_message":          { type: shortText }
+  "data[].livemode":                 { type: preserve }
+  "data[].metadata":                 { type: preserve }
+  "data[].method":                   { type: preserve }
+  "data[].original_payout":          { type: id, anchor: true }
+  "data[].reconciliation_status":    { type: preserve }
+  "data[].reversed_by":              { type: id, anchor: true }
+  "data[].source_type":              { type: preserve }
+  "data[].statement_descriptor":     { type: preserve }
+  "data[].status":                   { type: preserve }
+  "data[].type":                     { type: preserve }
+  "*": { type: auto }

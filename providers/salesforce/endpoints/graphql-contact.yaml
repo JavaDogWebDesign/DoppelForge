@@ -1,0 +1,64 @@
+endpoint:
+  method: POST
+  path: /services/data/v60.0/graphql (query Contact)
+  description: Salesforce GraphQL — Contact SObject (individuals)
+  doc_url: https://developer.salesforce.com/docs/platform/graphql/guide/query-record-objects.html
+
+# Salesforce GraphQL wraps every query under data.uiapi.query.<SObject> and
+# every scalar value under a `{ value: T }` object. Foreign keys add a
+# `displayValue` sibling. Compound addresses are nested objects whose children
+# are also `{ value }`-wrapped. CreatedDate/LastModifiedDate are bare scalars.
+signature:
+  required_paths:
+    - data.uiapi.query.Contact.edges[].node.Id
+    - data.uiapi.query.Contact.edges[].node.Email.value
+    - data.uiapi.query.Contact.edges[].node.LastName.value
+    - data.uiapi.query.Contact.pageInfo.endCursor
+  optional_paths:
+    - data.uiapi.query.Contact.totalCount
+    - data.uiapi.query.Contact.edges[].node.AccountId.value
+    - data.uiapi.query.Contact.edges[].node.MailingAddress
+
+fields:
+  "data.uiapi.query.Contact.totalCount":       { type: preserve }
+  "data.uiapi.query.Contact.pageResultCount":  { type: preserve }
+  "data.uiapi.query.Contact.pageInfo.hasNextPage":     { type: preserve }
+  "data.uiapi.query.Contact.pageInfo.hasPreviousPage": { type: preserve }
+  "data.uiapi.query.Contact.pageInfo.startCursor":     { type: id }
+  "data.uiapi.query.Contact.pageInfo.endCursor":       { type: id }
+  "data.uiapi.query.Contact.edges[].cursor":           { type: id }
+  "data.uiapi.query.Contact.edges[].node.Id":              { type: id, anchor: true }
+  "data.uiapi.query.Contact.edges[].node.FirstName.value": { type: firstName }
+  "data.uiapi.query.Contact.edges[].node.LastName.value":  { type: lastName }
+  "data.uiapi.query.Contact.edges[].node.Name.value":      { type: fullName, anchor: true }
+  "data.uiapi.query.Contact.edges[].node.Email.value":     { type: email, anchor: true }
+  "data.uiapi.query.Contact.edges[].node.Phone.value":     { type: phone }
+  "data.uiapi.query.Contact.edges[].node.MobilePhone.value": { type: phone }
+  "data.uiapi.query.Contact.edges[].node.HomePhone.value": { type: phone }
+  "data.uiapi.query.Contact.edges[].node.Title.value":     { type: shortText }
+  "data.uiapi.query.Contact.edges[].node.Department.value": { type: shortText }
+  "data.uiapi.query.Contact.edges[].node.AccountId.value":          { type: id, anchor: true }
+  "data.uiapi.query.Contact.edges[].node.AccountId.displayValue":   { type: company }
+  "data.uiapi.query.Contact.edges[].node.OwnerId.value":            { type: id, anchor: true }
+  "data.uiapi.query.Contact.edges[].node.OwnerId.displayValue":     { type: fullName }
+  "data.uiapi.query.Contact.edges[].node.LeadSource.value":         { type: preserve }
+  "data.uiapi.query.Contact.edges[].node.Description.value":        { type: longText }
+  "data.uiapi.query.Contact.edges[].node.Birthdate.value":          { type: isoDate }
+  "data.uiapi.query.Contact.edges[].node.LastModifiedDate":         { type: isoDate }
+  "data.uiapi.query.Contact.edges[].node.CreatedDate":              { type: isoDate }
+  "data.uiapi.query.Contact.edges[].node.SystemModstamp":           { type: isoDate }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.Street.value":     { type: street }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.City.value":       { type: city }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.State.value":      { type: stateOrProvince }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.StateCode.value":  { type: stateOrProvince }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.PostalCode.value": { type: postalCode }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.Country.value":    { type: country }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.CountryCode.value": { type: countryCode }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.Latitude.value":   { type: preserve }
+  "data.uiapi.query.Contact.edges[].node.MailingAddress.Longitude.value":  { type: preserve }
+  "data.uiapi.query.Contact.edges[].node.OtherAddress.Street.value":       { type: street }
+  "data.uiapi.query.Contact.edges[].node.OtherAddress.City.value":         { type: city }
+  "data.uiapi.query.Contact.edges[].node.OtherAddress.PostalCode.value":   { type: postalCode }
+  "data.uiapi.query.Contact.edges[].node.OtherAddress.Country.value":      { type: country }
+  "extensions.weakETags":                                                  { type: preserve }
+  "*": { type: auto }

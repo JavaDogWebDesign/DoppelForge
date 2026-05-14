@@ -1,0 +1,86 @@
+endpoint:
+  method: POST
+  path: /graphql (query customer)
+  description: BigCommerce Storefront GraphQL — customer (with addresses + orders connections)
+  doc_url: https://developer.bigcommerce.com/docs/storefront/graphql/customers
+
+# Storefront GraphQL is Relay-style with edges[].node + pageInfo. IDs are
+# numeric `entityId` fields; there's also an opaque base64 `id` on some types.
+signature:
+  required_paths:
+    - data.customer.entityId
+    - data.customer.email
+    - data.customer.firstName
+    - data.customer.lastName
+  optional_paths:
+    - extensions.complexity
+    - data.customer.addresses
+    - data.customer.orders
+    - data.customer.company
+    - data.customer.phone
+
+fields:
+  "extensions.complexity":     { type: preserve }
+  "data.customer.entityId":    { type: id, anchor: true }
+  "data.customer.id":          { type: id, anchor: true }
+  "data.customer.email":       { type: email, anchor: true }
+  "data.customer.firstName":   { type: firstName }
+  "data.customer.lastName":    { type: lastName }
+  "data.customer.company":     { type: company }
+  "data.customer.phone":       { type: phone }
+  "data.customer.notes":       { type: shortText }
+  "data.customer.taxExemptCategory": { type: preserve }
+  "data.customer.customerGroupId":   { type: id, anchor: true }
+  "data.customer.storeCredit":       { type: preserve }
+  "data.customer.attributeCount":    { type: preserve }
+  "data.customer.attributes":        { type: auto }
+  "data.customer.formFields[].name":   { type: preserve }
+  "data.customer.formFields[].value":  { type: shortText }
+  "data.customer.addresses.collectionInfo.totalItems": { type: preserve }
+  "data.customer.addresses.pageInfo.hasNextPage":      { type: preserve }
+  "data.customer.addresses.pageInfo.hasPreviousPage":  { type: preserve }
+  "data.customer.addresses.pageInfo.startCursor":      { type: id }
+  "data.customer.addresses.pageInfo.endCursor":        { type: id }
+  "data.customer.addresses.edges[].cursor":            { type: id }
+  "data.customer.addresses.edges[].node.entityId":     { type: id, anchor: true }
+  "data.customer.addresses.edges[].node.firstName":    { type: firstName }
+  "data.customer.addresses.edges[].node.lastName":     { type: lastName }
+  "data.customer.addresses.edges[].node.company":      { type: company }
+  "data.customer.addresses.edges[].node.address1":     { type: street }
+  "data.customer.addresses.edges[].node.address2":     { type: streetSecondary }
+  "data.customer.addresses.edges[].node.city":         { type: city }
+  "data.customer.addresses.edges[].node.stateOrProvince": { type: stateOrProvince }
+  "data.customer.addresses.edges[].node.postalCode":   { type: postalCode }
+  "data.customer.addresses.edges[].node.country":      { type: country }
+  "data.customer.addresses.edges[].node.countryCode":  { type: countryCode }
+  "data.customer.addresses.edges[].node.phone":        { type: phone }
+  "data.customer.addresses.edges[].node.addressType":  { type: preserve }
+  "data.customer.orders.collectionInfo.totalItems": { type: preserve }
+  "data.customer.orders.pageInfo.hasNextPage":      { type: preserve }
+  "data.customer.orders.pageInfo.hasPreviousPage":  { type: preserve }
+  "data.customer.orders.pageInfo.startCursor":      { type: id }
+  "data.customer.orders.pageInfo.endCursor":        { type: id }
+  "data.customer.orders.edges[].cursor":            { type: id }
+  "data.customer.orders.edges[].node.entityId":     { type: id, anchor: true }
+  "data.customer.orders.edges[].node.orderedAt.utc": { type: isoDate }
+  "data.customer.orders.edges[].node.status.label": { type: preserve }
+  "data.customer.orders.edges[].node.status.value": { type: preserve }
+  "data.customer.orders.edges[].node.subtotal.value":      { type: priceAmount }
+  "data.customer.orders.edges[].node.subtotal.currencyCode": { type: preserve }
+  "data.customer.orders.edges[].node.totalIncTax.value":   { type: priceAmount }
+  "data.customer.orders.edges[].node.totalIncTax.currencyCode": { type: preserve }
+  "data.customer.orders.edges[].node.shippingCostTotal.value": { type: priceAmount }
+  "data.customer.orders.edges[].node.handlingCostTotal.value": { type: priceAmount }
+  "data.customer.orders.edges[].node.taxTotal.value":      { type: priceAmount }
+  "data.customer.orders.edges[].node.discounts.nonCouponDiscountTotal.value": { type: priceAmount }
+  "data.customer.orders.edges[].node.billingAddress.firstName":     { type: firstName }
+  "data.customer.orders.edges[].node.billingAddress.lastName":      { type: lastName }
+  "data.customer.orders.edges[].node.billingAddress.company":       { type: company }
+  "data.customer.orders.edges[].node.billingAddress.address1":      { type: street }
+  "data.customer.orders.edges[].node.billingAddress.city":          { type: city }
+  "data.customer.orders.edges[].node.billingAddress.stateOrProvince": { type: stateOrProvince }
+  "data.customer.orders.edges[].node.billingAddress.postalCode":    { type: postalCode }
+  "data.customer.orders.edges[].node.billingAddress.country":       { type: country }
+  "data.customer.orders.edges[].node.billingAddress.countryCode":   { type: countryCode }
+  "data.customer.orders.edges[].node.billingAddress.phone":         { type: phone }
+  "*": { type: auto }

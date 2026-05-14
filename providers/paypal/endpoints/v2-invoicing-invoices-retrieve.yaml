@@ -1,0 +1,102 @@
+endpoint:
+  method: GET
+  path: /v2/invoicing/invoices/{invoice_id}
+  description: Retrieve an invoice
+  doc_url: https://developer.paypal.com/docs/api/invoicing/v2/#invoices_get
+
+signature:
+  required_paths:
+    - id
+    - status
+    - detail.invoice_number
+    - detail.invoice_date
+    - primary_recipients
+  optional_paths:
+    - invoicer
+    - items
+    - amount
+
+fields:
+  "id":           { type: id, anchor: true }
+  "status":       { type: preserve }
+  "parent_id":    { type: id, anchor: true }
+  "detail.invoice_number":  { type: id, anchor: true }
+  "detail.reference":       { type: id, anchor: true }
+  "detail.currency_code":   { type: currency }
+  "detail.note":            { type: longText }
+  "detail.terms_and_conditions": { type: longText }
+  "detail.memo":            { type: shortText }
+  "detail.invoice_date":    { type: isoDate }
+  "detail.payment_term.term_type": { type: preserve }
+  "detail.payment_term.due_date":  { type: isoDate }
+  "detail.metadata.create_time":   { type: isoDate }
+  "detail.metadata.last_update_time": { type: isoDate }
+  "detail.metadata.created_by_flow":  { type: preserve }
+  "detail.metadata.recipient_view_url": { type: url }
+  "detail.metadata.invoicer_view_url":  { type: url }
+  "invoicer.name.given_name":  { type: firstName }
+  "invoicer.name.surname":     { type: lastName }
+  "invoicer.email_address":    { type: email, anchor: true }
+  "invoicer.phones[].country_code": { type: countryCode }
+  "invoicer.phones[].national_number": { type: phone, anchor: true }
+  "invoicer.website":          { type: url }
+  "invoicer.tax_id":           { type: id, anchor: true }
+  "invoicer.logo_url":         { type: url }
+  "invoicer.business_name":    { type: company }
+  "invoicer.address.address_line_1":  { type: street }
+  "invoicer.address.admin_area_2":    { type: city }
+  "invoicer.address.admin_area_1":    { type: stateOrProvince }
+  "invoicer.address.postal_code":     { type: postalCode }
+  "invoicer.address.country_code":    { type: countryCode }
+  "primary_recipients[].billing_info.name.given_name": { type: firstName }
+  "primary_recipients[].billing_info.name.surname":    { type: lastName }
+  "primary_recipients[].billing_info.email_address":   { type: email, anchor: true }
+  "primary_recipients[].billing_info.phones[].country_code":    { type: countryCode }
+  "primary_recipients[].billing_info.phones[].national_number": { type: phone }
+  "primary_recipients[].billing_info.business_name":   { type: company }
+  "primary_recipients[].billing_info.address.address_line_1": { type: street }
+  "primary_recipients[].billing_info.address.admin_area_2":   { type: city }
+  "primary_recipients[].billing_info.address.admin_area_1":   { type: stateOrProvince }
+  "primary_recipients[].billing_info.address.postal_code":    { type: postalCode }
+  "primary_recipients[].billing_info.address.country_code":   { type: countryCode }
+  "primary_recipients[].shipping_info.name.full_name": { type: fullName }
+  "primary_recipients[].shipping_info.address.address_line_1": { type: street }
+  "primary_recipients[].shipping_info.address.admin_area_2":   { type: city }
+  "primary_recipients[].shipping_info.address.postal_code":    { type: postalCode }
+  "primary_recipients[].shipping_info.address.country_code":   { type: countryCode }
+  "items[].id":               { type: id, anchor: true }
+  "items[].name":             { type: productName }
+  "items[].description":      { type: shortText }
+  "items[].quantity":         { type: preserve }
+  "items[].unit_amount.value":         { type: priceAmount }
+  "items[].unit_amount.currency_code": { type: currency }
+  "items[].tax.name":         { type: preserve }
+  "items[].tax.percent":      { type: preserve }
+  "items[].tax.amount.value": { type: priceAmount }
+  "items[].discount.percent": { type: preserve }
+  "items[].discount.amount.value": { type: priceAmount }
+  "items[].unit_of_measure":  { type: preserve }
+  "amount.breakdown.item_total.value":     { type: priceAmount }
+  "amount.breakdown.discount.invoice_discount.amount.value": { type: priceAmount }
+  "amount.breakdown.tax_total.amount.value":         { type: priceAmount }
+  "amount.breakdown.shipping.amount.value":          { type: priceAmount }
+  "amount.breakdown.custom.label":         { type: shortText }
+  "amount.breakdown.custom.amount.value":  { type: priceAmount }
+  "amount.value":          { type: priceAmount }
+  "amount.currency_code":  { type: currency }
+  "due_amount.value":      { type: priceAmount }
+  "due_amount.currency_code": { type: currency }
+  "payments.paid_amount.value": { type: priceAmount }
+  "payments.transactions[].payment_id":   { type: id, anchor: true }
+  "payments.transactions[].type":         { type: preserve }
+  "payments.transactions[].payment_date": { type: isoDate }
+  "payments.transactions[].method":       { type: preserve }
+  "payments.transactions[].amount.value": { type: priceAmount }
+  "refunds.refund_amount.value": { type: priceAmount }
+  "refunds.transactions[].refund_id":   { type: id, anchor: true }
+  "refunds.transactions[].refund_date": { type: isoDate }
+  "refunds.transactions[].amount.value": { type: priceAmount }
+  "links[].href":   { type: url }
+  "links[].rel":    { type: preserve }
+  "links[].method": { type: preserve }
+  "*": { type: auto }

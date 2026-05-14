@@ -1,0 +1,104 @@
+endpoint:
+  method: GET
+  path: /shipments/{object_id}
+  description: Retrieve a shipment (with rates)
+  doc_url: https://docs.goshippo.com/shippoapi/public-api/#tag/Shipments/operation/ListShipmentRates
+
+# Shippo wraps shipments as a bare object (no envelope key). Address blocks
+# use street1/street2/street3 (not address_line_1/2/3). Money fields are
+# string-typed amounts paired with separate currency codes.
+signature:
+  required_paths:
+    - object_id
+    - object_owner
+    - status
+    - address_from
+    - address_to
+    - parcels
+  optional_paths:
+    - rates
+    - shipment_date
+    - customs_declaration
+
+fields:
+  "object_id":      { type: id, anchor: true }
+  "object_owner":   { type: email, anchor: true }
+  "object_created": { type: isoDate }
+  "object_updated": { type: isoDate }
+  "status":         { type: preserve }
+  "test":           { type: preserve }
+  "shipment_date":  { type: isoDate }
+  "metadata":       { type: shortText }
+  "messages":       { type: preserve }
+  "address_from.object_id":  { type: id, anchor: true }
+  "address_from.is_complete": { type: preserve }
+  "address_from.name":       { type: fullName }
+  "address_from.company":    { type: company }
+  "address_from.street1":    { type: street }
+  "address_from.street2":    { type: streetSecondary }
+  "address_from.street3":    { type: streetSecondary }
+  "address_from.street_no":  { type: shortText }
+  "address_from.city":       { type: city }
+  "address_from.state":      { type: stateOrProvince }
+  "address_from.zip":        { type: postalCode }
+  "address_from.country":    { type: countryCode }
+  "address_from.phone":      { type: phone }
+  "address_from.email":      { type: email, anchor: true }
+  "address_from.is_residential": { type: preserve }
+  "address_from.metadata":   { type: shortText }
+  "address_to.object_id":    { type: id, anchor: true }
+  "address_to.is_complete":  { type: preserve }
+  "address_to.name":         { type: fullName }
+  "address_to.company":      { type: company }
+  "address_to.street1":      { type: street }
+  "address_to.street2":      { type: streetSecondary }
+  "address_to.street3":      { type: streetSecondary }
+  "address_to.city":         { type: city }
+  "address_to.state":        { type: stateOrProvince }
+  "address_to.zip":          { type: postalCode }
+  "address_to.country":      { type: countryCode }
+  "address_to.phone":        { type: phone }
+  "address_to.email":        { type: email, anchor: true }
+  "address_to.is_residential": { type: preserve }
+  "address_to.metadata":     { type: shortText }
+  "address_return.object_id":  { type: id, anchor: true }
+  "address_return.name":       { type: fullName }
+  "address_return.street1":    { type: street }
+  "address_return.city":       { type: city }
+  "address_return.state":      { type: stateOrProvince }
+  "address_return.zip":        { type: postalCode }
+  "address_return.country":    { type: countryCode }
+  "parcels[].object_id":     { type: id, anchor: true }
+  "parcels[].length":        { type: preserve }
+  "parcels[].width":         { type: preserve }
+  "parcels[].height":        { type: preserve }
+  "parcels[].distance_unit": { type: preserve }
+  "parcels[].weight":        { type: preserve }
+  "parcels[].mass_unit":     { type: preserve }
+  "parcels[].metadata":      { type: shortText }
+  "rates[].object_id":       { type: id, anchor: true }
+  "rates[].amount":          { type: priceAmount }
+  "rates[].currency":        { type: currency }
+  "rates[].amount_local":    { type: priceAmount }
+  "rates[].currency_local":  { type: currency }
+  "rates[].provider":        { type: company }
+  "rates[].provider_image_75": { type: url }
+  "rates[].provider_image_200": { type: url }
+  "rates[].servicelevel.name":    { type: shortText }
+  "rates[].servicelevel.token":   { type: preserve }
+  "rates[].servicelevel.terms":   { type: shortText }
+  "rates[].days":             { type: preserve }
+  "rates[].estimated_days":   { type: preserve }
+  "rates[].duration_terms":   { type: shortText }
+  "rates[].carrier_account":  { type: id, anchor: true }
+  "rates[].zone":             { type: preserve }
+  "rates[].messages":         { type: preserve }
+  "rates[].attributes":       { type: preserve }
+  "rates[].arrives_by":       { type: isoDate }
+  "carrier_accounts":         { type: preserve }
+  "customs_declaration":      { type: id, anchor: true }
+  "extra.insurance.amount":   { type: priceAmount }
+  "extra.insurance.currency": { type: currency }
+  "extra.signature_confirmation": { type: preserve }
+  "extra.alcohol.contains_alcohol": { type: preserve }
+  "*": { type: auto }

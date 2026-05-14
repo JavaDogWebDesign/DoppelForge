@@ -1,0 +1,55 @@
+endpoint:
+  method: POST
+  path: /collector/graphql (query contact_collection)
+  description: HubSpot Content Hub GraphQL — contact_collection
+  doc_url: https://developers.hubspot.com/docs/cms/start-building/features/data-driven-content/graphql/query-hubspot-data-using-graphql
+
+# HubSpot Content Hub GraphQL is non-Relay: { offset, limit, total, items: [] }
+# under a data.CRM.<entity>_collection wrapper. Distinct from the v3 REST envelope
+# (`{ results: [], paging: {} }`) used elsewhere in this provider.
+signature:
+  required_paths:
+    - data.CRM.contact_collection.items[].id
+    - data.CRM.contact_collection.items[].email
+    - data.CRM.contact_collection.total
+    - data.CRM.contact_collection.offset
+    - data.CRM.contact_collection.limit
+  optional_paths:
+    - extensions.query_complexity.used_points
+    - data.CRM.contact_collection.items[].firstname
+    - data.CRM.contact_collection.items[].phone
+
+fields:
+  "extensions.query_complexity.used_points":            { type: preserve }
+  "extensions.query_complexity.remaining_points":       { type: preserve }
+  "data.CRM.contact_collection.total":                  { type: preserve }
+  "data.CRM.contact_collection.offset":                 { type: preserve }
+  "data.CRM.contact_collection.limit":                  { type: preserve }
+  "data.CRM.contact_collection.items[].id":             { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].hs_object_id":   { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].createdate":     { type: isoDate }
+  "data.CRM.contact_collection.items[].lastmodifieddate": { type: isoDate }
+  "data.CRM.contact_collection.items[].email":          { type: email, anchor: true }
+  "data.CRM.contact_collection.items[].firstname":      { type: firstName }
+  "data.CRM.contact_collection.items[].lastname":       { type: lastName }
+  "data.CRM.contact_collection.items[].fullname":       { type: fullName }
+  "data.CRM.contact_collection.items[].company":        { type: company }
+  "data.CRM.contact_collection.items[].jobtitle":       { type: shortText }
+  "data.CRM.contact_collection.items[].phone":          { type: phone }
+  "data.CRM.contact_collection.items[].mobilephone":    { type: phone }
+  "data.CRM.contact_collection.items[].website":        { type: url }
+  "data.CRM.contact_collection.items[].address":        { type: street }
+  "data.CRM.contact_collection.items[].city":           { type: city }
+  "data.CRM.contact_collection.items[].state":          { type: stateOrProvince }
+  "data.CRM.contact_collection.items[].zip":            { type: postalCode }
+  "data.CRM.contact_collection.items[].country":        { type: country }
+  "data.CRM.contact_collection.items[].industry":       { type: shortText }
+  "data.CRM.contact_collection.items[].lifecyclestage": { type: preserve }
+  "data.CRM.contact_collection.items[].hs_lead_status": { type: preserve }
+  "data.CRM.contact_collection.items[].hubspot_owner_id": { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].hubspot_team_id":  { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].twitterhandle":  { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].hs_linkedinid":  { type: id, anchor: true }
+  "data.CRM.contact_collection.items[].hs_email_domain": { type: id }
+  "data.CRM.contact_collection.items[].hs_marketable_status": { type: preserve }
+  "*": { type: auto }

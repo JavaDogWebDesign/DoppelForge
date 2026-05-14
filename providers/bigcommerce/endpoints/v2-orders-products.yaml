@@ -1,0 +1,81 @@
+endpoint:
+  method: GET
+  path: /v2/orders/{order_id}/products
+  description: List products in an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-management/orders/order-products
+
+signature:
+  required_paths:
+    - "[].id"
+    - "[].order_id"
+    - "[].product_id"
+    - "[].sku"
+    - "[].quantity"
+  optional_paths:
+    - "[].applied_discounts"
+    - "[].product_options"
+
+fields:
+  "[].id":                                  { type: id, anchor: true }
+  "[].order_id":                            { type: id, anchor: true }
+  "[].product_id":                          { type: id, anchor: true }
+  "[].variant_id":                          { type: id, anchor: true }
+  "[].order_pickup_method_id":              { type: id, anchor: true }
+  "[].order_address_id":                    { type: id, anchor: true }
+  "[].name":                                { type: productName }
+  "[].name_customer":                       { type: productName }
+  "[].name_merchant":                       { type: productName }
+  "[].sku":                                 { type: sku, anchor: true }
+  "[].upc":                                 { type: preserve }
+  "[].type":                                { type: preserve }
+  "[].base_price":                          { type: preserve }
+  "[].price_ex_tax":                        { type: preserve }
+  "[].price_inc_tax":                       { type: preserve }
+  "[].price_tax":                           { type: preserve }
+  "[].base_total":                          { type: preserve }
+  "[].total_ex_tax":                        { type: preserve }
+  "[].total_inc_tax":                       { type: preserve }
+  "[].total_tax":                           { type: preserve }
+  "[].quantity":                            { type: preserve }
+  "[].base_cost_price":                     { type: preserve }
+  "[].cost_price_inc_tax":                  { type: preserve }
+  "[].cost_price_ex_tax":                   { type: preserve }
+  "[].cost_price_tax":                      { type: preserve }
+  "[].weight":                              { type: preserve }
+  "[].is_refunded":                         { type: preserve }
+  "[].quantity_refunded":                   { type: preserve }
+  "[].refunded_amount":                     { type: preserve }
+  "[].return_id":                           { type: preserve }
+  "[].wrapping_name":                       { type: shortText }
+  "[].base_wrapping_cost":                  { type: preserve }
+  "[].wrapping_cost_ex_tax":                { type: preserve }
+  "[].wrapping_cost_inc_tax":               { type: preserve }
+  "[].wrapping_cost_tax":                   { type: preserve }
+  "[].wrapping_message":                    { type: shortText }
+  "[].quantity_shipped":                    { type: preserve }
+  "[].event_name":                          { type: shortText }
+  "[].event_date":                          { type: isoDate }
+  "[].fixed_shipping_cost":                 { type: preserve }
+  "[].ebay_item_id":                        { type: id, anchor: true }
+  "[].ebay_transaction_id":                 { type: id, anchor: true }
+  "[].option_set_id":                       { type: id }
+  "[].parent_order_product_id":             { type: id, anchor: true }
+  "[].is_bundled_product":                  { type: preserve }
+  "[].bin_picking_number":                  { type: preserve }
+  "[].external_id":                         { type: id, anchor: true }
+  "[].brand":                               { type: company }
+  "[].applied_discounts[].id":              { type: id }
+  "[].applied_discounts[].amount":          { type: preserve }
+  "[].applied_discounts[].name":            { type: shortText }
+  "[].applied_discounts[].code":            { type: preserve }
+  "[].applied_discounts[].target":          { type: preserve }
+  "[].product_options[].id":                { type: id }
+  "[].product_options[].option_id":         { type: id }
+  "[].product_options[].order_product_id":  { type: id, anchor: true }
+  "[].product_options[].product_option_id": { type: id }
+  "[].product_options[].display_name":      { type: preserve }
+  "[].product_options[].display_value":     { type: preserve }
+  "[].product_options[].value":             { type: preserve }
+  "[].product_options[].type":              { type: preserve }
+  "[].product_options[].name":              { type: preserve }
+  "*": { type: auto }

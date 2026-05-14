@@ -1,0 +1,75 @@
+endpoint:
+  method: POST
+  path: payment_method.attached
+  kind: webhook
+  description: Stripe webhook — payment method attached to customer
+  doc_url: https://docs.stripe.com/api/events/types#event_types-payment_method.attached
+
+signature:
+  required_paths:
+    - id
+    - object
+    - type
+    - data.object.object
+    - data.object.type
+    - data.object.billing_details
+    - data.object.allow_redisplay
+  optional_paths:
+    - data.object.card
+    - data.object.us_bank_account
+    - data.object.customer
+
+fields:
+  "id":                                              { type: id, anchor: true }
+  "object":                                          { type: preserve }
+  "api_version":                                     { type: preserve }
+  "created":                                         { type: unixTimestamp }
+  "livemode":                                        { type: preserve }
+  "pending_webhooks":                                { type: preserve }
+  "type":                                            { type: preserve }
+  "account":                                         { type: id, anchor: true }
+  "request.id":                                      { type: id, anchor: true }
+  "request.idempotency_key":                         { type: id, anchor: true }
+  "data.object.id":                                  { type: id, anchor: true }
+  "data.object.object":                              { type: preserve }
+  "data.object.allow_redisplay":                     { type: preserve }
+  "data.object.created":                             { type: unixTimestamp }
+  "data.object.customer":                            { type: id, anchor: true }
+  "data.object.livemode":                            { type: preserve }
+  "data.object.metadata":                            { type: preserve }
+  "data.object.type":                                { type: preserve }
+  "data.object.billing_details.email":               { type: email, anchor: true }
+  "data.object.billing_details.name":                { type: fullName }
+  "data.object.billing_details.phone":               { type: phone }
+  "data.object.billing_details.address.city":        { type: city }
+  "data.object.billing_details.address.country":     { type: countryCode }
+  "data.object.billing_details.address.line1":       { type: street }
+  "data.object.billing_details.address.line2":       { type: streetSecondary }
+  "data.object.billing_details.address.postal_code": { type: postalCode }
+  "data.object.billing_details.address.state":       { type: stateOrProvince }
+  "data.object.card.brand":                          { type: preserve }
+  "data.object.card.country":                        { type: countryCode }
+  "data.object.card.display_brand":                  { type: preserve }
+  "data.object.card.exp_month":                      { type: preserve }
+  "data.object.card.exp_year":                       { type: preserve }
+  "data.object.card.fingerprint":                    { type: sku, anchor: true }
+  "data.object.card.funding":                        { type: preserve }
+  "data.object.card.last4":                          { type: sku }
+  "data.object.card.regulated_status":               { type: preserve }
+  "data.object.card.checks.address_line1_check":     { type: preserve }
+  "data.object.card.checks.address_postal_code_check": { type: preserve }
+  "data.object.card.checks.cvc_check":               { type: preserve }
+  "data.object.card.networks.available":             { type: preserve }
+  "data.object.card.networks.preferred":             { type: preserve }
+  "data.object.card.three_d_secure_usage.supported": { type: preserve }
+  "data.object.card.wallet.type":                    { type: preserve }
+  "data.object.card.wallet.dynamic_last4":           { type: sku }
+  "data.object.card.generated_from":                 { type: auto }
+  "data.object.radar_options.session":               { type: id, anchor: true }
+  "data.object.us_bank_account.account_holder_type": { type: preserve }
+  "data.object.us_bank_account.account_type":        { type: preserve }
+  "data.object.us_bank_account.bank_name":           { type: company }
+  "data.object.us_bank_account.fingerprint":         { type: sku, anchor: true }
+  "data.object.us_bank_account.last4":               { type: sku }
+  "data.object.us_bank_account.routing_number":      { type: sku }
+  "*": { type: auto }

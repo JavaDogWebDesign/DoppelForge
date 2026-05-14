@@ -1,0 +1,6 @@
+id: hubspot
+name: HubSpot
+category: crm
+icon: users
+color: "#FF7A59"
+docs: https://developers.hubspot.com/docs/api/overview

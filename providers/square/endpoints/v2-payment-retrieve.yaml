@@ -1,0 +1,88 @@
+endpoint:
+  method: GET
+  path: /v2/payments/{payment_id}
+  description: Retrieve a payment
+  doc_url: https://developer.squareup.com/reference/square/payments-api/get-payment
+
+signature:
+  required_paths:
+    - payment.id
+    - payment.created_at
+    - payment.amount_money.amount
+    - payment.status
+    - payment.source_type
+  optional_paths:
+    - payment.card_details
+    - payment.customer_id
+    - payment.order_id
+
+fields:
+  "payment.id":              { type: id, anchor: true }
+  "payment.created_at":      { type: isoDate }
+  "payment.updated_at":      { type: isoDate }
+  "payment.amount_money.amount":            { type: preserve }
+  "payment.amount_money.currency":          { type: currency }
+  "payment.tip_money.amount":               { type: preserve }
+  "payment.tip_money.currency":             { type: currency }
+  "payment.total_money.amount":             { type: preserve }
+  "payment.total_money.currency":           { type: currency }
+  "payment.app_fee_money.amount":           { type: preserve }
+  "payment.app_fee_money.currency":         { type: currency }
+  "payment.approved_money.amount":          { type: preserve }
+  "payment.refunded_money.amount":          { type: preserve }
+  "payment.processing_fee[].effective_at":  { type: isoDate }
+  "payment.processing_fee[].type":          { type: preserve }
+  "payment.processing_fee[].amount_money.amount":   { type: preserve }
+  "payment.processing_fee[].amount_money.currency": { type: currency }
+  "payment.status":          { type: preserve }
+  "payment.delay_action":    { type: preserve }
+  "payment.delay_duration":  { type: preserve }
+  "payment.delayed_until":   { type: isoDate }
+  "payment.source_type":     { type: preserve }
+  "payment.card_details.status":            { type: preserve }
+  "payment.card_details.entry_method":      { type: preserve }
+  "payment.card_details.cvv_status":        { type: preserve }
+  "payment.card_details.avs_status":        { type: preserve }
+  "payment.card_details.statement_description": { type: shortText }
+  "payment.card_details.card.card_brand":   { type: preserve }
+  "payment.card_details.card.last_4":       { type: sku }
+  "payment.card_details.card.exp_month":    { type: preserve }
+  "payment.card_details.card.exp_year":     { type: preserve }
+  "payment.card_details.card.fingerprint":  { type: id, anchor: true }
+  "payment.card_details.card.card_type":    { type: preserve }
+  "payment.card_details.card.prepaid_type": { type: preserve }
+  "payment.card_details.card.bin":          { type: sku }
+  "payment.card_details.card.cardholder_name": { type: fullName }
+  "payment.card_details.card.billing_address.address_line_1": { type: street }
+  "payment.card_details.card.billing_address.locality":       { type: city }
+  "payment.card_details.card.billing_address.administrative_district_level_1": { type: stateOrProvince }
+  "payment.card_details.card.billing_address.postal_code":    { type: postalCode }
+  "payment.card_details.card.billing_address.country":        { type: countryCode }
+  "payment.location_id":     { type: id, anchor: true }
+  "payment.order_id":        { type: id, anchor: true }
+  "payment.reference_id":    { type: id, anchor: true }
+  "payment.customer_id":     { type: id, anchor: true }
+  "payment.employee_id":     { type: id, anchor: true }
+  "payment.team_member_id":  { type: id, anchor: true }
+  "payment.receipt_number":  { type: sku }
+  "payment.receipt_url":     { type: url }
+  "payment.note":            { type: shortText }
+  "payment.statement_description_identifier": { type: shortText }
+  "payment.buyer_email_address": { type: email, anchor: true }
+  "payment.billing_address.address_line_1": { type: street }
+  "payment.billing_address.locality":       { type: city }
+  "payment.billing_address.administrative_district_level_1": { type: stateOrProvince }
+  "payment.billing_address.postal_code":    { type: postalCode }
+  "payment.billing_address.country":        { type: countryCode }
+  "payment.billing_address.first_name":     { type: firstName }
+  "payment.billing_address.last_name":      { type: lastName }
+  "payment.shipping_address.address_line_1": { type: street }
+  "payment.shipping_address.locality":       { type: city }
+  "payment.shipping_address.postal_code":    { type: postalCode }
+  "payment.shipping_address.country":        { type: countryCode }
+  "payment.shipping_address.first_name":     { type: firstName }
+  "payment.shipping_address.last_name":      { type: lastName }
+  "payment.application_details.square_product": { type: preserve }
+  "payment.application_details.application_id": { type: id, anchor: true }
+  "payment.version_token":   { type: id, anchor: true }
+  "*": { type: auto }

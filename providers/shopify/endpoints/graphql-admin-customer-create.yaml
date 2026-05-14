@@ -1,0 +1,55 @@
+endpoint:
+  method: POST
+  path: /admin/api/2024-10/graphql.json (mutation customerCreate)
+  description: Shopify Admin GraphQL — customerCreate mutation
+  doc_url: https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerCreate
+
+signature:
+  required_paths:
+    - data.customerCreate.customer.id
+    - data.customerCreate.customer.displayName
+    - data.customerCreate.userErrors
+  optional_paths:
+    - extensions.cost.actualQueryCost
+    - data.customerCreate.customer.email
+    - data.customerCreate.customer.defaultEmailAddress
+
+fields:
+  "extensions.cost.requestedQueryCost":  { type: preserve }
+  "extensions.cost.actualQueryCost":     { type: preserve }
+  "extensions.cost.throttleStatus.maximumAvailable":   { type: preserve }
+  "extensions.cost.throttleStatus.currentlyAvailable": { type: preserve }
+  "extensions.cost.throttleStatus.restoreRate":        { type: preserve }
+  "data.customerCreate.userErrors[].field":   { type: preserve }
+  "data.customerCreate.userErrors[].message": { type: shortText }
+  "data.customerCreate.userErrors[].code":    { type: preserve }
+  "data.customerCreate.customer.id":           { type: id, anchor: true }
+  "data.customerCreate.customer.firstName":    { type: firstName }
+  "data.customerCreate.customer.lastName":     { type: lastName }
+  "data.customerCreate.customer.displayName":  { type: fullName }
+  "data.customerCreate.customer.email":        { type: email, anchor: true }
+  "data.customerCreate.customer.phone":        { type: phone }
+  "data.customerCreate.customer.defaultEmailAddress.emailAddress":   { type: email, anchor: true }
+  "data.customerCreate.customer.defaultEmailAddress.marketingState": { type: preserve }
+  "data.customerCreate.customer.defaultPhoneNumber.phoneNumber":     { type: phone }
+  "data.customerCreate.customer.defaultPhoneNumber.marketingState":  { type: preserve }
+  "data.customerCreate.customer.note":           { type: shortText }
+  "data.customerCreate.customer.tags":           { type: preserve }
+  "data.customerCreate.customer.taxExempt":      { type: preserve }
+  "data.customerCreate.customer.verifiedEmail":  { type: preserve }
+  "data.customerCreate.customer.createdAt":      { type: isoDate }
+  "data.customerCreate.customer.updatedAt":      { type: isoDate }
+  "data.customerCreate.customer.defaultAddress.firstName":    { type: firstName }
+  "data.customerCreate.customer.defaultAddress.lastName":     { type: lastName }
+  "data.customerCreate.customer.defaultAddress.name":         { type: fullName }
+  "data.customerCreate.customer.defaultAddress.company":      { type: company }
+  "data.customerCreate.customer.defaultAddress.address1":     { type: street }
+  "data.customerCreate.customer.defaultAddress.address2":     { type: streetSecondary }
+  "data.customerCreate.customer.defaultAddress.city":         { type: city }
+  "data.customerCreate.customer.defaultAddress.province":     { type: stateOrProvince }
+  "data.customerCreate.customer.defaultAddress.provinceCode": { type: stateOrProvince }
+  "data.customerCreate.customer.defaultAddress.zip":          { type: postalCode }
+  "data.customerCreate.customer.defaultAddress.country":      { type: country }
+  "data.customerCreate.customer.defaultAddress.countryCode":  { type: countryCode }
+  "data.customerCreate.customer.defaultAddress.phone":        { type: phone }
+  "*": { type: auto }

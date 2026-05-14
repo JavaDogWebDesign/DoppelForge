@@ -1,0 +1,38 @@
+endpoint:
+  method: GET
+  path: /v3/orders/{order_id}/payment_actions/refunds
+  description: List refunds for an order
+  doc_url: https://developer.bigcommerce.com/docs/rest-payments/refunds
+
+signature:
+  required_paths:
+    - data[].id
+    - data[].order_id
+    - data[].total_amount
+    - data[].reason
+    - data[].payments
+  optional_paths:
+    - data[].items
+    - data[].user_id
+
+fields:
+  "data[].id":                              { type: id, anchor: true }
+  "data[].order_id":                        { type: id, anchor: true }
+  "data[].user_id":                         { type: id, anchor: true }
+  "data[].created":                         { type: isoDate }
+  "data[].reason":                          { type: shortText }
+  "data[].total_amount":                    { type: preserve }
+  "data[].total_tax":                       { type: preserve }
+  "data[].uses_merchant_override_values":   { type: preserve }
+  "data[].items[].item_type":               { type: preserve }
+  "data[].items[].item_id":                 { type: id, anchor: true }
+  "data[].items[].reason":                  { type: shortText }
+  "data[].items[].quantity":                { type: preserve }
+  "data[].items[].requested_amount":        { type: preserve }
+  "data[].payments[].id":                   { type: id, anchor: true }
+  "data[].payments[].provider_id":          { type: id, anchor: true }
+  "data[].payments[].amount":               { type: preserve }
+  "data[].payments[].offline":              { type: preserve }
+  "data[].payments[].is_declined":          { type: preserve }
+  "data[].payments[].declined_message":     { type: shortText }
+  "*": { type: auto }

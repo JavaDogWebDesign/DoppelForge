@@ -1,0 +1,41 @@
+endpoint:
+  method: GET
+  path: /api/v2/users-by-email
+  description: Search users by email (Management API v2)
+  doc_url: https://auth0.com/docs/api/management/v2/users-by-email/get-users-by-email
+
+# Response is a top-level array of user objects matching the email search.
+signature:
+  required_paths:
+    - "[].user_id"
+    - "[].email"
+    - "[].email_verified"
+    - "[].identities"
+  optional_paths:
+    - "[].name"
+    - "[].created_at"
+
+fields:
+  "[].user_id":         { type: id, anchor: true }
+  "[].email":           { type: email, anchor: true }
+  "[].email_verified":  { type: preserve }
+  "[].username":        { type: id, anchor: true }
+  "[].name":            { type: fullName }
+  "[].given_name":      { type: firstName }
+  "[].family_name":     { type: lastName }
+  "[].nickname":        { type: shortText }
+  "[].picture":         { type: url }
+  "[].phone_number":    { type: phone }
+  "[].created_at":      { type: isoDate }
+  "[].updated_at":      { type: isoDate }
+  "[].last_login":      { type: isoDate }
+  "[].last_ip":         { type: ipv4 }
+  "[].logins_count":    { type: preserve }
+  "[].blocked":         { type: preserve }
+  "[].identities[].user_id":    { type: id, anchor: true }
+  "[].identities[].provider":   { type: preserve }
+  "[].identities[].connection": { type: preserve }
+  "[].identities[].isSocial":   { type: preserve }
+  "[].user_metadata":   { type: auto }
+  "[].app_metadata":    { type: auto }
+  "*": { type: auto }

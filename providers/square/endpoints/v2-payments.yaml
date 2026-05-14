@@ -1,0 +1,59 @@
+endpoint:
+  method: GET
+  path: /v2/payments
+  description: List payments
+  doc_url: https://developer.squareup.com/reference/square/payments-api/list-payments
+
+signature:
+  required_paths:
+    - payments[].id
+    - payments[].created_at
+    - payments[].amount_money.amount
+    - payments[].status
+    - payments[].source_type
+  optional_paths:
+    - cursor
+    - payments[].card_details
+    - payments[].customer_id
+
+fields:
+  "cursor":                  { type: id, anchor: true }
+  "payments[].id":              { type: id, anchor: true }
+  "payments[].created_at":      { type: isoDate }
+  "payments[].updated_at":      { type: isoDate }
+  "payments[].amount_money.amount":   { type: preserve }
+  "payments[].amount_money.currency": { type: currency }
+  "payments[].total_money.amount":    { type: preserve }
+  "payments[].total_money.currency":  { type: currency }
+  "payments[].tip_money.amount":      { type: preserve }
+  "payments[].refunded_money.amount": { type: preserve }
+  "payments[].status":          { type: preserve }
+  "payments[].source_type":     { type: preserve }
+  "payments[].card_details.status":          { type: preserve }
+  "payments[].card_details.entry_method":    { type: preserve }
+  "payments[].card_details.card.card_brand": { type: preserve }
+  "payments[].card_details.card.last_4":     { type: sku }
+  "payments[].card_details.card.exp_month":  { type: preserve }
+  "payments[].card_details.card.exp_year":   { type: preserve }
+  "payments[].card_details.card.fingerprint": { type: id, anchor: true }
+  "payments[].card_details.card.card_type":   { type: preserve }
+  "payments[].card_details.card.bin":         { type: sku }
+  "payments[].card_details.card.cardholder_name": { type: fullName }
+  "payments[].location_id":     { type: id, anchor: true }
+  "payments[].order_id":        { type: id, anchor: true }
+  "payments[].reference_id":    { type: id, anchor: true }
+  "payments[].customer_id":     { type: id, anchor: true }
+  "payments[].employee_id":     { type: id, anchor: true }
+  "payments[].team_member_id":  { type: id, anchor: true }
+  "payments[].receipt_number":  { type: sku }
+  "payments[].receipt_url":     { type: url }
+  "payments[].note":            { type: shortText }
+  "payments[].buyer_email_address": { type: email, anchor: true }
+  "payments[].billing_address.address_line_1": { type: street }
+  "payments[].billing_address.locality":       { type: city }
+  "payments[].billing_address.postal_code":    { type: postalCode }
+  "payments[].billing_address.country":        { type: countryCode }
+  "payments[].billing_address.first_name":     { type: firstName }
+  "payments[].billing_address.last_name":      { type: lastName }
+  "payments[].version_token":   { type: id, anchor: true }
+  "*": { type: auto }
