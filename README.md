@@ -2,7 +2,7 @@
 
 **Forge identical twins of your API responses.**
 
-Drop in a response from BigCommerce, Shopify, Piano, Stripe, or one of seven other platforms. DoppelForge returns a doppelgänger — identical structure, safe values — ready to paste into a blog post, support ticket, Stack Overflow answer, or your favorite LLM.
+Drop in a response from Shopify, Stripe, BigCommerce, Square, PayPal, Mailchimp, Zendesk, or any of ten other platforms. DoppelForge returns a doppelgänger — identical structure, safe values — ready to paste into a blog post, support ticket, Stack Overflow answer, or your favorite LLM.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/built%20with-TypeScript-3178c6.svg)](https://www.typescriptlang.org/)
@@ -30,7 +30,7 @@ Same shape. Safe values. Counterfeit, with consent.
 
 **Batch mode** — Drop in a folder of JSON files. Pick which fields stay raw and which get transformed. Export the whole set as safe-to-share files, with a single seed reused across files so cross-file IDs stay consistent.
 
-**Platform-aware** — DoppelForge knows the shape of API responses from BigCommerce, Shopify, Stripe, Piano.io, HubSpot, Recharge, Braintree, Twilio, SendGrid, Salesforce, and Auth0. It transforms the right fields without breaking the structure.
+**Platform-aware** — DoppelForge knows the shape of API responses from Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Braintree, Recharge, Twilio, Auth0, SendGrid, Shippo, Mailchimp, PayPal, Square, Zendesk, Salesforce, and ShipperHQ. It transforms the right fields without breaking the structure.
 
 **Runs in your browser** — Your responses never touch a server. DoppelForge is a static web app — every transformation happens locally, and a strict Content Security Policy stops any rogue dependency from changing that.
 
@@ -48,7 +48,7 @@ Same shape. Safe values. Counterfeit, with consent.
 
 ## Provider coverage
 
-11 providers, 186 endpoints:
+17 providers, 220 endpoints:
 
 | Provider     | Endpoints | Category       |
 |--------------|----------:|----------------|
@@ -62,7 +62,13 @@ Same shape. Safe values. Counterfeit, with consent.
 | Twilio       |        13 | Communications |
 | Auth0        |         8 | Identity       |
 | SendGrid     |         7 | Communications |
+| Shippo       |         7 | Shipping       |
+| Mailchimp    |         6 | Marketing      |
+| PayPal       |         6 | Payments       |
+| Square       |         6 | Payments       |
+| Zendesk      |         6 | Support        |
 | Salesforce   |         5 | CRM            |
+| ShipperHQ    |         3 | Shipping       |
 
 Unknown endpoints fall back to a generic pattern detector — still useful, just lower fidelity. Adding coverage for a new endpoint is a single YAML file. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -84,7 +90,7 @@ All persistent state lives in `localStorage`. Nothing leaves the tab.
 ├── providers/        ← YAML field-map library (the community asset)
 │   ├── auth0/
 │   ├── bigcommerce/
-│   └── …             (11 providers, 186 endpoints)
+│   └── …             (17 providers, 220 endpoints)
 ├── web/              ← React app that consumes providers/
 │   ├── src/
 │   ├── public/
@@ -150,7 +156,7 @@ Open source, MIT licensed. No paid tiers, no telemetry, no priority queue. The f
 
 ## Trademarks
 
-Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Recharge, Braintree, PayPal, Twilio, SendGrid, Salesforce, and Auth0 are trademarks of their respective owners. DoppelForge is independent and not affiliated with, endorsed by, or sponsored by any of them. See [TRADEMARKS.md](./TRADEMARKS.md).
+Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Recharge, Braintree, PayPal, Twilio, SendGrid, Salesforce, Auth0, Mailchimp, Square, Zendesk, Shippo, and ShipperHQ are trademarks of their respective owners. DoppelForge is independent and not affiliated with, endorsed by, or sponsored by any of them. See [TRADEMARKS.md](./TRADEMARKS.md).
 
 ## License
 
