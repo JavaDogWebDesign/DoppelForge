@@ -214,7 +214,17 @@ function mergeJsonSchemaItems(items: JsonValue[]): Record<string, unknown> {
     }
   }
 
-  const variants: Record<string, unknown>[] = [...others];
+  // Dedupe primitive variants: a homogeneous array (e.g. ["a","b"]) yields
+  // repeated identical nodes, and `oneOf` requires EXACTLY one match — two
+  // identical subschemas make every value match twice and fail validation.
+  const seen = new Set<string>();
+  const variants: Record<string, unknown>[] = [];
+  for (const node of others) {
+    const key = JSON.stringify(node);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    variants.push(node);
+  }
   if (objectShapes.length > 0) {
     const merged = mergeObjectShapes(objectShapes);
     const properties: Record<string, unknown> = {};
