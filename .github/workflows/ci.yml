@@ -51,6 +51,11 @@ jobs:
         # static bundle compiles and types are consistent.
         run: npm run build
 
+      - name: Run tests
+        # Vitest unit suite over the transformation engine. Runs after the
+        # build so a type error fails on the clearer `tsc` message first.
+        run: npm run test
+
       - name: Bundle privacy audit
         # Sanity-check that the production bundle has no fetch/XHR/WebSocket
         # primitives. The privacy claim ("data never leaves your tab") depends
