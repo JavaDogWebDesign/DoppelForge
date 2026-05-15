@@ -8,6 +8,11 @@ export interface MatchResult {
   matchedOptional: number;
 }
 
+// Skip these keys when walking user-supplied JSON so a payload like
+// {"__proto__": {...}} cannot taint downstream object building. JSON.parse
+// admits them as own enumerable properties, so Object.entries returns them.
+const POLLUTION_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
 function collectPaths(value: JsonValue, path: string, out: Set<string>): void {
   if (value === null || value === undefined) return;
   if (Array.isArray(value)) {
@@ -18,6 +23,7 @@ function collectPaths(value: JsonValue, path: string, out: Set<string>): void {
   }
   if (typeof value === "object") {
     for (const [k, v] of Object.entries(value)) {
+      if (POLLUTION_KEYS.has(k)) continue;
       const childPath = path === "" ? k : `${path}.${k}`;
       out.add(childPath);
       collectPaths(v, childPath, out);
@@ -70,6 +76,28 @@ export function bestMatch(
   return best;
 }
 
+// Custom providers (loaded from user YAML in localStorage) feed
+// `endpoint.path` straight into `new RegExp`. Without escaping, a malicious
+// path like `/api/(a+)+$` would cause catastrophic backtracking, and a
+// malformed pattern like `/api/(unclosed` would throw at construction time.
+// Escape every literal segment; only `{placeholder}` segments expand into a
+// regex token (`[^/]+`).
+function escapeRegexLiteral(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildPathRegex(specPath: string): RegExp | null {
+  const trimmed = specPath.replace(/^\//, "");
+  const pattern = trimmed.replace(/(\{[^}]+\})|([^{}]+)/g, (_m, placeholder, literal) =>
+    placeholder ? "[^/]+" : escapeRegexLiteral(literal),
+  );
+  try {
+    return new RegExp(`(^|/)${pattern}/?($|\\?)`);
+  } catch {
+    return null;
+  }
+}
+
 export function matchByUrl(
   url: string,
   endpoints: EndpointSpec[],
@@ -88,13 +116,8 @@ export function matchByUrl(
     // is the literal event/topic/scope, not a provider URL. URL hints
     // describe outbound API calls — only response endpoints can match.
     if (ep.endpoint.kind === "webhook") continue;
-    // Regex source is build-time-trusted provider YAML, NOT user input.
-    // If a future change ever takes `ep.endpoint.path` from user-supplied
-    // data, this becomes an unbounded-pattern + ReDoS risk and needs
-    // escaping/validation before reaching `new RegExp`.
-    const specPath = ep.endpoint.path.replace(/\{[^}]+\}/g, "[^/]+");
-    const re = new RegExp(`(^|/)${specPath.replace(/^\//, "")}/?($|\\?)`);
-    if (re.test(pathOnly)) return ep;
+    const re = buildPathRegex(ep.endpoint.path);
+    if (re && re.test(pathOnly)) return ep;
   }
   return null;
 }

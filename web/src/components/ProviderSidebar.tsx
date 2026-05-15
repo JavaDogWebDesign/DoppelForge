@@ -1,49 +1,161 @@
 import { useEffect, useState } from "react";
 import {
-  ShoppingBag,
-  ShoppingCart,
-  CreditCard,
-  Package,
-  Database,
-  Layers,
-  Users,
-  Phone,
-  Repeat,
+  // Sidebar chrome
   PanelLeftClose,
   PanelLeftOpen,
   ShieldCheck,
   Bug,
   Menu,
   X,
+  Plus,
+  Pencil,
+  // Format pills
+  Braces,
+  Code,
+  Table,
+  AlignJustify,
+  AtSign,
+  // Provider icons (referenced by manifest.icon)
+  ShoppingBag,
+  ShoppingCart,
+  Store,
+  Package,
+  Box,
+  CreditCard,
+  Wallet,
+  DollarSign,
+  Banknote,
+  Users,
+  User,
+  Contact,
+  Phone,
+  Mail,
+  Send,
+  MessageCircle,
+  MessageSquare,
+  Repeat,
+  RefreshCw,
+  Calendar,
+  Shield,
+  Key,
+  Lock,
+  LifeBuoy,
+  Headphones,
+  HelpCircle,
+  Megaphone,
+  Target,
+  Truck,
+  Cloud,
+  Server,
+  Database,
+  Layers,
+  Building2,
+  Briefcase,
+  Settings,
+  Square,
+  Zap,
 } from "lucide-react";
 import type { Provider } from "../engine/types";
+import type { InputFormat } from "../engine/xml";
 
+// Provider manifests reference icons by string name. Add new icons here as
+// providers need them; unmapped names fall back to `Layers`. The set is
+// curated rather than pulling every Lucide icon — keeps the bundle small
+// and gives custom-provider authors a discoverable list.
+//
+// Browse the full Lucide catalog at https://lucide.dev/icons — any icon
+// added there can be wired up by adding an import above + an entry here.
 const ICONS: Record<string, typeof ShoppingBag> = {
+  // E-commerce
   "shopping-bag": ShoppingBag,
   "shopping-cart": ShoppingCart,
-  "credit-card": CreditCard,
+  store: Store,
   package: Package,
-  database: Database,
-  layers: Layers,
+  box: Box,
+  // Payments
+  "credit-card": CreditCard,
+  wallet: Wallet,
+  "dollar-sign": DollarSign,
+  banknote: Banknote,
+  square: Square,
+  // CRM / people
   users: Users,
+  user: User,
+  contact: Contact,
+  // Communications
   phone: Phone,
+  mail: Mail,
+  send: Send,
+  "message-circle": MessageCircle,
+  "message-square": MessageSquare,
+  // Subscription / recurring
   repeat: Repeat,
+  "refresh-cw": RefreshCw,
+  calendar: Calendar,
+  // Auth
+  "shield-check": ShieldCheck,
+  shield: Shield,
+  key: Key,
+  lock: Lock,
+  // Support
+  "life-buoy": LifeBuoy,
+  headphones: Headphones,
+  "help-circle": HelpCircle,
+  // Marketing
+  megaphone: Megaphone,
+  target: Target,
+  // Shipping
+  truck: Truck,
+  // Cloud / infra
+  cloud: Cloud,
+  server: Server,
+  database: Database,
+  // Generic
+  layers: Layers,
+  "building-2": Building2,
+  briefcase: Briefcase,
+  settings: Settings,
+  zap: Zap,
 };
+
+// Supported input formats surfaced in the sidebar so users discover that
+// non-provider payloads (CSV, NDJSON, form-encoded) are first-class. The
+// active row highlights whichever format the InputEditor auto-detected.
+const FORMATS: { id: InputFormat; label: string; icon: typeof Braces; hint: string }[] = [
+  { id: "json", label: "JSON", icon: Braces, hint: "Standard JSON object or array" },
+  { id: "xml", label: "XML", icon: Code, hint: "XML document" },
+  { id: "ndjson", label: "NDJSON", icon: AlignJustify, hint: "Newline-delimited JSON" },
+  { id: "csv", label: "CSV", icon: Table, hint: "Comma / tab / semicolon-separated values" },
+  { id: "form", label: "Form", icon: AtSign, hint: "URL-encoded form body" },
+];
 
 interface Props {
   providers: Provider[];
+  /** Subset of provider ids that came from the user's localStorage uploads. */
+  customIds: Set<string>;
   selectedId: string | null;
   onSelect: (id: string) => void;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  onOpenCustomModal: () => void;
+  /** Per-row "edit YAML" button on each custom provider — opens the modal
+   *  directly into edit mode for that provider id. */
+  onEditCustom: (id: string) => void;
+  /** Format auto-detected from the user's current input. Drives the
+   *  "Supported formats" highlight; null means no input or unrecognized. */
+  detectedFormat?: InputFormat | null;
 }
 
 export function ProviderSidebar({
   providers,
+  customIds,
   selectedId,
   onSelect,
   collapsed,
   onToggleCollapse,
+  onOpenCustomModal,
+  onEditCustom,
+  detectedFormat = null,
 }: Props) {
   // Mobile-only state. On desktop the drawer container is `display: contents`
   // so this flag has no effect and the original sidebar layout is unchanged.
@@ -104,8 +216,12 @@ export function ProviderSidebar({
           {providers.map((p) => {
             const Icon = ICONS[p.manifest.icon] ?? Layers;
             const active = p.manifest.id === selectedId;
+            const isCustom = customIds.has(p.manifest.id);
             return (
-              <li key={p.manifest.id}>
+              <li
+                key={p.manifest.id}
+                className={`provider-row${isCustom ? " is-custom" : ""}`}
+              >
                 <button
                   className={`provider-item${active ? " active" : ""}`}
                   style={{ "--accent": p.manifest.color } as React.CSSProperties}
@@ -113,16 +229,82 @@ export function ProviderSidebar({
                     onSelect(p.manifest.id);
                     closeMenu();
                   }}
-                  title={collapsed ? p.manifest.name : undefined}
+                  // Always set the title so the full name is reachable even
+                  // when truncated by ellipsis in the expanded sidebar.
+                  title={p.manifest.name}
                 >
                   <Icon size={18} aria-hidden="true" />
                   <span className="provider-name">{p.manifest.name}</span>
+                  {isCustom && (
+                    <span
+                      className="custom-pill"
+                      title="Custom provider (your YAML, local-only)"
+                      aria-label="Custom provider"
+                    />
+                  )}
                   <span className="endpoint-count">{p.endpoints.length}</span>
                 </button>
+                {isCustom && (
+                  <button
+                    className="provider-edit-btn"
+                    onClick={() => {
+                      onEditCustom(p.manifest.id);
+                      closeMenu();
+                    }}
+                    title={`Edit YAML for ${p.manifest.name}`}
+                    aria-label={`Edit YAML for ${p.manifest.name}`}
+                  >
+                    <Pencil size={12} aria-hidden="true" />
+                  </button>
+                )}
               </li>
             );
           })}
+          <li className="provider-row">
+            <button
+              className="provider-item provider-item-add"
+              onClick={() => {
+                onOpenCustomModal();
+                closeMenu();
+              }}
+              title="Add a custom provider (YAML stored locally in your browser)"
+            >
+              <Plus size={18} aria-hidden="true" />
+              <span className="provider-name">Add custom</span>
+            </button>
+          </li>
         </ul>
+        <section
+          className="sidebar-formats"
+          aria-label="Supported input formats"
+        >
+          <h2 className="sidebar-formats-title">Supported formats</h2>
+          <ul className="sidebar-formats-list">
+            {FORMATS.map((f) => {
+              const Icon = f.icon;
+              const active = detectedFormat === f.id;
+              return (
+                <li key={f.id}>
+                  <span
+                    className={`format-item${active ? " active" : ""}`}
+                    title={
+                      active
+                        ? `${f.label} — detected in current input`
+                        : f.hint
+                    }
+                    aria-current={active ? "true" : undefined}
+                  >
+                    <Icon size={14} aria-hidden="true" />
+                    <span className="format-item-label">{f.label}</span>
+                    {active && (
+                      <span className="format-item-dot" aria-hidden="true" />
+                    )}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
         <footer className="sidebar-footer">
           <a
             href="/about"

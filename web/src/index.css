@@ -14,10 +14,12 @@
   --text-h: #d6d9e1;
   --text-code: #a3a8b4;
   --accent: #a875e0;
-  --accent-soft: rgba(168, 117, 224, 0.12);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
   --ok: #4ade80;
   --warn: #fbbf24;
   --err: #f87171;
+
+  --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.5);
 
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "SF Mono", Consolas, monospace;

@@ -182,6 +182,10 @@ export class TransformEngine {
     if (typeof value === "object") {
       const out: Record<string, JsonValue> = {};
       for (const [k, v] of Object.entries(value)) {
+        // Skip pollution keys: JSON.parse admits __proto__ / constructor /
+        // prototype as own properties, and assigning out[k]=… would either
+        // mutate the local prototype chain or shadow inherited methods.
+        if (k === "__proto__" || k === "constructor" || k === "prototype") continue;
         const childPath = path === "" ? k : `${path}.${k}`;
         out[k] = this.walk(v, childPath, endpoint, overrides, valueOverrides, stats, summaries);
       }

@@ -148,6 +148,19 @@
   position: relative;
 }
 
+/* Provider name takes the remaining row space and truncates with ellipsis
+   rather than wrapping over multiple lines. `min-width: 0` is the magic bit:
+   inside a flex container, a child's default min-width is its content size,
+   which prevents shrinking-to-ellipsis. Setting it to 0 unlocks the
+   text-overflow rule. */
+.provider-item .provider-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .provider-item .endpoint-count {
   margin-left: auto;
   font-size: 11px;
@@ -172,6 +185,850 @@
   width: 3px;
   background: var(--accent);
   border-radius: 2px;
+}
+
+/* Indicator dot on user-uploaded providers in the sidebar. Was a "CUSTOM"
+   text pill but it ate ~25% of the row width — the dot conveys the same
+   "this one is yours" signal with minimal visual cost. The full label is
+   reachable via the `title` attribute on the empty span. */
+.provider-item .custom-pill {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  padding: 0;
+  margin-left: 6px;
+  /* Right margin reserves clear space between the dot and the count slot
+     where the pencil overlay appears on hover — without this, the pencil
+     button's left edge visually clips the dot's right side. */
+  margin-right: 14px;
+  /* Soft glow ring so the dot reads as an indicator, not a bullet point. */
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* The "+ Custom provider" affordance at the bottom of the provider list. */
+.provider-item-add {
+  color: var(--text-dim);
+  border-style: dashed;
+  border-color: var(--border);
+  margin-top: 4px;
+}
+
+.provider-item-add:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.sidebar.collapsed .provider-item .custom-pill {
+  display: none;
+}
+
+/* The <li> is just a positioning anchor — the pencil sits absolutely over
+   the count's slot inside the main button, so the layout doesn't shift
+   between resting and hover states. Two-button HTML still: the main
+   button + the pencil button are siblings, never nested. */
+.provider-list li.provider-row {
+  position: relative;
+}
+
+/* Pencil overlays the endpoint-count's location inside the main button.
+   `right: 8px` aligns it with where the count pill sits. Hidden by default
+   so non-custom rows aren't affected; revealed by hover/focus on custom
+   rows. `visibility: hidden` on the count below preserves its space so
+   neither the name truncation nor the row width change between states. */
+.provider-edit-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 120ms, background 120ms, border-color 120ms;
+}
+
+.provider-row.is-custom:hover .provider-edit-btn,
+.provider-row.is-custom:focus-within .provider-edit-btn {
+  display: inline-flex;
+}
+
+/* Hide the count's visual but keep its layout slot so the main button's
+   inner spacing doesn't shift when the pencil appears on top of it. */
+.provider-row.is-custom:hover .endpoint-count,
+.provider-row.is-custom:focus-within .endpoint-count {
+  visibility: hidden;
+}
+
+.provider-edit-btn:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.sidebar.collapsed .provider-edit-btn {
+  display: none !important;
+}
+
+/* ---------- Supported formats (sidebar) ----------
+   Sits between the provider list and the footer. Surfaces non-provider
+   payloads (CSV, NDJSON, form, plain JSON/XML) so users discover they're
+   first-class; the row matching the InputEditor's auto-detected format
+   highlights so a fresh paste gets visible confirmation. */
+.sidebar-formats {
+  border-top: 1px solid var(--border);
+  padding: 8px 8px 6px;
+}
+
+.sidebar-formats-title {
+  margin: 2px 8px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.sidebar-formats-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.format-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg-pane);
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.format-item.active {
+  color: var(--text-h);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.format-item-label {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.format-item-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: auto;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.sidebar.collapsed .sidebar-formats {
+  display: none;
+}
+
+/* ---------- Custom provider modal ---------- */
+
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.custom-modal {
+  width: min(960px, 100%);
+  max-height: calc(100vh - 48px);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.custom-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  /* Page-background color (deeper than the modal body) so the header reads
+     as a distinct chrome bar, matching the visual weight of the sidebar
+     header sitting on top of the workspace. */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.custom-modal-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.custom-modal-close {
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-modal-close:hover {
+  color: var(--text-h);
+}
+
+.custom-modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.custom-modal-intro {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.custom-modal-intro code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--bg-pane);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.custom-modal-intro a {
+  color: var(--accent);
+}
+
+.custom-modal-section {
+  margin-bottom: 18px;
+}
+
+.custom-modal-section h3 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.custom-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.custom-section-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.custom-section-actions button,
+.custom-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-pane);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.custom-section-actions button:hover,
+.custom-upload-btn:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.custom-provider-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.custom-provider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.custom-provider-row:last-child {
+  border-bottom: none;
+}
+
+.custom-provider-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.custom-provider-meta strong {
+  font-size: 13px;
+  color: var(--text-h);
+}
+
+.custom-provider-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.custom-provider-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.custom-provider-actions button {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-pane);
+  color: var(--text-dim);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.custom-provider-actions button:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.custom-provider-actions button.danger:hover {
+  color: var(--err);
+  border-color: var(--err);
+}
+
+.custom-provider-actions button:disabled,
+.custom-provider-actions button.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  cursor: default;
+}
+
+/* Highlight the row whose provider is currently loaded in the editor. */
+.custom-provider-row.editing {
+  background: var(--accent-soft);
+  position: relative;
+}
+
+.custom-provider-row.editing::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+}
+
+/* Small "editing" pill inline with the provider name. */
+.custom-editing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--text-h);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* "← Add new instead" affordance shown in the editor header when in edit
+   mode. Keeps the user oriented and gives a one-click escape back to the
+   "create new" flow. */
+.custom-cancel-edit {
+  margin-left: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 2px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.custom-cancel-edit:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+/* Lets the long "Editing: ..." header wrap nicely with the cancel button. */
+.custom-section-header h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Sticky banner that pins itself to the top of the modal-body scroll
+   container while the user is editing an existing provider. Without this,
+   the only edit-mode indicator (the row pill in the existing-providers
+   list above) scrolls out of view as soon as the user touches the YAML. */
+.custom-editing-banner {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-h);
+  /* Slight backdrop blur so YAML scrolling underneath doesn't make text
+     unreadable when colors collide. */
+  backdrop-filter: blur(4px);
+}
+
+.custom-editing-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+}
+
+.custom-editing-banner-name {
+  font-weight: 600;
+}
+
+.custom-editing-banner-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.custom-editing-banner-cancel {
+  margin-left: auto;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.custom-editing-banner-cancel:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.custom-field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin: 10px 0 6px;
+}
+
+.custom-yaml-textarea {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: var(--bg-pane);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.custom-yaml-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.custom-endpoint-row {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.custom-endpoint-slug {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+  background: var(--bg-pane);
+  color: var(--text-h);
+  box-sizing: border-box;
+  border-bottom: none;
+}
+
+.custom-endpoint-row .custom-yaml-textarea {
+  border-radius: 0 0 6px 6px;
+}
+
+/* CodeMirror YAML editor wrapper used in the modal. Mimics the original
+   plain textarea visual rhythm so existing margin/spacing still works. */
+.yaml-editor {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-pane);
+  overflow: hidden;
+}
+
+.yaml-editor:focus-within {
+  border-color: var(--accent);
+}
+
+.yaml-editor .cm-editor {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.yaml-editor .cm-gutters {
+  background: var(--bg-pane);
+  border-right: 1px solid var(--border);
+}
+
+/* When the editor sits below the endpoint-slug input, drop its top corners
+   so the two elements visually fuse into one input group. */
+.custom-endpoint-row .yaml-editor {
+  border-radius: 0 0 6px 6px;
+  border-top: none;
+}
+
+/* The "Upload accepts ..." helper note that sits under the section actions. */
+.custom-upload-hint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.custom-upload-hint svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+/* Reuses upload-hint visual rhythm but sits under the manifest editor,
+   spelling out the supported icon names + color format. */
+.custom-manifest-hint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 12px;
+  margin: 4px 0 14px;
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+
+.custom-manifest-hint svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+.custom-manifest-hint code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-elev);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.custom-manifest-hint strong {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.custom-manifest-hint a {
+  color: var(--accent);
+}
+
+.custom-upload-hint code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-elev);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.custom-upload-hint strong {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.custom-endpoint-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-endpoint-remove:hover {
+  color: var(--warn);
+}
+
+.custom-add-endpoint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.custom-add-endpoint:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.custom-modal-error {
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+  border: 1px solid var(--warn);
+  color: var(--warn);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-top: 8px;
+  font-family: var(--mono);
+}
+
+.custom-modal-success {
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
+  border: 1px solid var(--ok);
+  color: var(--ok);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-pane);
+}
+
+.custom-modal-footer button {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.custom-modal-footer button:hover:not(:disabled) {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.custom-modal-footer button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-h);
+}
+
+.custom-modal-footer button.primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.custom-modal-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Delete confirmation modal ----------
+   Sits above the custom-provider modal (z-index 1010 vs 1000) so the user
+   can keep their unsaved edits visible underneath while confirming the
+   destructive action. Backdrop click + Esc both cancel. */
+
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.confirm-modal {
+  width: min(440px, 100%);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.confirm-modal h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.confirm-modal p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+
+.confirm-modal p:last-of-type {
+  margin-bottom: 18px;
+}
+
+.confirm-modal strong {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.confirm-modal-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.confirm-modal-hint code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-elev);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.confirm-modal-actions button {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-pane);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.confirm-modal-actions button:hover {
+  color: var(--text-h);
+  border-color: var(--accent);
+}
+
+.confirm-modal-actions button.danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--err);
+  border-color: var(--err);
+  color: #1a0c0c;
+  font-weight: 600;
+}
+
+.confirm-modal-actions button.danger:hover {
+  filter: brightness(1.1);
+  border-color: var(--err);
+}
+
+.confirm-modal-actions button.danger:focus-visible {
+  outline: 2px solid var(--err);
+  outline-offset: 2px;
 }
 
 /* ---------- Main ---------- */
@@ -376,9 +1233,9 @@
   letter-spacing: 0.04em;
   padding: 2px 6px;
   border-radius: 10px;
-  background: rgba(74, 222, 128, 0.12);
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
   color: var(--ok);
-  border: 1px solid rgba(74, 222, 128, 0.45);
+  border: 1px solid color-mix(in srgb, var(--ok) 45%, transparent);
   text-transform: uppercase;
 }
 
@@ -461,7 +1318,7 @@
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 6px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-modal);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -524,7 +1381,7 @@
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 6px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-modal);
   overflow: hidden;
 }
 
@@ -711,12 +1568,12 @@
 /* Active line — purple, clearly visible. The cursor row mirrors across
    panes regardless of the link toggle so the same row stands out in both. */
 .cm-editor .cm-activeLine {
-  background: rgba(168, 117, 224, 0.18) !important;
+  background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
   box-shadow: inset 2px 0 0 var(--accent) !important;
 }
 
 .cm-editor .cm-activeLineGutter {
-  background: rgba(168, 117, 224, 0.22) !important;
+  background: color-mix(in srgb, var(--accent) 22%, transparent) !important;
   color: var(--text-h) !important;
 }
 
@@ -725,7 +1582,7 @@
    active-line so the two states stack cleanly when a row is both. */
 .cm-editor .cm-line.cm-modified-line {
   position: relative;
-  background: rgba(74, 222, 128, 0.07);
+  background: color-mix(in srgb, var(--ok) 7%, transparent);
 }
 
 .cm-editor .cm-line.cm-modified-line::before {
@@ -742,7 +1599,7 @@
 /* Layer modified + active: keep the green stripe, brighten the active tint
    so the cursor row still reads. */
 .cm-editor .cm-line.cm-modified-line.cm-activeLine {
-  background: rgba(168, 117, 224, 0.20) !important;
+  background: color-mix(in srgb, var(--accent) 20%, transparent) !important;
 }
 
 .pane > :not(.pane-header) {
@@ -920,7 +1777,7 @@
 
 .tree-row.leaf.custom {
   border-left: 2px solid var(--ok);
-  background: rgba(74, 222, 128, 0.12);
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
 }
 
 .field-edit-btn {
@@ -1134,7 +1991,7 @@
 .forget-everything.confirming {
   color: var(--err);
   border-color: var(--err);
-  background: rgba(239, 68, 68, 0.08);
+  background: color-mix(in srgb, var(--err) 8%, transparent);
 }
 
 /* ---------- Mobile warning overlay ---------- */
@@ -1142,7 +1999,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(13, 14, 19, 0.92);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -1157,7 +2014,7 @@
   padding: 24px;
   max-width: 360px;
   width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-modal);
 }
 
 .mobile-warning-card h2 {
@@ -1198,7 +2055,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(13, 14, 19, 0.96);
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1212,7 +2069,7 @@
   padding: 24px;
   max-width: 440px;
   width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-modal);
 }
 
 .error-boundary-card h2 {
@@ -1319,7 +2176,7 @@
 }
 
 .batch-run:hover:not(:disabled) {
-  background: rgba(74, 222, 128, 0.12);
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
 }
 
 .batch-reseed {
@@ -1673,6 +2530,14 @@
 
   .sidebar.menu-open .provider-item.active::before {
     left: -8px;
+  }
+
+  /* Restore visibility for the formats section when the mobile menu is open,
+     even if the desktop-collapsed rule above hid it. */
+  .sidebar.menu-open .sidebar-formats,
+  .sidebar.menu-open.collapsed .sidebar-formats {
+    display: block;
+    padding: 8px 8px 6px;
   }
 
   .sidebar.menu-open .sidebar-footer,

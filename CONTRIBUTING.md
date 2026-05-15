@@ -12,10 +12,32 @@ Say you want to add Stripe. Two files:
 id: stripe
 name: Stripe
 category: payments
-icon: credit-card        # lucide-react icon name
+icon: credit-card        # see "Manifest icons" below
 color: "#635BFF"
 docs: https://stripe.com/docs/api
 ```
+
+#### Manifest icons
+
+`icon` references a curated subset of [Lucide](https://lucide.dev/icons) icons that are pre-imported into the bundle. The currently wired-up names (browse the source of truth at [web/src/components/ProviderSidebar.tsx](web/src/components/ProviderSidebar.tsx)'s `ICONS` map):
+
+| Category | Available names |
+|---|---|
+| E-commerce | `shopping-bag`, `shopping-cart`, `store`, `package`, `box` |
+| Payments | `credit-card`, `wallet`, `dollar-sign`, `banknote`, `square` |
+| CRM / people | `users`, `user`, `contact` |
+| Communications | `phone`, `mail`, `send`, `message-circle`, `message-square` |
+| Subscription / recurring | `repeat`, `refresh-cw`, `calendar` |
+| Auth | `shield-check`, `shield`, `key`, `lock` |
+| Support | `life-buoy`, `headphones`, `help-circle` |
+| Marketing | `megaphone`, `target` |
+| Shipping | `truck` |
+| Cloud / infra | `cloud`, `server`, `database` |
+| Generic | `layers`, `building-2`, `briefcase`, `settings`, `zap` |
+
+Unknown names fall back to `layers`. To wire up an icon not in the list, add the Lucide import + a map entry in `ProviderSidebar.tsx` in the same PR as the manifest.
+
+`color` is any valid CSS color (hex recommended) — used as the brand accent in the sidebar's active-row indicator and the endpoint badge.
 
 ### 2. `providers/stripe/endpoints/customers.yaml`
 

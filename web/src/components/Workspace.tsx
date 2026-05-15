@@ -35,6 +35,15 @@ interface Props {
   provider: Provider | null;
   allProviders: Provider[];
   onSelectProvider: (id: string) => void;
+  /** True while the user has manually picked a provider in the sidebar.
+   *  Suppresses the auto-switch effect below until reset. */
+  manualSelection: boolean;
+  /** Workspace calls this on paste to release the manual-selection lock so
+   *  fresh input can flow through auto-detect again. */
+  onResetManualSelection: () => void;
+  /** Reports the detected input format (or null when input is empty/invalid)
+   *  so the sidebar's "Supported formats" section can highlight it. */
+  onDetectedFormatChange?: (format: InputFormat | null) => void;
 }
 
 type DetectionSource = "explicit" | "url" | "signature" | "none";
@@ -54,7 +63,14 @@ const MAX_FIELDS_WIDTH_RATIO = 0.5;
 const clampSplitRatio = (n: number) => Math.max(0.15, Math.min(0.85, n));
 const clampFieldsWidth = (n: number) => Math.max(MIN_FIELDS_WIDTH, n);
 
-export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
+export function Workspace({
+  provider,
+  allProviders,
+  onSelectProvider,
+  manualSelection,
+  onResetManualSelection,
+  onDetectedFormatChange,
+}: Props) {
   const [inputText, setInputText] = useState("");
   const [urlHint, setUrlHint] = useState("");
   const [outputText, setOutputText] = useState("");
@@ -103,8 +119,10 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
     // back to the bottom of a freshly pasted payload.
     view.dom.addEventListener("paste", () => {
       // A new paste means a new payload — drop any manual CSV delimiter
-      // override so auto-detection runs against the fresh content.
+      // override AND release the sidebar manual-selection lock so
+      // auto-detection runs against the fresh content.
       setCsvDelimiterOverride(null);
+      onResetManualSelection();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           const iv = inputViewRef.current;
@@ -215,14 +233,24 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
 
   // When the matcher lands on a different provider than the sidebar shows,
   // promote that provider so the endpoint dropdown + brand context follow.
-  // Skip when the user has pinned an explicit endpoint — that's a hard manual
-  // override that shouldn't be displaced.
+  // Skip when:
+  //  - the user pinned an explicit endpoint (hard override), or
+  //  - the user clicked a provider in the sidebar (manualSelection lock).
+  // Both kinds of manual selection survive until the next paste, at which
+  // point Workspace's paste handler resets the lock.
   useEffect(() => {
     if (explicitEndpointId) return;
+    if (manualSelection) return;
     if (!detectedProviderId) return;
     if (detectedProviderId === provider?.manifest.id) return;
     onSelectProvider(detectedProviderId);
-  }, [detectedProviderId, explicitEndpointId, provider?.manifest.id, onSelectProvider]);
+  }, [
+    detectedProviderId,
+    explicitEndpointId,
+    manualSelection,
+    provider?.manifest.id,
+    onSelectProvider,
+  ]);
 
   const scopeKey = `${provider?.manifest.id ?? "none"}::${endpoint?.id ?? "generic"}`;
 
@@ -242,6 +270,17 @@ export function Workspace({ provider, allProviders, onSelectProvider }: Props) {
   useEffect(() => {
     setExplicitEndpointId(null);
   }, [provider?.manifest.id]);
+
+  // Surface the detected input format to the parent so the sidebar's
+  // "Supported formats" section can highlight whichever format the user just
+  // pasted. Clear on unmount (e.g. when switching to Batch mode) so the
+  // sidebar doesn't show a stale highlight from a no-longer-visible pane.
+  useEffect(() => {
+    onDetectedFormatChange?.(parsedInput?.format ?? null);
+  }, [parsedInput?.format, onDetectedFormatChange]);
+  useEffect(() => {
+    return () => onDetectedFormatChange?.(null);
+  }, [onDetectedFormatChange]);
 
   useEffect(() => {
     if (parsedInput === null) {
