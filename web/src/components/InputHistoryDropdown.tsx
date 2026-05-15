@@ -67,7 +67,10 @@ export function InputHistoryDropdown({
         ref={anchorRef}
         onClick={toggle}
         title={entries.length === 0 ? "History settings" : "Recent inputs"}
-        aria-label="Recent inputs"
+        // Accessible name must contain the visible "History" label (WCAG 2.5.3
+        // Label in Name); kept explicit so the icon-only state below 1300px,
+        // where .btn-label is hidden, still has a name.
+        aria-label="History"
         aria-haspopup="menu"
         aria-expanded={open}
       >

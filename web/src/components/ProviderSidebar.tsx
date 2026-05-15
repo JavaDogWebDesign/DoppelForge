@@ -197,7 +197,15 @@ export function ProviderSidebar({
         >
           {menuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
-        <img src="/doppel-logo.svg" alt="DoppelForge" className="brand-logo" />
+        {/* Intrinsic dimensions (matches the SVG's 392x86 viewBox) so the
+            browser can reserve space before load; CSS controls display size. */}
+        <img
+          src="/doppel-logo.svg"
+          alt="DoppelForge"
+          className="brand-logo"
+          width={392}
+          height={86}
+        />
         <button
           className="sidebar-toggle"
           onClick={onToggleCollapse}

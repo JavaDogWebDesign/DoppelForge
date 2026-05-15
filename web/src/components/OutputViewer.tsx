@@ -3,7 +3,7 @@ import { json } from "@codemirror/lang-json";
 import { xml } from "@codemirror/lang-xml";
 import { RefreshCw, PanelRightOpen, Link2, Link2Off } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { EditorView, ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate } from "@codemirror/view";
 import type { InputFormat } from "../engine/xml";
 import type { JsonValue } from "../engine/types";
 import { modifiedLinesField, setModifiedLines } from "./cmModifiedLines";
@@ -62,9 +62,15 @@ export function OutputViewer({
   // extensions prop reference changes. Without this, every parent re-render
   // (e.g. every keystroke in the input pane) would rebuild the editor.
   const extensions = useMemo(() => {
-    if (format === "xml") return [xml(), modifiedLinesField];
-    if (format === "form" || format === "csv") return [modifiedLinesField];
-    return [json(), modifiedLinesField];
+    // CodeMirror's contenteditable surface is a role="textbox" with no
+    // accessible name by default - give screen readers something to announce.
+    const a11yLabel = EditorView.contentAttributes.of({
+      "aria-label": "Obfuscated output",
+    });
+    if (format === "xml") return [xml(), modifiedLinesField, a11yLabel];
+    if (format === "form" || format === "csv")
+      return [modifiedLinesField, a11yLabel];
+    return [json(), modifiedLinesField, a11yLabel];
   }, [format]);
 
   return (

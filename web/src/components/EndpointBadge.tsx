@@ -24,6 +24,7 @@ export function EndpointBadge({ endpoint, endpoints, detectedFrom, onChange }: P
   return (
     <div className="endpoint-badge">
       <select
+        aria-label="API endpoint"
         value={endpoint?.id ?? ""}
         onChange={(e) => onChange(e.target.value || null)}
       >

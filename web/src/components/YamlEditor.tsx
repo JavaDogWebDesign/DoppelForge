@@ -1,5 +1,6 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { yaml } from "@codemirror/lang-yaml";
+import { EditorView } from "@codemirror/view";
 import { useMemo } from "react";
 
 interface Props {
@@ -22,9 +23,17 @@ export function YamlEditor({
   minHeight = "120px",
   ariaLabel,
 }: Props) {
-  const extensions = useMemo(() => [yaml()], []);
+  // aria-label on a plain <div> is ignored - it has no role. Apply it to
+  // CodeMirror's role="textbox" surface so screen readers actually announce it.
+  const extensions = useMemo(
+    () =>
+      ariaLabel
+        ? [yaml(), EditorView.contentAttributes.of({ "aria-label": ariaLabel })]
+        : [yaml()],
+    [ariaLabel],
+  );
   return (
-    <div className="yaml-editor" aria-label={ariaLabel}>
+    <div className="yaml-editor">
       <CodeMirror
         value={value}
         onChange={onChange}

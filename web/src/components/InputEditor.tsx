@@ -4,7 +4,7 @@ import { xml } from "@codemirror/lang-xml";
 import { linter } from "@codemirror/lint";
 import { RotateCcw } from "lucide-react";
 import { useMemo } from "react";
-import type { EditorView, ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate } from "@codemirror/view";
 import type { CsvDelimiter, InputFormat } from "../engine/xml";
 import { useInputHistory } from "../hooks/useInputHistory";
 import { InputHistoryDropdown } from "./InputHistoryDropdown";
@@ -57,10 +57,15 @@ export function InputEditor({
   // change to this prop's reference. A fresh array per render would re-init
   // the editor on every keystroke.
   const extensions = useMemo(() => {
-    if (format === "xml") return [xml()];
-    if (format === "form" || format === "csv") return [];
-    if (format === "ndjson") return [json()];
-    return [json(), linter(jsonParseLinter())];
+    // CodeMirror's contenteditable surface is a role="textbox" with no
+    // accessible name by default - give screen readers something to announce.
+    const a11yLabel = EditorView.contentAttributes.of({
+      "aria-label": "Real response input",
+    });
+    if (format === "xml") return [xml(), a11yLabel];
+    if (format === "form" || format === "csv") return [a11yLabel];
+    if (format === "ndjson") return [json(), a11yLabel];
+    return [json(), linter(jsonParseLinter()), a11yLabel];
   }, [format]);
 
   const {
