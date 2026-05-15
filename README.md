@@ -115,6 +115,7 @@ Build a static bundle (no server needed):
 ```bash
 npm run build      # tsc -b && vite build
 npm run preview    # serves dist/ locally to verify the production CSP
+npm run test       # runs the Vitest unit + golden-test suite
 npm run lint:yaml  # validates every providers/**/*.yaml parses cleanly
 ```
 
@@ -129,6 +130,16 @@ node web/scripts/smoke.mjs
 node web/scripts/smoke-transactions.mjs
 node web/scripts/smoke-cross-provider.mjs
 ```
+
+## Testing
+
+A [Vitest](https://vitest.dev) suite (~360 checks) covers the transform engine, the matcher, the schema generators, and the provider field-map library. It runs in CI on every commit alongside the bundle audit — run it locally with `npm run test`. The suite is built around the guarantees that actually matter:
+
+- **Privacy-invariant tests.** Synthetic responses are seeded with fake PII, run through the engine, and checked to confirm not one original value survives — verified for *every* input format the tool accepts (JSON, XML, form-encoded, base64-wrapped, CSV, NDJSON).
+- **Golden tests over the provider library**, in two layers:
+  - *Layer 1* derives a conforming input from every endpoint's own YAML, then asserts the matcher recognizes it, structure is preserved, and each mapped field behaves per its declared type. A typo'd semantic type or an unsatisfiable signature fails CI — no hand-written fixtures, so coverage scales for free as providers are added.
+  - *Layer 2* checks selected endpoints against realistically-shaped responses, verifying a field map is correct for the real provider, not merely internally consistent.
+- **Security tests.** Prototype-pollution attempts are pushed through every parser, and the custom-provider YAML validator is exercised against pollution keys, CSS-injection payloads, and oversized input.
 
 ## Add a new provider
 
@@ -146,7 +157,7 @@ Privacy is the product, so it's enforced by construction — not by promise:
 - **Runtime egress monitor.** Before any app code runs, DoppelForge wraps the three browser APIs that can transmit data off-device — `fetch`, `XMLHttpRequest`, and `navigator.sendBeacon` — and counts every call. The privacy badge in the footer reads "Data stays on this device" only while that count is zero; the moment anything is sent it flips to a red "outbound request detected" warning. The guarantee is verified live in your own browser, not just asserted here. (Dynamic `import()` and asset loads use the module/script loader, not these APIs, so legitimate same-origin chunk loading is never miscounted as egress.)
 - **CSP at the browser.** The Cloudflare Pages deploy ships `connect-src 'none'`, `frame-ancestors 'none'`, `object-src 'none'` via [web/public/_headers](./web/public/_headers). Even a hypothetically compromised dependency couldn't open a network connection — the browser would refuse it.
 - **CSP also in the HTML.** The same policy is injected as a `<meta>` tag at build time, so it applies even if the bundle is served from somewhere else.
-- **CI-gated.** Every commit runs a bundle audit that fails the build if any of those network primitives ever sneak back in.
+- **CI-gated.** Every commit runs a bundle audit that fails the build if any of those network primitives ever sneak back in — plus the full test suite, including privacy-invariant tests that fail the build if an obfuscated response ever retains an original value. See [Testing](#testing).
 - **No analytics, no telemetry, no error reporting.** None are dependencies.
 
 ### Reporting a vulnerability

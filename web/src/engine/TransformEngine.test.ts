@@ -192,3 +192,36 @@ describe("TransformEngine.transform - auto type & array-path rules", () => {
     expect(stats.fieldsTransformed).toBe(2);
   });
 });
+
+describe("TransformEngine.transform — nestedJson fields", () => {
+  const ep: EndpointSpec = {
+    id: "nested",
+    providerId: "test",
+    endpoint: { method: "GET", path: "/x" },
+    signature: { required_paths: [] },
+    fields: { blob: { type: "nestedJson" } },
+  };
+
+  it("obfuscates PII embedded in a JSON-string field, keeping it valid JSON", () => {
+    const input: JsonValue = {
+      blob: '{"email":"real.person@example.com","kind":"plan"}',
+    };
+    const { output } = makeEngine().transform(input, ep);
+    const blob = (output as Record<string, JsonValue>).blob;
+    expect(typeof blob).toBe("string");
+    const reparsed = JSON.parse(blob as string) as Record<string, JsonValue>;
+    expect(Object.keys(reparsed)).toEqual(["email", "kind"]);
+    expect(reparsed.email).not.toBe("real.person@example.com");
+    expect(reparsed.email).toMatch(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
+  });
+
+  it("leaves the field untouched when the string is not valid JSON", () => {
+    const { output } = makeEngine().transform({ blob: "not json at all" }, ep);
+    expect((output as Record<string, JsonValue>).blob).toBe("not json at all");
+  });
+
+  it("leaves the field untouched when the JSON is a bare primitive", () => {
+    const { output } = makeEngine().transform({ blob: "42" }, ep);
+    expect((output as Record<string, JsonValue>).blob).toBe("42");
+  });
+});

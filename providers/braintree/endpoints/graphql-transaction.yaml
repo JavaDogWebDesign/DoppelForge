@@ -1,0 +1,42 @@
+endpoint:
+  method: POST
+  path: /graphql (node transaction)
+  description: Braintree GraphQL API - node(id) resolved to a Transaction
+  doc_url: https://graphql.braintreepayments.com/reference/
+
+# The modern Braintree GraphQL API returns a transaction under data.node in
+# camelCase, distinct from the SDK flat-object shape in transaction-retrieve.
+# The node(id:) query is generic, so the signature leans on transaction-only
+# fields (legacyId, amount.value) to disambiguate from other node types.
+signature:
+  required_paths:
+    - data.node.id
+    - data.node.legacyId
+    - data.node.status
+    - data.node.amount.value
+  optional_paths:
+    - extensions.requestId
+    - data.node.orderId
+    - data.node.disbursementDetails
+
+fields:
+  "data.node.id":                  { type: id, anchor: true }
+  "data.node.legacyId":            { type: id, anchor: true }
+  "data.node.createdAt":           { type: isoDate }
+  "data.node.status":              { type: preserve }
+  "data.node.orderId":             { type: id, anchor: true }
+  "data.node.merchantAccountId":   { type: id, anchor: true }
+  "data.node.amount.value":          { type: priceAmount }
+  "data.node.amount.currencyIsoCode": { type: preserve }
+  "data.node.disbursementDetails.date":                   { type: isoDate }
+  "data.node.disbursementDetails.amount.value":           { type: priceAmount }
+  "data.node.disbursementDetails.amount.currencyIsoCode": { type: preserve }
+  "data.node.disbursementDetails.exchangeRate":           { type: preserve }
+  "data.node.disbursementDetails.fundsHeld":              { type: preserve }
+  "data.node.statusHistory[].status":                 { type: preserve }
+  "data.node.statusHistory[].timestamp":              { type: isoDate }
+  "data.node.statusHistory[].amount.value":           { type: priceAmount }
+  "data.node.statusHistory[].amount.currencyIsoCode": { type: preserve }
+  "extensions.requestId":          { type: uuid, anchor: true }
+  "extensions.complexity":         { type: preserve }
+  "*": { type: auto }

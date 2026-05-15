@@ -126,6 +126,12 @@ export class TransformEngine {
     if (effective === "preserve") {
       stats.fieldsPreserved++;
       fake = value;
+    } else if (effective === "nestedJson") {
+      fake = this.transformNestedJson(
+        value, path, endpoint, overrides, valueOverrides, stats, summaries,
+      );
+      if (fromGeneric) stats.fieldsFromGeneric++;
+      else stats.fieldsTransformed++;
     } else if (anchor) {
       // Anchored: cache holds value→fake; seed with value only so cache hits
       // (which skip generation) are consistent with the first generation.
@@ -193,6 +199,34 @@ export class TransformEngine {
     }
 
     return this.applyRule(path, value, endpoint, overrides, valueOverrides, stats, summaries);
+  }
+
+  // A `nestedJson` field is a string that itself holds a JSON document (e.g.
+  // a serialized billing plan). Parse it, run the engine over the contents so
+  // embedded PII is obfuscated too, then re-serialize. If the value isn't a
+  // string, or isn't valid JSON, or decodes to a bare primitive, it is left
+  // untouched — there is nothing structured to walk.
+  private transformNestedJson(
+    value: JsonValue,
+    path: string,
+    endpoint: EndpointSpec | null,
+    overrides: OverrideMap,
+    valueOverrides: ValueOverrideMap,
+    stats: TransformResult["stats"],
+    summaries: Map<string, FieldSummary>,
+  ): JsonValue {
+    if (typeof value !== "string") return value;
+    let parsed: JsonValue;
+    try {
+      parsed = JSON.parse(value) as JsonValue;
+    } catch {
+      return value;
+    }
+    if (parsed === null || typeof parsed !== "object") return value;
+    const transformed = this.walk(
+      parsed, path, endpoint, overrides, valueOverrides, stats, summaries,
+    );
+    return JSON.stringify(transformed);
   }
 }
 

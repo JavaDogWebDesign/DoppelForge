@@ -26,7 +26,7 @@ fields:
   "subscription.next_bill_date":             { type: unixTimestamp }
   "subscription.cancel_date":                { type: unixTimestamp }
   "subscription.grace_period_start_date":    { type: unixTimestamp }
-  "subscription.payment_billing_plan":       { type: preserve }
+  "subscription.payment_billing_plan":       { type: nestedJson }
   "subscription.payment_billing_plan_description": { type: shortText }
   "subscription.payment_billing_plan_descriptor":  { type: preserve }
   "subscription.upi_ext_customer_id":        { type: id, anchor: true }
@@ -48,7 +48,7 @@ fields:
   "subscription.term.name":                  { type: shortText }
   "subscription.term.description":           { type: shortText }
   "subscription.term.type":                  { type: preserve }
-  "subscription.term.payment_billing_plan":  { type: preserve }
+  "subscription.term.payment_billing_plan":  { type: nestedJson }
   "subscription.term.payment_first_amount":  { type: preserve }
   "subscription.term.payment_currency":      { type: preserve }
   "subscription.term.create_date":           { type: unixTimestamp }

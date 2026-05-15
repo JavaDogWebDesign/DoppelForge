@@ -34,7 +34,8 @@ export type SemanticType =
   | "preserve"
   | "auto"
   | "null"
-  | "redact";
+  | "redact"
+  | "nestedJson";
 
 export interface FieldRule {
   type: SemanticType;

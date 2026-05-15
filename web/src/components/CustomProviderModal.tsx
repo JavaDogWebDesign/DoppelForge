@@ -211,7 +211,10 @@ export function CustomProviderModal({
       manifestYaml: manifestYaml.trim(),
       endpointYamls,
     };
-    const result = addCustomProvider(source, builtInIds);
+    // editingId is null when adding a new provider - addCustomProvider then
+    // rejects an id that collides with an existing custom provider instead of
+    // silently overwriting it.
+    const result = addCustomProvider(source, builtInIds, editingId);
     if (!result.ok) {
       setError(result.error);
       return;

@@ -27,7 +27,7 @@ const SEMANTIC_TYPES: readonly SemanticType[] = [
   "sku", "productName", "shortText", "longText",
   "currency", "priceAmount", "cvvCode", "cvvMessage",
   "avsCode", "avsMessage", "boolean", "custom", "preserve", "auto",
-  "null", "redact",
+  "null", "redact", "nestedJson",
 ];
 const SEMANTIC_TYPE_SET = new Set<string>(SEMANTIC_TYPES);
 
@@ -309,9 +309,19 @@ export interface SaveError {
   error: string;
 }
 
+/**
+ * Persist a custom provider.
+ *
+ * @param replaceId  The id of the provider this save is editing, or null when
+ *   adding a brand-new provider. When null, a save whose id collides with an
+ *   existing custom provider is rejected rather than silently overwriting it -
+ *   without this, two providers built from the sample template (which hardcodes
+ *   `id: my-internal-api`) would clobber each other.
+ */
 export function addCustomProvider(
   source: CustomProviderSource,
   builtInIds: Set<string>,
+  replaceId: string | null = null,
 ): SaveResult | SaveError {
   let parsed: ParsedCustomProvider;
   try {
@@ -327,16 +337,31 @@ export function addCustomProvider(
     };
   }
   const existing = loadStoredSources();
-  // Replace any existing custom provider with the same id.
-  const withoutDup = existing.filter((s) => {
+  const idOf = (s: CustomProviderSource): string | null => {
     try {
-      const m = validateManifest(s.manifestYaml);
-      return m.id !== id;
+      return validateManifest(s.manifestYaml).id;
     } catch {
-      return true;
+      return null;
     }
-  });
-  const next = [...withoutDup, source];
+  };
+  // A custom provider already uses this id. Overwriting it would discard the
+  // user's earlier work, so only allow it when this save is an explicit edit
+  // of that same provider.
+  if (existing.some((s) => idOf(s) === id) && id !== replaceId) {
+    return {
+      ok: false,
+      error: `A custom provider with id '${id}' already exists. Edit that provider, or change this id to add a separate one.`,
+    };
+  }
+  // Drop the provider being edited (its id may have changed during the edit)
+  // and any entry sharing the new id, then append the fresh source.
+  const next = [
+    ...existing.filter((s) => {
+      const sid = idOf(s);
+      return sid !== id && sid !== replaceId;
+    }),
+    source,
+  ];
   if (totalSourceBytes(next) > MAX_TOTAL_BYTES) {
     return {
       ok: false,

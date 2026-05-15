@@ -416,6 +416,16 @@
         </li>
       </ol>
       <p>
+        Those guarantees are tested, not just stated. A suite of roughly 360
+        automated checks runs in CI on every commit. It includes
+        <strong>privacy-invariant tests</strong> - synthetic responses seeded
+        with fake personal data are run through the engine and checked to
+        confirm no original value survives, for every input format the tool
+        accepts - and <strong>golden tests</strong> that exercise all 220+
+        provider field maps, so a mis-classified PII field or a broken map
+        fails the build rather than shipping.
+      </p>
+      <p>
         No analytics, no telemetry, no error reporting libraries are
         dependencies. The only thing that ever crosses the network is the
         initial download of the static bundle from Cloudflare Pages.
@@ -533,6 +543,7 @@
         <li><strong>Fake data:</strong> @faker-js/faker</li>
         <li><strong>Parsing:</strong> fast-xml-parser, native JSON</li>
         <li><strong>Field maps:</strong> YAML (js-yaml)</li>
+        <li><strong>Tested with:</strong> Vitest - ~360 checks, CI-gated</li>
         <li><strong>Hosting:</strong> Cloudflare Pages (static, no Functions)</li>
       </ul>
       <p>
