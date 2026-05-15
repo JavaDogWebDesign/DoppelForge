@@ -93,7 +93,7 @@ export function Workspace({
   const [fieldsPaneVisible, setFieldsPaneVisible] = useState<boolean>(true);
   const [linked, setLinked] = useLocalStorageState(LINKED_KEY, true, boolCodec);
   // When the layout switches to the stacked tablet/mobile view, mirroring the
-  // scroll position between the two now-vertical panes feels jarring — every
+  // scroll position between the two now-vertical panes feels jarring - every
   // scroll snaps both panes. Disable scroll sync at the stacked breakpoint
   // but leave cursor sync running so the active-line highlight still mirrors.
   const isStacked = useMediaQuery("(max-width: 1100px)");
@@ -115,10 +115,10 @@ export function Workspace({
     // After a paste, CodeMirror parks the caret at the end of inserted text
     // and auto-scrolls to keep it visible. We pin both panes to the top AND
     // move the caret to position 0 so the visible viewport and the active
-    // line agree — otherwise the first arrow-key press teleports the user
+    // line agree - otherwise the first arrow-key press teleports the user
     // back to the bottom of a freshly pasted payload.
     view.dom.addEventListener("paste", () => {
-      // A new paste means a new payload — drop any manual CSV delimiter
+      // A new paste means a new payload - drop any manual CSV delimiter
       // override AND release the sidebar manual-selection lock so
       // auto-detection runs against the fresh content.
       setCsvDelimiterOverride(null);
@@ -307,7 +307,7 @@ export function Workspace({
   }, [parsedInput, endpoint, obfuscate, inputText, parseError, state.seed]);
 
   // Line-by-line diff between the re-serialized input and the output. Both
-  // run through the same serialize() so line counts match exactly — any line
+  // run through the same serialize() so line counts match exactly - any line
   // that differs is a line where obfuscation (or a custom override) changed
   // something. Used to draw a small left-edge indicator on those lines.
   const modifiedLines = useMemo<Set<number>>(() => {

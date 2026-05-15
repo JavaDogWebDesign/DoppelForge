@@ -60,10 +60,10 @@ import type { InputFormat } from "../engine/xml";
 
 // Provider manifests reference icons by string name. Add new icons here as
 // providers need them; unmapped names fall back to `Layers`. The set is
-// curated rather than pulling every Lucide icon — keeps the bundle small
+// curated rather than pulling every Lucide icon - keeps the bundle small
 // and gives custom-provider authors a discoverable list.
 //
-// Browse the full Lucide catalog at https://lucide.dev/icons — any icon
+// Browse the full Lucide catalog at https://lucide.dev/icons - any icon
 // added there can be wired up by adding an import above + an entry here.
 const ICONS: Record<string, typeof ShoppingBag> = {
   // E-commerce
@@ -138,7 +138,7 @@ interface Props {
   collapsed: boolean;
   onToggleCollapse: () => void;
   onOpenCustomModal: () => void;
-  /** Per-row "edit YAML" button on each custom provider — opens the modal
+  /** Per-row "edit YAML" button on each custom provider - opens the modal
    *  directly into edit mode for that provider id. */
   onEditCustom: (id: string) => void;
   /** Format auto-detected from the user's current input. Drives the
@@ -209,7 +209,7 @@ export function ProviderSidebar({
       </header>
       {/* `display: contents` on desktop so this wrapper is invisible to the
           flex layout. On mobile (in App.css media query) it becomes the
-          full-screen menu toggled by the hamburger — closed via the X
+          full-screen menu toggled by the hamburger - closed via the X
           button in the header or the Esc key. */}
       <div className="sidebar-drawer">
         <ul className="provider-list">
@@ -289,7 +289,7 @@ export function ProviderSidebar({
                     className={`format-item${active ? " active" : ""}`}
                     title={
                       active
-                        ? `${f.label} — detected in current input`
+                        ? `${f.label} - detected in current input`
                         : f.hint
                     }
                     aria-current={active ? "true" : undefined}

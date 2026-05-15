@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { GeneratorRegistry } from "./GeneratorRegistry";
+import { GeneratorRegistry, CVV_PAIRS, AVS_PAIRS } from "./GeneratorRegistry";
 
-describe("GeneratorRegistry.generate — determinism", () => {
+describe("GeneratorRegistry.generate - determinism", () => {
   it("produces the same fake for the same seed, type, value and salt", () => {
     const a = new GeneratorRegistry(7).generate("email", "x@y.com", "path");
     const b = new GeneratorRegistry(7).generate("email", "x@y.com", "path");
@@ -14,9 +14,18 @@ describe("GeneratorRegistry.generate — determinism", () => {
       reg.generate("fullName", "n", "second"),
     );
   });
+
+  it("generates an identical isoDate for the same seed across instances", () => {
+    // Regression guard: faker's date.recent() once anchored to wall-clock
+    // `now`, so equal seeds drifted by milliseconds. The full-datetime branch
+    // (sub-second precision) is where that non-determinism surfaced.
+    const a = new GeneratorRegistry(5).generate("isoDate", "2026-04-18T14:32:07Z");
+    const b = new GeneratorRegistry(5).generate("isoDate", "2026-04-18T14:32:07Z");
+    expect(b).toBe(a);
+  });
 });
 
-describe("GeneratorRegistry.generate — type fidelity", () => {
+describe("GeneratorRegistry.generate - type fidelity", () => {
   it("keeps a numeric id numeric and preserves its digit length", () => {
     const fake = new GeneratorRegistry(1).generate("id", 4242);
     expect(typeof fake).toBe("number");
@@ -65,17 +74,12 @@ describe("GeneratorRegistry.generate — type fidelity", () => {
   });
 });
 
-describe("GeneratorRegistry.generate — paired gateway fields", () => {
-  // A cvvCode and its cvvMessage seeded from the same parent path must land on
-  // the same row of the gateway response table.
-  const CVV_PAIRS: Record<string, string> = {
-    M: "Match",
-    N: "No match",
-    P: "Not processed",
-    S: "CVV not present",
-    U: "Issuer unable to process CVV",
-    X: "Service not supported",
-  };
+describe("GeneratorRegistry.generate - paired gateway fields", () => {
+  // A code and its message, seeded from the same parent path, must land on the
+  // same row of the gateway response table. The expected mapping is the real
+  // table imported from the source, so editing it forces this test to update.
+  const tableOf = (pairs: Array<[string, string]>): Record<string, string> =>
+    Object.fromEntries(pairs);
 
   it("keeps cvv code and message consistent when they share a parent path", () => {
     const reg = new GeneratorRegistry(42);
@@ -85,6 +89,17 @@ describe("GeneratorRegistry.generate — paired gateway fields", () => {
       "Match",
       "payment.cvv_result.message",
     ) as string;
-    expect(CVV_PAIRS[code]).toBe(message);
+    expect(tableOf(CVV_PAIRS)[code]).toBe(message);
+  });
+
+  it("keeps avs code and message consistent when they share a parent path", () => {
+    const reg = new GeneratorRegistry(99);
+    const code = reg.generate("avsCode", "Y", "payment.avs_result.code") as string;
+    const message = reg.generate(
+      "avsMessage",
+      "Address and 5-digit ZIP match",
+      "payment.avs_result.message",
+    ) as string;
+    expect(tableOf(AVS_PAIRS)[code]).toBe(message);
   });
 });

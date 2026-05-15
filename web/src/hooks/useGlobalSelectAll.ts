@@ -6,7 +6,7 @@ interface Args {
   outputViewRef: RefObject<EditorView | null>;
 }
 
-// Cmd/Ctrl+A inside an editor selects that editor's contents only — not the
+// Cmd/Ctrl+A inside an editor selects that editor's contents only - not the
 // whole page. Tracks last-clicked editor because the read-only output pane
 // often doesn't take DOM focus on click, so `e.target` alone isn't enough to
 // know which editor a Cmd/Ctrl+A is meant for.

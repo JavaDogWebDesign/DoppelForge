@@ -105,7 +105,7 @@ export function BatchDropzone({ onAdd, disabled }: Props) {
         Drop JSON or XML files here, or click to browse
       </span>
       <span className="batch-dropzone-hint">
-        All files processed in your browser — nothing is uploaded.
+        All files processed in your browser - nothing is uploaded.
       </span>
       {skipped.length > 0 && (
         <span className="batch-dropzone-skipped" role="alert">

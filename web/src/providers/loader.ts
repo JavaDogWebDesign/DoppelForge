@@ -34,7 +34,7 @@ function isObject(v: unknown): v is Record<string, unknown> {
 
 // Minimal shape check: every required string field is a non-empty string.
 // Provider YAML is build-time-trusted, so this is defense-in-depth for typos
-// and merge mistakes — not a security boundary.
+// and merge mistakes - not a security boundary.
 function validateManifest(raw: unknown): ProviderManifest | null {
   if (!isObject(raw)) return null;
   const required = ["id", "name", "category", "icon", "color", "docs"] as const;

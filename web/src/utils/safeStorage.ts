@@ -6,7 +6,7 @@
 //   2. Storage quota exceeded on write,
 //   3. Storage disabled by enterprise/browser policy.
 //
-// Every error here is non-fatal for this app — the worst case is "the user
+// Every error here is non-fatal for this app - the worst case is "the user
 // loses persistence for this session," which is strictly better than crashing.
 export const safeStorage = {
   get(key: string): string | null {
@@ -20,7 +20,7 @@ export const safeStorage = {
     try {
       localStorage.setItem(key, value);
     } catch {
-      /* private mode / quota / disabled — ignore */
+      /* private mode / quota / disabled - ignore */
     }
   },
   remove(key: string): void {

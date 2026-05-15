@@ -6,7 +6,7 @@ import type { EndpointSpec, JsonValue } from "../engine/types";
 import { safeStorage } from "../utils/safeStorage";
 
 const STORAGE_PREFIX = "doppelforge.overrides.";
-// Generic scope has no stable identity worth persisting — skip storage so a
+// Generic scope has no stable identity worth persisting - skip storage so a
 // generic-mode session doesn't leak overrides into the next paste.
 const GENERIC_SCOPE = "none::generic";
 

@@ -217,7 +217,7 @@ export function CustomProviderModal({
       return;
     }
     // Auto-close on successful save. The user's intent on clicking Save is
-    // "I'm done with this edit" — staying open afterwards left Cancel as the
+    // "I'm done with this edit" - staying open afterwards left Cancel as the
     // only exit, which read as "discard" even though the work was already
     // persisted. The sidebar re-renders via onSaved() and the saved provider
     // is visible there (with its dot indicator) as visual confirmation.
@@ -248,7 +248,7 @@ export function CustomProviderModal({
         if (lower.endsWith(".zip")) {
           if (file.size > MAX_ZIP_BYTES) {
             setError(
-              `Zip '${file.name}' is ${file.size} bytes — refusing to decompress (cap ${MAX_ZIP_BYTES})`,
+              `Zip '${file.name}' is ${file.size} bytes - refusing to decompress (cap ${MAX_ZIP_BYTES})`,
             );
             return;
           }
@@ -401,7 +401,7 @@ export function CustomProviderModal({
         <div className="custom-modal-body">
           <p className="custom-modal-intro">
             Add field maps for your own APIs. YAML is stored in your browser's
-            localStorage — never uploaded anywhere. Same schema as the built-in{" "}
+            localStorage - never uploaded anywhere. Same schema as the built-in{" "}
             <code>providers/</code> directory; see{" "}
             <a
               href="https://github.com/javadogwebdesign/doppelforge/blob/main/CONTRIBUTING.md"
@@ -567,7 +567,7 @@ export function CustomProviderModal({
                 <code>shield-check</code>, <code>life-buoy</code>, <code>megaphone</code>,{" "}
                 <code>truck</code>, <code>wallet</code>, <code>square</code>,{" "}
                 <code>phone</code>, <code>repeat</code>, <code>layers</code>{" "}
-                (and more — see{" "}
+                (and more - see{" "}
                 <a
                   href="https://lucide.dev/icons"
                   target="_blank"
@@ -576,7 +576,7 @@ export function CustomProviderModal({
                   lucide.dev/icons
                 </a>
                 ). Unknown names fall back to a generic <code>layers</code> icon.{" "}
-                <strong>Color:</strong> any hex (e.g. <code>"#6366F1"</code>) — used to
+                <strong>Color:</strong> any hex (e.g. <code>"#6366F1"</code>) - used to
                 tint the sidebar's active-row accent.
               </span>
             </p>
@@ -648,7 +648,7 @@ export function CustomProviderModal({
             <p id="confirm-delete-desc">
               <strong>{pendingDelete.name}</strong> will be removed from your
               browser's localStorage. Its YAML, signature, and field map are
-              not stored anywhere else — this can't be undone.
+              not stored anywhere else - this can't be undone.
             </p>
             <p className="confirm-modal-hint">
               Tip: export it as a <code>.zip</code> first if you want to keep

@@ -15,7 +15,7 @@ export type RetentionMode = "off" | "1h" | "24h" | "persistent";
 const STORAGE_KEY = "doppelforge.inputHistory";
 const RETENTION_KEY = "doppelforge.history.retention";
 // Privacy-first default. Real pasted responses sit in localStorage until the
-// TTL expires — 1h is long enough to recover from an accidental Reset and
+// TTL expires - 1h is long enough to recover from an accidental Reset and
 // short enough that an unattended desktop doesn't leak yesterday's payloads.
 const DEFAULT_RETENTION: RetentionMode = "1h";
 const MAX_ENTRIES = 5;
@@ -77,7 +77,7 @@ function readStorage(mode: RetentionMode): InputHistoryEntry[] {
 
 function writeStorage(entries: InputHistoryEntry[], mode: RetentionMode) {
   if (mode === "off") {
-    // "off" means in-memory only — make sure nothing lingers on disk.
+    // "off" means in-memory only - make sure nothing lingers on disk.
     safeStorage.remove(STORAGE_KEY);
     return;
   }

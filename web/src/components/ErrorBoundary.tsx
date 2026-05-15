@@ -15,7 +15,7 @@ interface State {
 // history; the live in-progress paste is lost (React state goes with the
 // crash).
 //
-// Class component because hooks can't catch render errors — this is one of
+// Class component because hooks can't catch render errors - this is one of
 // the rare cases where the class API is the only API.
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { error: null };
@@ -25,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    // Log to the console only — no off-origin reporting, no telemetry.
+    // Log to the console only - no off-origin reporting, no telemetry.
     // The CSP would block any sneaky beacon anyway, but this keeps the
     // privacy claim "browser-only" honest at the source level.
     console.error("[ErrorBoundary]", error, info.componentStack);

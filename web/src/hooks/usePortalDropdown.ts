@@ -15,9 +15,9 @@ interface UsePortalDropdownResult<A extends HTMLElement, P extends HTMLElement> 
   open: boolean;
   setOpen: (next: boolean) => void;
   toggle: () => void;
-  /** Attach to the trigger/wrapper element — used for both positioning and outside-click detection. */
+  /** Attach to the trigger/wrapper element - used for both positioning and outside-click detection. */
   anchorRef: React.RefObject<A | null>;
-  /** Attach to the portaled panel element — used for outside-click detection. */
+  /** Attach to the portaled panel element - used for outside-click detection. */
   panelRef: React.RefObject<P | null>;
   /** Anchored panel position, set after the panel opens. Null while closed. */
   coords: DropdownCoords | null;
@@ -74,7 +74,7 @@ export function usePortalDropdown<
   }, [open, recomputeCoords]);
 
   // Outside-click + Escape to close. Clicks inside the anchor or the panel
-  // bubble up but are ignored here — the trigger's own onClick handles toggle.
+  // bubble up but are ignored here - the trigger's own onClick handles toggle.
   useEffect(() => {
     if (!open) return;
     const onDocPointerDown = (e: MouseEvent) => {

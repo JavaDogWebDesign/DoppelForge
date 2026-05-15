@@ -46,12 +46,12 @@
 
 .brand-logo {
   display: block;
-  height: 28px;
+  height: 30px;
   width: auto;
   user-select: none;
 }
 
-/* On desktop the drawer wrapper is invisible to layout — provider-list and
+/* On desktop the drawer wrapper is invisible to layout - provider-list and
    sidebar-footer behave as direct children of .sidebar. The mobile media
    query below promotes it to a real absolutely-positioned dropdown. */
 .sidebar-drawer {
@@ -188,7 +188,7 @@
 }
 
 /* Indicator dot on user-uploaded providers in the sidebar. Was a "CUSTOM"
-   text pill but it ate ~25% of the row width — the dot conveys the same
+   text pill but it ate ~25% of the row width - the dot conveys the same
    "this one is yours" signal with minimal visual cost. The full label is
    reachable via the `title` attribute on the empty span. */
 .provider-item .custom-pill {
@@ -201,7 +201,7 @@
   padding: 0;
   margin-left: 6px;
   /* Right margin reserves clear space between the dot and the count slot
-     where the pencil overlay appears on hover — without this, the pencil
+     where the pencil overlay appears on hover - without this, the pencil
      button's left edge visually clips the dot's right side. */
   margin-right: 14px;
   /* Soft glow ring so the dot reads as an indicator, not a bullet point. */
@@ -226,7 +226,7 @@
   display: none;
 }
 
-/* The <li> is just a positioning anchor — the pencil sits absolutely over
+/* The <li> is just a positioning anchor - the pencil sits absolutely over
    the count's slot inside the main button, so the layout doesn't shift
    between resting and hover states. Two-button HTML still: the main
    button + the pencil button are siblings, never nested. */
@@ -1210,7 +1210,7 @@
   border: 1px solid var(--border);
 }
 
-/* Sibling of .format-pill — appears only when format is CSV. Lets the user
+/* Sibling of .format-pill - appears only when format is CSV. Lets the user
    override the auto-detected delimiter (comma / tab / semicolon). */
 .csv-delim-select {
   font-family: var(--mono);
@@ -1540,7 +1540,7 @@
   height: 100% !important;
 }
 
-/* Soften the CodeMirror dark-theme text — base color is too bright on near-black bg. */
+/* Soften the CodeMirror dark-theme text - base color is too bright on near-black bg. */
 .cm-editor .cm-content {
   color: var(--text-code);
 }
@@ -1551,7 +1551,7 @@
   color: var(--text-dim);
 }
 
-/* Zebra-striped code lines — odd rows sit on a darker band so rows read
+/* Zebra-striped code lines - odd rows sit on a darker band so rows read
    as distinct bands against the editor surface. */
 .cm-editor .cm-line:nth-child(odd) {
   background: rgba(0, 0, 0, 0.28);
@@ -1565,7 +1565,7 @@
   background: rgba(0, 0, 0, 0.28);
 }
 
-/* Active line — purple, clearly visible. The cursor row mirrors across
+/* Active line - purple, clearly visible. The cursor row mirrors across
    panes regardless of the link toggle so the same row stands out in both. */
 .cm-editor .cm-activeLine {
   background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
@@ -1577,7 +1577,7 @@
   color: var(--text-h) !important;
 }
 
-/* Modified-line indicator (output pane only) — green stripe + tint, the
+/* Modified-line indicator (output pane only) - green stripe + tint, the
    git-diff convention for "this row was changed". Distinct from the purple
    active-line so the two states stack cleanly when a row is both. */
 .cm-editor .cm-line.cm-modified-line {
@@ -2234,7 +2234,7 @@
 }
 
 .batch-panes {
-  /* same as .panes — kept distinct in case batch layout diverges later */
+  /* same as .panes - kept distinct in case batch layout diverges later */
 }
 
 .batch-input-pane {
@@ -2426,7 +2426,7 @@
   }
 
   /* Sidebar becomes a compact horizontal bar on tablet/mobile:
-       [hamburger] [logo] [expand toggle — hidden]
+       [hamburger] [logo] [expand toggle - hidden]
      Tapping the hamburger drops a vertical drawer below the bar with the
      provider list and footer links. */
   .sidebar,
@@ -2475,7 +2475,7 @@
   }
 
   .sidebar .brand-logo {
-    height: 22px;
+    height: 28px;
   }
 
   /* Override desktop-collapsed display:none so the logo always shows on mobile. */
@@ -2621,7 +2621,7 @@
 
   /* The link toggle controls scroll + cursor mirroring across panes. With
      stacked panes we force scroll-sync off and keep the active-line mirror
-     always on, so the toggle would be misleading — hide it. */
+     always on, so the toggle would be misleading - hide it. */
   .pane-actions .link-toggle {
     display: none;
   }
@@ -2646,7 +2646,7 @@
     flex-basis: 100%;
   }
 
-  /* Batch dropzone shrinks to a single compact row on mobile/tablet — touch
+  /* Batch dropzone shrinks to a single compact row on mobile/tablet - touch
      devices can't drag-and-drop anyway, so it's effectively a tap-to-browse
      button. Hide the supplementary "processed in your browser" hint to save
      vertical space; the privacy note in the footer covers that already. */

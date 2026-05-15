@@ -77,7 +77,7 @@ interface CursorSyncArgs {
   rebindKey: unknown;
 }
 
-// Mirror the active line between editors. Independent of the link toggle —
+// Mirror the active line between editors. Independent of the link toggle -
 // the highlighted row tracks across panes whether or not scroll is linked.
 //
 // Two transport mechanisms because the panes behave differently:
@@ -85,7 +85,7 @@ interface CursorSyncArgs {
 //   Input → output (handleInputUpdate, returned). Hooked into onUpdate.
 //   CodeMirror dispatches selection transactions synchronously on click /
 //   keyboard / programmatic moves, so onUpdate fires the moment selection
-//   changes — no waiting on mouseup/keyup, which was the visible lag.
+//   changes - no waiting on mouseup/keyup, which was the visible lag.
 //
 //   Output → input (mousedown + posAtCoords). The output pane is
 //   editable={false}; contenteditable is off, so clicks never reach CM's
@@ -100,7 +100,7 @@ export function useCursorSync({
   const suppressRef = useRef(false);
 
   // Move `view`'s active line to `lineNumber` (1-based). Bails out when the
-  // target is already current — keeps us from re-dispatching on every
+  // target is already current - keeps us from re-dispatching on every
   // intra-line keystroke and from chasing our own echo.
   const setActiveLine = useCallback(
     (view: EditorView, lineNumber: number) => {
@@ -196,7 +196,7 @@ export function useFoldSync({
       const startLine = from.state.doc.lineAt(start).number;
       const endLine = from.state.doc.lineAt(end).number;
       if (startLine > targetLines || endLine > targetLines) return;
-      // Fold from end of opening line to start of closing line — same shape
+      // Fold from end of opening line to start of closing line - same shape
       // CodeMirror's JSON fold range uses by default.
       const tStart = to.state.doc.line(startLine).to;
       const tEnd = to.state.doc.line(endLine).from;

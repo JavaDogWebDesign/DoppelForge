@@ -91,7 +91,7 @@ export function BatchWorkspace({
         };
       }
     } catch {
-      /* ignore — file may be invalid; we still surface it in the list */
+      /* ignore - file may be invalid; we still surface it in the list */
     }
     return { endpoint: null, detectedFrom: "none", detectedProviderId: null };
   }, [schemaSource, allProviders, explicitEndpointId, provider]);

@@ -14,7 +14,7 @@ interface Props {
   onSetValueOverride: (path: string, value: string | null) => void;
   onReset: () => void;
   // Optional: when omitted, the hide button is not rendered. Useful for
-  // contexts where hiding the panel doesn't make sense — batch mode (the
+  // contexts where hiding the panel doesn't make sense - batch mode (the
   // panel is the only right-hand UI) and the stacked tablet/mobile layout
   // (there is no "right" to hide into).
   onHide?: () => void;

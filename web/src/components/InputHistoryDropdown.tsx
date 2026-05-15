@@ -26,7 +26,7 @@ const RETENTION_LABELS: Record<RetentionMode, string> = {
 };
 
 const RETENTION_HINTS: Record<RetentionMode, string> = {
-  off: "Not saved — cleared on refresh",
+  off: "Not saved - cleared on refresh",
   "1h": "Auto-clears 1 hour after paste",
   "24h": "Auto-clears 24 hours after paste",
   persistent: "Kept until you clear it",
@@ -121,7 +121,7 @@ export function InputHistoryDropdown({
             <div className="history-retention-hint">{RETENTION_HINTS[retention]}</div>
             {currentTooLarge && retention !== "off" && (
               <div className="history-too-large" role="status">
-                Current paste is over {Math.round(HISTORY_MAX_ENTRY_CHARS / 1000)}K chars — not saved to history.
+                Current paste is over {Math.round(HISTORY_MAX_ENTRY_CHARS / 1000)}K chars - not saved to history.
               </div>
             )}
             {entries.length === 0 ? (

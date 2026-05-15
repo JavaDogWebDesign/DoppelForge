@@ -18,7 +18,7 @@ const STORAGE_VERSION = 1;
 const MAX_TOTAL_BYTES = 1_000_000;
 
 // Mirror of SemanticType for runtime validation. Keep in sync with
-// engine/types.ts — TypeScript's type-only enum can't be iterated at runtime.
+// engine/types.ts - TypeScript's type-only enum can't be iterated at runtime.
 const SEMANTIC_TYPES: readonly SemanticType[] = [
   "email", "firstName", "lastName", "fullName", "phone",
   "street", "streetSecondary", "city", "state", "stateOrProvince",
@@ -289,7 +289,7 @@ export function loadCustomProviders(): ParsedCustomProvider[] {
     try {
       out.push(parseCustomProvider(s));
     } catch {
-      // Silently skip broken entries — they remain in storage so the user
+      // Silently skip broken entries - they remain in storage so the user
       // can re-open them in the edit modal and fix them. The sidebar simply
       // won't render the broken provider until the YAML is valid.
     }

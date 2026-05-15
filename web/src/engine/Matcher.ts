@@ -114,7 +114,7 @@ export function matchByUrl(
   for (const ep of endpoints) {
     // Webhook endpoints are inbound POSTs to the user's server; their "path"
     // is the literal event/topic/scope, not a provider URL. URL hints
-    // describe outbound API calls — only response endpoints can match.
+    // describe outbound API calls - only response endpoints can match.
     if (ep.endpoint.kind === "webhook") continue;
     const re = buildPathRegex(ep.endpoint.path);
     if (re && re.test(pathOnly)) return ep;

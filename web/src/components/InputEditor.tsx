@@ -26,7 +26,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-// Mnemonic codes for the select options — encoding raw "\t" as a value
+// Mnemonic codes for the select options - encoding raw "\t" as a value
 // attribute renders poorly and trims unpredictably in some browsers.
 const DELIM_DECODE: Record<string, CsvDelimiter | null> = {
   "": null,
@@ -82,7 +82,7 @@ export function InputEditor({
             className="csv-delim-select"
             value={DELIM_ENCODE(csvDelimiterOverride ?? null)}
             onChange={(e) => onCsvDelimiterChange(DELIM_DECODE[e.target.value] ?? null)}
-            title="CSV delimiter — auto-detected from the header row by default"
+            title="CSV delimiter - auto-detected from the header row by default"
           >
             <option value="">
               auto ({DELIM_LABEL(csvDetectedDelimiter ?? null)})

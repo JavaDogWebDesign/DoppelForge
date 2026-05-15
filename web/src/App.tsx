@@ -89,7 +89,7 @@ export default function App() {
   const handleAutoSelect = useCallback((id: string) => {
     setSelectedId(id);
   }, []);
-  // Workspace clears the lock when the user pastes new content — at that
+  // Workspace clears the lock when the user pastes new content - at that
   // point intent is unclear, so let auto-detect take over again.
   const handleResetManualSelection = useCallback(() => {
     setManualSelection(false);

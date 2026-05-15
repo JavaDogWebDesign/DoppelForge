@@ -118,7 +118,7 @@ export function TreeNodeRow({
   }
 
   // Container row. The wrapping <li> is the containing block for the sticky
-  // row, so the parent stays pinned only while its own subtree is in view —
+  // row, so the parent stays pinned only while its own subtree is in view -
   // once the last child scrolls past, the parent scrolls out with the <li>.
   const open = isExpanded(node.fullPath);
   const agg = aggregate(node);

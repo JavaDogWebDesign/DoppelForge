@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { detectGeneric } from "./GenericDetector";
 
-describe("detectGeneric — key-name hints", () => {
+describe("detectGeneric - key-name hints", () => {
   it("maps known PII key names to their semantic type", () => {
     expect(detectGeneric("user.first_name", "Bob")).toBe("firstName");
     expect(detectGeneric("user.email", "a@b.com")).toBe("email");
@@ -21,14 +21,14 @@ describe("detectGeneric — key-name hints", () => {
   });
 });
 
-describe("detectGeneric — path hints take precedence over key hints", () => {
+describe("detectGeneric - path hints take precedence over key hints", () => {
   it("disambiguates a generic `code` key by its parent context", () => {
     expect(detectGeneric("payment.cvv_result.code", "M")).toBe("cvvCode");
     expect(detectGeneric("payment.avs_result.message", "Match")).toBe("avsMessage");
   });
 });
 
-describe("detectGeneric — value-pattern fallback", () => {
+describe("detectGeneric - value-pattern fallback", () => {
   it("detects formats from the value when the key gives no hint", () => {
     expect(detectGeneric("ref", "550e8400-e29b-41d4-a716-446655440000")).toBe("uuid");
     expect(detectGeneric("addr", "192.168.1.1")).toBe("ipv4");

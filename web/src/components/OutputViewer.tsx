@@ -21,7 +21,7 @@ interface Props {
   linked: boolean;
   onToggleLink: () => void;
   modifiedLines: Set<number>;
-  // Parsed obfuscated payload — used by codegen ("Copy as TS / Zod / JSON
+  // Parsed obfuscated payload - used by codegen ("Copy as TS / Zod / JSON
   // Schema"). XML payloads pass null here; the menu disables itself.
   codegenSample: JsonValue | null;
 }

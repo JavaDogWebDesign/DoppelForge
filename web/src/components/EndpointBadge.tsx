@@ -27,7 +27,7 @@ export function EndpointBadge({ endpoint, endpoints, detectedFrom, onChange }: P
         value={endpoint?.id ?? ""}
         onChange={(e) => onChange(e.target.value || null)}
       >
-        <option value="">— Generic mode —</option>
+        <option value="">- Generic mode -</option>
         {endpoints.map((ep) => (
           <option key={ep.id} value={ep.id}>
             {ep.endpoint.method} {ep.endpoint.path}

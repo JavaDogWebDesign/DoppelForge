@@ -9,7 +9,7 @@ function makeEngine(seed: number = DEFAULT_SEED): TransformEngine {
 }
 
 // Maps every leaf to its primitive type while keeping object keys and array
-// nesting. Two values with the same `shape` are structurally identical — the
+// nesting. Two values with the same `shape` are structurally identical - the
 // core invariant of the tool (forge the same shape, change the values).
 function shape(value: JsonValue): unknown {
   if (Array.isArray(value)) return value.map(shape);
@@ -90,7 +90,7 @@ describe("TransformEngine.transform", () => {
   });
 });
 
-describe("TransformEngine.transform — overrides", () => {
+describe("TransformEngine.transform - overrides", () => {
   const flat: JsonValue = { id: "abc123", object: "customer", email: "real@person.com" };
 
   it("override=false forces a normally-transformed field to preserve", () => {
@@ -130,7 +130,7 @@ describe("TransformEngine.transform — overrides", () => {
   });
 });
 
-describe("TransformEngine.transform — anchoring & wildcard rules", () => {
+describe("TransformEngine.transform - anchoring & wildcard rules", () => {
   const anchored: EndpointSpec = {
     id: "anchored",
     providerId: "test",
@@ -156,7 +156,7 @@ describe("TransformEngine.transform — anchoring & wildcard rules", () => {
   });
 });
 
-describe("TransformEngine.transform — auto type & array-path rules", () => {
+describe("TransformEngine.transform - auto type & array-path rules", () => {
   it("routes an `auto` field through the generic detector", () => {
     const ep: EndpointSpec = {
       id: "auto",

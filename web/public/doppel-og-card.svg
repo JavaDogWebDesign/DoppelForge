@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="DoppelForge — Forge identical twins of your API responses">
-  <title>DoppelForge — Forge identical twins of your API responses</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="DoppelForge - Forge identical twins of your API responses">
+  <title>DoppelForge - Forge identical twins of your API responses</title>
   <defs>
     <style>
       .sans {
@@ -15,22 +15,22 @@
       }
       .tagline {
         font-weight: 600;
-        font-size: 44px;
+        font-size: 50px;
         letter-spacing: -1px;
       }
       .subtle {
         font-weight: 500;
-        font-size: 30px;
+        font-size: 42px;
       }
       .meta {
         font-weight: 600;
-        font-size: 22px;
+        font-size: 26px;
         letter-spacing: 1px;
         text-transform: uppercase;
       }
       .url {
         font-weight: 500;
-        font-size: 26px;
+        font-size: 30px;
       }
     </style>
     <linearGradient id="border-glow" x1="0" y1="0" x2="0" y2="1">
@@ -48,20 +48,20 @@
   <!-- Inner card surface -->
   <rect x="60" y="60" width="1080" height="510" rx="20" fill="#14151c" stroke="#2a2d39" stroke-width="1" />
 
-  <!-- DoppelForge wordmark — doubled / ghost treatment, echoing the logo -->
-  <g transform="translate(110, 260)">
+  <!-- DoppelForge wordmark - doubled / ghost treatment, echoing the logo -->
+  <g transform="translate(110, 220)">
     <text x="0" y="0" class="sans brand" fill="#a875e0" fill-opacity="0.22">DoppelForge</text>
     <text x="14" y="14" class="sans brand" fill="#a875e0">DoppelForge</text>
   </g>
 
   <!-- Tagline (primary, from brand guide) -->
-  <text x="110" y="380" class="sans tagline" fill="#d6d9e1">Forge identical twins of</text>
-  <text x="110" y="430" class="sans tagline" fill="#d6d9e1">your API responses.</text>
+  <text x="110" y="340" class="sans tagline" fill="#d6d9e1">Forge identical twins of</text>
+  <text x="110" y="400" class="sans tagline" fill="#d6d9e1">your API responses for LLMs.</text>
 
   <!-- Sub-tagline -->
-  <text x="110" y="490" class="sans subtle" fill="#9197a4">Same shape. Safe values. Counterfeit, with consent.</text>
+  <text x="110" y="465" class="sans subtle" fill="#9197a4">Same shape. Safe values. Counterfeit, with consent.</text>
 
   <!-- Footer meta strip -->
-  <text x="110" y="555" class="mono meta" fill="#a875e0">MIT  ·  Browser-only  ·  No telemetry</text>
-  <text x="1090" y="555" class="mono url" fill="#9197a4" text-anchor="end">doppelforge.com</text>
+  <text x="110" y="525" class="mono meta" fill="#a875e0">MIT  ·  Browser-only  ·  No telemetry</text>
+  <text x="1090" y="525" class="mono url" fill="#9197a4" text-anchor="end">doppelforge.com</text>
 </svg>

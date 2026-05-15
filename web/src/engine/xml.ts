@@ -8,17 +8,17 @@ export interface ParsedInput {
   data: JsonValue;
   format: InputFormat;
   rootName?: string;
-  // Original key order from a urlencoded body — re-emitted on serialize so
+  // Original key order from a urlencoded body - re-emitted on serialize so
   // the round-trip diff stays meaningful. Only present when format === "form"
   // and the body was a flat Twilio-style key/value pair.
   formOrder?: string[];
   // Distinguishes the three Braintree paste shapes so serialize() can wrap
   // back to whatever the user pasted. Null for Twilio.
-  //   "form"   — outer bt_signature=&bt_payload=<base64 XML>
-  //   "base64" — bare base64 XML (rare; not auto-detected in v1)
-  //   "xml"    — decoded XML pasted directly (detected as format: "xml", not "form")
+  //   "form"   - outer bt_signature=&bt_payload=<base64 XML>
+  //   "base64" - bare base64 XML (rare; not auto-detected in v1)
+  //   "xml"    - decoded XML pasted directly (detected as format: "xml", not "form")
   braintreeWrapper?: "form" | "base64" | "xml" | null;
-  // CSV round-trip state — original column order + delimiter + line ending so
+  // CSV round-trip state - original column order + delimiter + line ending so
   // the obfuscated output matches the user's input shape byte-for-byte where
   // possible (preserves diffability and Excel/Sheets re-import).
   csvHeaders?: string[];
@@ -47,7 +47,7 @@ export function detectFormat(input: string): InputFormat | null {
     }
     return "json";
   }
-  // Bare base64 — pure base64 alphabet, no `&`, length large enough to be a
+  // Bare base64 - pure base64 alphabet, no `&`, length large enough to be a
   // Braintree bt_payload (which is base64-encoded XML, typically 500+ chars).
   // Check before the form-pair regex so short base64 padding chars don't get
   // mistaken for a `key=value` pair.
@@ -63,7 +63,7 @@ export function detectFormat(input: string): InputFormat | null {
   if (/^[A-Za-z0-9_.\-+%]+=/.test(trimmed)) return "form";
   // CSV: first two non-empty lines share a comma/tab/semicolon count.
   // Quoted fields are respected so a `"Smith, John"` cell doesn't inflate
-  // the count. Detection is intentionally loose — false positives surface
+  // the count. Detection is intentionally loose - false positives surface
   // as parse errors rather than data corruption.
   const firstTwo = trimmed.split(/\r?\n/).filter((l) => l.length > 0).slice(0, 2);
   if (firstTwo.length >= 2) {
@@ -113,7 +113,7 @@ export function parseJson(input: string): ParsedInput {
 export function parseForm(input: string): ParsedInput {
   const trimmed = input.trim();
 
-  // Bare base64 — Braintree bt_payload pasted on its own (no outer form
+  // Bare base64 - Braintree bt_payload pasted on its own (no outer form
   // wrapper). detectFormat() gated on length, alphabet, and absence of `&`,
   // so we trust those preconditions here.
   const stripped = trimmed.replace(/\s/g, "");
@@ -339,7 +339,7 @@ function serializeForm(value: JsonValue, parsed: ParsedInput): string {
     const b64 = encodeBase64Utf8(xmlStr);
     if (parsed.braintreeWrapper === "base64") return b64;
     // "form" wrapper: rebuild bt_signature=&bt_payload=. The signature was
-    // computed over the original body — obfuscation invalidates it, so we
+    // computed over the original body - obfuscation invalidates it, so we
     // emit a placeholder rather than the real value.
     const params = new URLSearchParams();
     params.set("bt_signature", "obfuscated-signature-invalid");
