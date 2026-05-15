@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
-import { ShieldX, Trash2 } from "lucide-react";
+import { useCallback, useState, useSyncExternalStore } from "react";
+import { ShieldAlert, ShieldX, Trash2 } from "lucide-react";
 import { safeStorage, STORAGE_NAMESPACE } from "../utils/safeStorage";
+import { getEgressCount, subscribeEgress } from "../utils/networkMonitor";
 
 interface Props {
   cacheSize: number;
@@ -10,6 +11,11 @@ interface Props {
 
 export function SettingsDrawer({ cacheSize, seed, onClearCache }: Props) {
   const [confirming, setConfirming] = useState(false);
+
+  // Live count of outbound requests seen by the network monitor. Zero means
+  // nothing has left this device, so the privacy badge can say so honestly.
+  const egressCount = useSyncExternalStore(subscribeEgress, getEgressCount);
+  const dataStaysLocal = egressCount === 0;
 
   const handleForgetEverything = useCallback(() => {
     if (!confirming) {
@@ -44,9 +50,24 @@ export function SettingsDrawer({ cacheSize, seed, onClearCache }: Props) {
         <ShieldX size={14} />
         {confirming ? "Click again to confirm" : "Forget everything"}
       </button>
-      <span className="setting-item privacy-note">
-        ● Data stays on this device
-      </span>
+      {dataStaysLocal ? (
+        <span
+          className="setting-item privacy-note"
+          title="Verified: no outbound network requests have been made - your data has not left this device"
+        >
+          ● Data stays on this device
+        </span>
+      ) : (
+        <span
+          className="setting-item privacy-note privacy-note-alert"
+          title={`${egressCount} outbound network request${
+            egressCount === 1 ? "" : "s"
+          } detected this session`}
+        >
+          <ShieldAlert size={14} />
+          {egressCount} outbound request{egressCount === 1 ? "" : "s"} detected
+        </span>
+      )}
     </footer>
   );
 }

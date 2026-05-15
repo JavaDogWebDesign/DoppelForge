@@ -1978,6 +1978,12 @@
   font-size: 8px;
 }
 
+/* Network monitor caught an outbound request - the "stays on device"
+   guarantee no longer holds, so the badge turns into a warning. */
+.privacy-note-alert {
+  color: var(--err);
+}
+
 .forget-everything {
   color: var(--text-dim);
   font-size: 12px;
@@ -2679,5 +2685,17 @@
   .batch-dropzone-skipped {
     flex-basis: 100%;
     margin-top: 0;
+  }
+}
+
+/* ---------- Responsive: custom provider modal on phones ---------- */
+/* On narrow screens the provider modal is taller than the viewport. With
+   `align-items: center` on a scrollable overlay the browser clips the top
+   of the modal out of reach. We anchor the modal to the top instead, leave
+   a gap above it, and trade side padding for width so the form is wider. */
+@media (max-width: 640px) {
+  .custom-modal-overlay {
+    align-items: flex-start;
+    padding: 32px 8px 16px;
   }
 }
