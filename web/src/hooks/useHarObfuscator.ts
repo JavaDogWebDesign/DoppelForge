@@ -8,6 +8,7 @@ import type {
   RedactionTarget,
 } from "../engine/har";
 import type { HarWorkerRequest, HarWorkerResponse } from "../workers/har.worker";
+import { errMsg } from "../utils/errMsg";
 
 export type HarPhase = "idle" | "processing" | "done" | "error";
 
@@ -30,10 +31,6 @@ const IDLE: HarObfuscatorState = {
   resultName: null,
   error: null,
 };
-
-function errMsg(err: unknown): string {
-  return err instanceof Error ? err.message : String(err);
-}
 
 /**
  * Drives HAR obfuscation through an off-thread worker. Owns the worker

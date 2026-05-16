@@ -3252,17 +3252,6 @@
   flex: 0 0 auto;
 }
 
-.har-row-type {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 1px 5px;
-  border-radius: 3px;
-  color: var(--accent);
-  background: var(--accent-soft);
-}
-
 .har-row-values {
   display: flex;
   align-items: baseline;

@@ -11,6 +11,7 @@ import {
   type ProcessHarOptions,
   type RedactionTarget,
 } from "../engine/har";
+import { errMsg } from "../utils/errMsg";
 
 /** Main thread -> worker: the raw file bytes (transferred zero-copy). */
 export interface HarWorkerRequest {
@@ -54,13 +55,12 @@ ctx.onmessage = (e: MessageEvent<HarWorkerRequest>) => {
       }
     });
 
-    const outText = JSON.stringify(har, null, 2);
-    const blob = new Blob([outText], { type: "application/json" });
+    // Compact, not pretty-printed: indentation would inflate a 250MB HAR's
+    // output by 20-40%, pushing peak memory toward the size ceiling. HAR is
+    // consumed by tools (DevTools, viewers), not hand-read.
+    const blob = new Blob([JSON.stringify(har)], { type: "application/json" });
     post({ type: "done", blob, stats, targets });
   } catch (err) {
-    post({
-      type: "error",
-      message: err instanceof Error ? err.message : String(err),
-    });
+    post({ type: "error", message: errMsg(err) });
   }
 };

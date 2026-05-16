@@ -8,7 +8,7 @@ import {
 import { ProviderSidebar } from "./components/ProviderSidebar";
 import { Workspace } from "./components/Workspace";
 import { BatchWorkspace } from "./components/BatchWorkspace";
-import { HarWorkspace } from "./components/HarWorkspace";
+import { HarWorkspace } from "./components/har/HarWorkspace";
 import { MobileWarning } from "./components/MobileWarning";
 import { CustomProviderModal } from "./components/CustomProviderModal";
 import { useLocalStorageState, boolCodec, stringCodec } from "./hooks/useLocalStorageState";

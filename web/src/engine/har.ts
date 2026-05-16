@@ -23,6 +23,7 @@ import { TransformEngine, type FieldSummary } from "./TransformEngine";
 import { ConsistencyCache } from "./Cache";
 import { DEFAULT_SEED, GeneratorRegistry } from "./GeneratorRegistry";
 import { parseInput, serialize } from "./xml";
+import { errMsg } from "../utils/errMsg";
 import {
   isSecretHeader,
   isSecretParam,
@@ -93,8 +94,6 @@ export interface RedactionTarget {
   occurrences: number;
   /** Entries this value appears in (capped at MAX_LOCATIONS for transport). */
   locations: TargetLocation[];
-  /** Engine semantic type, for body fields only (e.g. "email"). */
-  semanticType?: string;
 }
 
 /** User's decision for one target: redact or keep, plus an optional literal
@@ -328,7 +327,10 @@ export function processHar(
   // seeds itself, so an identical real value forges the same fake everywhere.
   const fakeGen = new GeneratorRegistry(seed);
 
-  const ctx: Ctx = { policy, overrides, seed, sharedEngine, fakeGen, stats, targets };
+  const ctx: Ctx = {
+    policy, overrides, seed, sharedEngine, fakeGen, stats, targets,
+    fakeCache: new Map(),
+  };
 
   for (let i = 0; i < entries.length; i++) {
     const entry = asRecord(entries[i]);
@@ -353,35 +355,50 @@ interface Ctx {
   fakeGen: GeneratorRegistry;
   stats: HarStats;
   targets: TargetSet;
+  /** Memoized generator output, keyed `${type}:${value}` — see genCached. */
+  fakeCache: Map<string, string>;
+}
+
+/**
+ * A generator's output for one value, memoized for the run. Output is
+ * deterministic per value (salt ""), so the same real value seen across
+ * thousands of entries is generated once, not once per occurrence.
+ */
+function genCached(ctx: Ctx, type: "id" | "ipv4", value: string): string {
+  const key = `${type}:${value}`;
+  const hit = ctx.fakeCache.get(key);
+  if (hit !== undefined) return hit;
+  const fake = String(ctx.fakeGen.generate(type, value, ""));
+  ctx.fakeCache.set(key, fake);
+  return fake;
 }
 
 /**
  * A realistic, shape-preserving fake for a header / cookie / param / IP value.
  * The engine's `id` generator scrambles alphanumeric runs while keeping length,
  * casing, and every separator — so a JWT stays JWT-shaped, a `k=v; k=v` cookie
- * stays parseable, an IP stays an IP. Deterministic per value (salt ""), so an
- * identical real value forges the same fake everywhere in the HAR.
+ * stays parseable, an IP stays an IP.
  */
 function fakeValue(ctx: Ctx, value: string): string {
-  return String(ctx.fakeGen.generate("id", value, ""));
+  return genCached(ctx, "id", value);
+}
+
+/** Redact userinfo + secret query params in a URL string field, in place, but
+ *  only when it actually carries a secret — clean URLs are left verbatim. */
+function maybeRedactUrl(holder: Record<string, unknown>, key: string, ctx: Ctx): void {
+  const url = holder[key];
+  if (typeof url === "string" && urlHasSecrets(url)) {
+    holder[key] = redactUrl(url, (v) => fakeValue(ctx, v));
+  }
 }
 
 function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): void {
   const { policy } = ctx;
   const request = asRecord(entry.request);
 
-  if (request) {
-    // URL secret-param + userinfo redaction stays automatic under the params
-    // category — it backstops HARs whose queryString[] array is empty. Only
-    // touched when it actually carries a secret, so clean URLs stay verbatim.
-    if (
-      policy.params &&
-      typeof request.url === "string" &&
-      urlHasSecrets(request.url)
-    ) {
-      request.url = redactUrl(request.url, (v) => fakeValue(ctx, v));
-    }
-  }
+  // Request-URL redaction is automatic under the params category — it backstops
+  // HARs whose queryString[] array is empty.
+  if (request && policy.params) maybeRedactUrl(request, "url", ctx);
 
   // Where every target of this entry will say it lives.
   const loc: TargetLocation = {
@@ -397,25 +414,19 @@ function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): 
     const postData = asRecord(request.postData);
     if (postData) {
       ctx.stats.paramsRedacted += redactNameValues(postData.params, "param", policy.params, ctx, loc);
-      obfuscateBody(postData, postData.mimeType, undefined, ctx, index, "request", loc);
+      obfuscateBody(postData, ctx, "request", loc);
     }
   }
 
   const response = asRecord(entry.response);
   if (response) {
     // Redirect destinations leak OAuth codes / tokens via `?code=`, `?token=`.
-    if (
-      policy.params &&
-      typeof response.redirectURL === "string" &&
-      urlHasSecrets(response.redirectURL)
-    ) {
-      response.redirectURL = redactUrl(response.redirectURL, (v) => fakeValue(ctx, v));
-    }
+    if (policy.params) maybeRedactUrl(response, "redirectURL", ctx);
     ctx.stats.headersRedacted += redactNameValues(response.headers, "header", policy.headers, ctx, loc);
     ctx.stats.cookiesRedacted += redactNameValues(response.cookies, "cookie", policy.headers, ctx, loc);
     const content = asRecord(response.content);
     if (content) {
-      obfuscateBody(content, content.mimeType, content.encoding, ctx, index, "response", loc);
+      obfuscateBody(content, ctx, "response", loc);
     }
   }
 
@@ -426,7 +437,7 @@ function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): 
     const redact = ctx.policy.ips && (rule ? rule.redact : true);
     let replacement = real;
     if (redact) {
-      replacement = rule?.value || String(ctx.fakeGen.generate("ipv4", real, ""));
+      replacement = rule?.value || genCached(ctx, "ipv4", real);
       entry.serverIPAddress = replacement;
       ctx.stats.ipsRedacted++;
     }
@@ -453,6 +464,18 @@ function shortUrl(url: string): string {
 // and tokens. Redacted by userinfo/secret-param like a request URL, not faked.
 const URL_HEADER_NAMES = new Set(["location", "content-location"]);
 
+/** The out-of-the-box redaction decision for one header/cookie/param value. */
+function defaultRedact(
+  section: "header" | "cookie" | "param",
+  name: string,
+  value: string,
+  isUrlHeader: boolean,
+): boolean {
+  if (isUrlHeader) return urlHasSecrets(value);
+  if (section === "cookie") return isSensitiveCookie(name, value);
+  return intrinsicDefault(section, name);
+}
+
 /**
  * Walk a HAR `[{ name, value }]` array. For every value: register a target and,
  * when the category is enabled and the effective decision says so, replace it.
@@ -476,13 +499,7 @@ function redactNameValues(
     const value = rec.value;
     const isUrlHeader =
       section === "header" && URL_HEADER_NAMES.has(name.toLowerCase());
-    // A URL header is "flagged" only when the link actually carries a secret;
-    // a plain redirect is left alone (no whole-value faking).
-    const def = isUrlHeader
-      ? urlHasSecrets(value)
-      : section === "cookie"
-        ? isSensitiveCookie(name, value)
-        : intrinsicDefault(section, name);
+    const def = defaultRedact(section, name, value, isUrlHeader);
     const id = targetId(section, name, value);
     const rule = ctx.overrides[id];
     const redact = categoryEnabled && (rule ? rule.redact : def);
@@ -522,18 +539,17 @@ function redactNameValues(
  */
 function obfuscateBody(
   holder: Record<string, unknown>,
-  mimeType: unknown,
-  encoding: unknown,
   ctx: Ctx,
-  index: number,
   side: "request" | "response",
   loc: TargetLocation,
 ): void {
   const text = holder.text;
   if (typeof text !== "string" || text === "") return;
-  const mt = typeof mimeType === "string" ? mimeType : "";
-  const enc = typeof encoding === "string" ? encoding : undefined;
-  if (!bodyIsObfuscatable(mt, enc)) {
+  const mt = typeof holder.mimeType === "string" ? holder.mimeType : "";
+  const enc = typeof holder.encoding === "string" ? holder.encoding : undefined;
+  // Binary / non-structured bodies — and every body when the category is off —
+  // are left exactly as-is. Skipping here also avoids a wasted parse+transform.
+  if (!bodyIsObfuscatable(mt, enc) || !ctx.policy.bodies) {
     ctx.stats.bodiesSkipped++;
     return;
   }
@@ -589,7 +605,7 @@ function obfuscateBody(
     // Pass 2 only when this body actually has overrides — a throwaway engine so
     // the shared engine's cross-body consistency isn't disturbed.
     let result = base;
-    if ((engOverrides.size || engValues.size) && ctx.policy.bodies) {
+    if (engOverrides.size || engValues.size) {
       const fresh = new TransformEngine(
         new GeneratorRegistry(ctx.seed),
         new ConsistencyCache(),
@@ -597,12 +613,8 @@ function obfuscateBody(
       result = fresh.transform(parsed.data, null, engOverrides, engValues);
     }
 
-    if (ctx.policy.bodies) {
-      holder.text = serialize(result.output, parsed);
-      ctx.stats.bodiesObfuscated++;
-    } else {
-      ctx.stats.bodiesSkipped++;
-    }
+    holder.text = serialize(result.output, parsed);
+    ctx.stats.bodiesObfuscated++;
 
     // Register a target per body field, keyed on its default-pass value so the
     // id is stable regardless of the override applied.
@@ -612,7 +624,7 @@ function obfuscateBody(
   } catch (err) {
     ctx.stats.bodiesSkipped++;
     ctx.stats.entryErrors.push({
-      entry: index,
+      entry: loc.entry,
       message: `${side} body left unobfuscated: ${errMsg(err)}`,
     });
   }
@@ -631,28 +643,22 @@ function registerBodyTarget(
   const replacement = String(f.sampleFake);
   // The final transform already reflects any override, so "did the value
   // change" is the effective decision.
-  const redact = ctx.policy.bodies && !sameValue(f.sampleOriginal, f.sampleFake);
-  // URL fields get a `custom` effectiveType once their redacted value is
-  // injected, so their reason/type is set explicitly rather than via the map.
+  const redact = !sameValue(f.sampleOriginal, f.sampleFake);
+  // URL fields get a `custom` effectiveType once redacted, so their reason is
+  // set explicitly rather than derived from the (now meaningless) type.
   const isUrl = urlPaths.has(f.path);
+  const reason = isUrl
+    ? def
+      ? "url with a secret"
+      : "public url"
+    : bodyReason(f.effectiveType, def);
   ctx.targets.add({
     id, section: "body", name: f.path,
     original: disp(original), replacement: disp(replacement),
-    redact,
-    redactedByDefault: def,
-    reason: isUrl
-      ? def
-        ? "url with a secret"
-        : "public url"
-      : bodyReason(f.effectiveType, def),
-    semanticType: isUrl ? "url" : f.effectiveType,
+    redact, redactedByDefault: def, reason,
   }, loc);
 }
 
 function sameValue(a: unknown, b: unknown): boolean {
   return String(a) === String(b);
-}
-
-function errMsg(err: unknown): string {
-  return err instanceof Error ? err.message : String(err);
 }
