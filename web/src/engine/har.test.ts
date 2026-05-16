@@ -154,6 +154,12 @@ describe("harRedact name rules", () => {
     expect(isSecretParam("country_code")).toBe(false);
     expect(isSecretParam("zip_code")).toBe(false);
   });
+  it("catches camelCase secret param names, not just snake/kebab", () => {
+    expect(isSecretParam("connectionToken")).toBe(true);
+    expect(isSecretParam("accessToken")).toBe(true);
+    expect(isSecretParam("apiKey")).toBe(true);
+    expect(isSecretParam("pageSize")).toBe(false);
+  });
 });
 
 describe("redactUrl", () => {
@@ -262,6 +268,27 @@ describe("processHar — default redaction", () => {
     const qs = entriesOf(har)[0].request.queryString;
     expect(qs[0].value).not.toBe("ya29.real");
     expect(qs[1].value).toBe("3");
+    expect(stats.paramsRedacted).toBe(1);
+  });
+
+  it("redacts a token-shaped param value under a cryptic name, not URLs", () => {
+    const har = makeHar([
+      jsonEntry({
+        query: [
+          { name: "k", value: "client-iOZ831TxVwJNrNCWSUAwsQgfvuZ" },
+          { name: "loc", value: "https://www.example.com/some/article" },
+          { name: "size", value: "1265x1201" },
+        ],
+      }),
+    ]);
+    const { stats } = processHar(har);
+    const qs = entriesOf(har)[0].request.queryString;
+    // Cryptic name, token-shaped value → redacted.
+    expect(qs[0].value).not.toBe("client-iOZ831TxVwJNrNCWSUAwsQgfvuZ");
+    // A URL value is not a token — left as-is.
+    expect(qs[1].value).toBe("https://www.example.com/some/article");
+    // Benign short value — left as-is.
+    expect(qs[2].value).toBe("1265x1201");
     expect(stats.paramsRedacted).toBe(1);
   });
 

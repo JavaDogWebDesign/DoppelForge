@@ -26,8 +26,8 @@ import { parseInput, serialize } from "./xml";
 import { errMsg } from "../utils/errMsg";
 import {
   isSecretHeader,
-  isSecretParam,
   isSensitiveCookie,
+  isSensitiveParam,
   redactUrl,
   urlHasSecrets,
 } from "./harRedact";
@@ -186,20 +186,13 @@ export function targetId(
   return `${section}:${nameKey(section, name)}:${hashStr(value)}`;
 }
 
-/** The intrinsic (out-of-the-box) redaction default for a header / param name.
- *  Cookies are decided by isSensitiveCookie (needs the value too); body fields
- *  by the engine; IPs are always redacted. */
-function intrinsicDefault(section: "header" | "param", name: string): boolean {
-  return section === "header" ? isSecretHeader(name) : isSecretParam(name);
-}
-
 // Short, tag-sized "why this was flagged" labels.
 
 /** Why a header / cookie / param was (or wasn't) flagged. */
 function nameReason(section: "header" | "cookie" | "param", def: boolean): string {
   if (section === "cookie") return def ? "session cookie" : "preference cookie";
   if (section === "header") return def ? "credential header" : "standard header";
-  return def ? "secret-named param" : "standard param";
+  return def ? "secret-looking param" : "standard param";
 }
 
 // Friendly labels for the engine's semantic field types.
@@ -473,7 +466,8 @@ function defaultRedact(
 ): boolean {
   if (isUrlHeader) return urlHasSecrets(value);
   if (section === "cookie") return isSensitiveCookie(name, value);
-  return intrinsicDefault(section, name);
+  if (section === "param") return isSensitiveParam(name, value);
+  return isSecretHeader(name);
 }
 
 /**

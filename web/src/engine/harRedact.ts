@@ -51,7 +51,10 @@ export function isSecretParam(name: string): boolean {
   // Exact `code` is the OAuth authorization code — matched on its own so the
   // likes of `country_code` / `zip_code` aren't swept up by a broader rule.
   if (n.toLowerCase() === "code") return true;
-  return SECRET_PARAM_RE.test(n);
+  // Test a snake-cased form too, so camelCase names (`connectionToken`,
+  // `accessToken`) are caught — the rule only anchors on `_`/`-`/start.
+  const snake = n.replace(/([a-z0-9])([A-Z])/g, "$1_$2");
+  return SECRET_PARAM_RE.test(n) || SECRET_PARAM_RE.test(snake);
 }
 
 // Cookie names that signal a session / identity / tracking cookie. Cookies that
@@ -60,11 +63,12 @@ export function isSecretParam(name: string): boolean {
 const SENSITIVE_COOKIE_NAME_RE =
   /(session|sess|token|auth|csrf|xsrf|secret|credential|sid|jwt|bearer|_octo|telemetry|device|account|login|user|^id$)/i;
 
-/** A cookie value long and random enough to look like a credential/token. */
+/** A value long and random enough to look like a credential/token/identifier. */
 function valueLooksLikeToken(value: string): boolean {
   const v = value.trim();
   if (v.length < 16) return false; // yes / no / dark / light / small ints
   if (/\s/.test(v)) return false; // human phrases aren't tokens
+  if (/^https?:\/\//i.test(v)) return false; // a URL is not a token
   const hasLetter = /[A-Za-z]/.test(v);
   const hasDigit = /\d/.test(v);
   return hasLetter && hasDigit && new Set(v).size >= 10;
@@ -78,6 +82,15 @@ function valueLooksLikeToken(value: string): boolean {
  */
 export function isSensitiveCookie(name: string, value: string): boolean {
   return SENSITIVE_COOKIE_NAME_RE.test(name.trim()) || valueLooksLikeToken(value);
+}
+
+/**
+ * Whether a query/form param is worth redacting. True when the name looks
+ * secret, or the value looks like a token/identifier — so a token in a
+ * cryptically-named param (`k=…`, `au=<uuid>`) is still caught.
+ */
+export function isSensitiveParam(name: string, value: string): boolean {
+  return isSecretParam(name) || valueLooksLikeToken(value);
 }
 
 /**
