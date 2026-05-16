@@ -415,6 +415,32 @@ describe("processHar — default redaction", () => {
     expect(entriesOf(har)[1].response.content.text).toBe(base64);
   });
 
+  it("obfuscates a body behind an anti-hijacking prefix, keeping the prefix", () => {
+    const body = `)]}'\n${JSON.stringify({ email: "real@example.com" })}`;
+    const har = makeHar([jsonEntry({ respBody: body })]);
+    const { stats } = processHar(har);
+    const out = entriesOf(har)[0].response.content.text;
+    expect(out.startsWith(")]}'\n")).toBe(true);
+    const parsed = JSON.parse(out.slice(5));
+    expect(parsed.email).not.toBe("real@example.com");
+    expect(parsed.email).toContain("@");
+    expect(stats.bodiesObfuscated).toBe(1);
+  });
+
+  it("de-chunks an HTTP chunked-transfer body, then obfuscates it", () => {
+    const json = JSON.stringify({ email: "real@example.com" });
+    const chunked = `${json.length.toString(16)}\r\n${json}\r\n0\r\n\r\n`;
+    const har = makeHar([jsonEntry({ respBody: chunked })]);
+    const { stats } = processHar(har);
+    const out = entriesOf(har)[0].response.content.text;
+    // Output is the clean de-chunked body — no hex-size framing left.
+    expect(out).not.toContain("\r\n");
+    const parsed = JSON.parse(out);
+    expect(parsed.email).not.toBe("real@example.com");
+    expect(parsed.email).toContain("@");
+    expect(stats.bodiesObfuscated).toBe(1);
+  });
+
   it("isolates a malformed body — other entries still process", () => {
     const har = makeHar([
       jsonEntry({ respBody: "not valid json {{{", respMime: "application/json" }),

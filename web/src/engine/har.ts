@@ -271,6 +271,58 @@ function looksEncodedBody(text: string): boolean {
   return t.length > 64 && /^[A-Za-z0-9+/]+={0,2}$/.test(t);
 }
 
+/**
+ * Some HAR bodies arrive wrapped: an anti-JSON-hijacking prefix (`)]}'`), or
+ * raw HTTP chunked-transfer framing the capture never stripped. Unwrap to the
+ * real payload so it can be parsed, with a `reframe` to restore the wrapper on
+ * the obfuscated output. Returns null when the body isn't wrapped.
+ */
+function unframeBody(
+  text: string,
+): { payload: string; reframe: (out: string) => string } | null {
+  // Anti-hijacking prefix — `)]}'` or `)]}',`, then a newline.
+  const hijack = /^\)\]\}'[,]?\r?\n?/.exec(text);
+  if (hijack) {
+    const prefix = hijack[0];
+    return { payload: text.slice(prefix.length), reframe: (out) => prefix + out };
+  }
+  // HTTP chunked transfer framing: <hex-size>CRLF<data>CRLF … 0CRLFCRLF. The
+  // framing is a capture artifact, so the de-chunked body is written clean.
+  if (/^[0-9a-fA-F]+(;[^\r\n]*)?\r\n/.test(text)) {
+    const dechunked = dechunk(text);
+    if (dechunked !== null) return { payload: dechunked, reframe: (out) => out };
+  }
+  return null;
+}
+
+/** De-chunk an HTTP chunked-transfer body. Works in byte space (chunk sizes
+ *  are byte counts) so multi-byte UTF-8 stays aligned. Null if malformed. */
+function dechunk(text: string): string | null {
+  const bytes = new TextEncoder().encode(text);
+  const decoder = new TextDecoder();
+  const out: number[] = [];
+  let i = 0;
+  while (i < bytes.length) {
+    let nl = -1;
+    for (let j = i; j + 1 < bytes.length; j++) {
+      if (bytes[j] === 0x0d && bytes[j + 1] === 0x0a) {
+        nl = j;
+        break;
+      }
+    }
+    if (nl < 0) return null;
+    const sizeHex = decoder.decode(bytes.slice(i, nl)).split(";")[0].trim();
+    if (!/^[0-9a-fA-F]+$/.test(sizeHex)) return null;
+    const size = parseInt(sizeHex, 16);
+    if (size === 0) break;
+    const start = nl + 2;
+    if (start + size > bytes.length) return null;
+    for (let k = start; k < start + size; k++) out.push(bytes[k]);
+    i = start + size + 2; // skip the chunk's trailing CRLF
+  }
+  return decoder.decode(new Uint8Array(out));
+}
+
 /** Accumulates distinct targets across the whole HAR, recording every entry
  *  each value is seen in (up to MAX_LOCATIONS) so the UI can trace it back. */
 class TargetSet {
@@ -577,7 +629,10 @@ function obfuscateBody(
     return;
   }
   try {
-    const parsed = parseInput(text);
+    // Unwrap an anti-hijacking prefix or chunked-transfer framing, if present,
+    // so the real payload can be parsed; restored on output via `reframe`.
+    const framed = unframeBody(text);
+    const parsed = parseInput(framed ? framed.payload : text);
 
     // Pass 1: no overrides. Establishes each field's default behavior — whether
     // the engine changes it out of the box (sampleOriginal !== sampleFake).
@@ -636,7 +691,8 @@ function obfuscateBody(
       result = fresh.transform(parsed.data, null, engOverrides, engValues);
     }
 
-    holder.text = serialize(result.output, parsed);
+    const out = serialize(result.output, parsed);
+    holder.text = framed ? framed.reframe(out) : out;
     ctx.stats.bodiesObfuscated++;
 
     // Register a target per body field, keyed on its default-pass value so the
