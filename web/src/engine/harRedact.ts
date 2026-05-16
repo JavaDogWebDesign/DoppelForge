@@ -63,15 +63,24 @@ export function isSecretParam(name: string): boolean {
 const SENSITIVE_COOKIE_NAME_RE =
   /(session|sess|token|auth|csrf|xsrf|secret|credential|sid|jwt|bearer|_octo|telemetry|device|account|login|user|^id$)/i;
 
-/** A value long and random enough to look like a credential/token/identifier. */
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Whether a value looks like a credential / key / opaque identifier — as
+ * opposed to a structured telemetry or config string, which is punctuated into
+ * short pieces (`0.6:N,1.2:B`, `Roboto:wght@300;400`). True for a UUID, or any
+ * value with an unbroken alphanumeric run of >=16 chars mixing letters+digits.
+ */
 function valueLooksLikeToken(value: string): boolean {
   const v = value.trim();
   if (v.length < 16) return false; // yes / no / dark / light / small ints
-  if (/\s/.test(v)) return false; // human phrases aren't tokens
   if (/^https?:\/\//i.test(v)) return false; // a URL is not a token
-  const hasLetter = /[A-Za-z]/.test(v);
-  const hasDigit = /\d/.test(v);
-  return hasLetter && hasDigit && new Set(v).size >= 10;
+  if (UUID_RE.test(v)) return true;
+  for (const run of v.match(/[A-Za-z0-9]+/g) ?? []) {
+    if (run.length >= 16 && /[A-Za-z]/.test(run) && /\d/.test(run)) return true;
+  }
+  return false;
 }
 
 /**

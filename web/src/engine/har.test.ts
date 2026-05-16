@@ -292,6 +292,26 @@ describe("processHar — default redaction", () => {
     expect(stats.paramsRedacted).toBe(1);
   });
 
+  it("leaves structured telemetry/config param values alone", () => {
+    // Punctuated into short pieces — a token has a long unbroken run, these
+    // don't, so they must not be mistaken for secrets.
+    const har = makeHar([
+      jsonEntry({
+        query: [
+          { name: "vps", value: "0.000:N,0.012:B,0.146:N,0.615:N" },
+          { name: "family", value: "Roboto:wght@300;400;500;700" },
+          { name: "fexp", value: "v1,23848211,156433,15321210,11737789" },
+        ],
+      }),
+    ]);
+    const { stats } = processHar(har);
+    const qs = entriesOf(har)[0].request.queryString;
+    expect(qs[0].value).toBe("0.000:N,0.012:B,0.146:N,0.615:N");
+    expect(qs[1].value).toBe("Roboto:wght@300;400;500;700");
+    expect(qs[2].value).toBe("v1,23848211,156433,15321210,11737789");
+    expect(stats.paramsRedacted).toBe(0);
+  });
+
   it("redacts secrets in redirect URLs — Location header and redirectURL", () => {
     const dirty = "https://app.example.com/cb?code=AUTH_SECRET_9";
     const har = makeHar([
@@ -375,6 +395,24 @@ describe("processHar — default redaction", () => {
     expect(entriesOf(har)[0].response.content.text).toBe("iVBORw0KGgoAAAANSUhEUg==");
     expect(stats.bodiesObfuscated).toBe(0);
     expect(stats.bodiesSkipped).toBe(1);
+  });
+
+  it("reports a body that claims a text mime but is gzip or base64-encoded", () => {
+    // application/json mime, but the bytes are gzip (entry 0) / a bare base64
+    // blob with no encoding field (entry 1) — can't be parsed and obfuscated.
+    const gzip = "" + "compressedgarbage".repeat(4);
+    const base64 = "eyJ" + "A".repeat(80);
+    const har = makeHar([
+      jsonEntry({ respBody: gzip }),
+      jsonEntry({ respBody: base64 }),
+    ]);
+    const { stats } = processHar(har);
+    expect(stats.bodiesObfuscated).toBe(0);
+    expect(stats.entryErrors.length).toBe(2);
+    expect(stats.entryErrors[0].message).toMatch(/compressed or base64-encoded/);
+    // The bodies are left exactly as-is — never silently corrupted.
+    expect(entriesOf(har)[0].response.content.text).toBe(gzip);
+    expect(entriesOf(har)[1].response.content.text).toBe(base64);
   });
 
   it("isolates a malformed body — other entries still process", () => {

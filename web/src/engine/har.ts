@@ -253,6 +253,24 @@ export function bodyIsObfuscatable(
   );
 }
 
+/**
+ * Whether a body's text is compressed or base64-encoded rather than the JSON /
+ * XML / form text its mime claims — gzip/zlib magic bytes, other binary control
+ * characters, or a bare base64 blob (some exporters store a body base64-encoded
+ * without setting `content.encoding`). Such bodies can't be parsed in place.
+ */
+function looksEncodedBody(text: string): boolean {
+  const c = text.charCodeAt(0);
+  if (c === 0x1f || c === 0x78) return true; // gzip (1f 8b) / zlib (78 xx)
+  // Binary control bytes near the start (tab/newline/CR excluded).
+  for (let i = 0; i < Math.min(64, text.length); i++) {
+    const x = text.charCodeAt(i);
+    if (x < 9 || (x > 13 && x < 32)) return true;
+  }
+  const t = text.trim();
+  return t.length > 64 && /^[A-Za-z0-9+/]+={0,2}$/.test(t);
+}
+
 /** Accumulates distinct targets across the whole HAR, recording every entry
  *  each value is seen in (up to MAX_LOCATIONS) so the UI can trace it back. */
 class TargetSet {
@@ -545,6 +563,17 @@ function obfuscateBody(
   // are left exactly as-is. Skipping here also avoids a wasted parse+transform.
   if (!bodyIsObfuscatable(mt, enc) || !ctx.policy.bodies) {
     ctx.stats.bodiesSkipped++;
+    return;
+  }
+  // A body whose mime claims JSON/XML but whose bytes are gzip-compressed or
+  // base64-encoded can't be parsed and obfuscated in place. Surface it so the
+  // user knows it went out untouched — don't let it become a cryptic error.
+  if (looksEncodedBody(text)) {
+    ctx.stats.bodiesSkipped++;
+    ctx.stats.entryErrors.push({
+      entry: loc.entry,
+      message: `${side} body is compressed or base64-encoded — left unobfuscated; decode it before sharing if it may hold personal data`,
+    });
     return;
   }
   try {
