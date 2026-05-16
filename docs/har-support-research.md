@@ -1,6 +1,6 @@
 # HAR file support — feasibility, scope, and cost analysis
 
-**Status**: research only. Not committed.
+**Status**: ✅ **Built — shipped as "HAR mode," beta release (2026-05-15).** See the [Decision record](#decision-record) at the end for what was built and how it diverged from this research. The analysis below is preserved as written; it remains the rationale for the architecture that shipped.
 
 This doc captures the research from 2026-05 into what it would actually take to add HAR (HTTP Archive 1.2) file support to doppelforge. It exists so we can revisit the decision with full information rather than re-litigating from scratch each time the topic comes up.
 
@@ -258,14 +258,28 @@ Defer if **any** of these are true:
 
 ---
 
-## Decision record (to be filled when revisited)
+## Decision record
 
-When this comes up again, capture:
+- **Date**: 2026-05-15
+- **Decision**: **Build.** Shipped as **HAR mode** — a third workspace tab alongside Single and Batch — at beta quality.
+- **Reasoning**: Option A (in-memory + Web Worker) was chosen as designed. The market gap held: no browser-only tool reliably redacts large HARs, and HAR is a genuine headline differentiator for the launch.
+- **Time committed**: a single focused implementation pass.
+- **What we gave up**: nothing material — endpoint-coverage expansion continues in parallel.
 
-- **Date**:
-- **Decision**: build / defer / build CLI companion / build extension instead
-- **Reasoning**:
-- **Time committed (if build)**:
-- **What we're giving up to do this**:
+### What shipped (and how it diverged from this research)
+
+The architecture matches Option A: file → `ArrayBuffer` transferred zero-copy to a Web Worker → `JSON.parse` → per-entry walk reusing the existing `TransformEngine` for bodies → re-serialize → `Blob` download. Size gates are as recommended (≤75MB silent · 75-250MB warn · >250MB refuse · 75MB mobile cap). Per-entry `try/catch` isolates malformed bodies.
+
+Deliberate departures from the research, all driven by hands-on testing against real HARs:
+
+- **Realistic fakes, not `[REDACTED]`.** The research table said "replace with placeholder." In practice that contradicts doppelforge's whole premise and produced malformed output (`Cookie: [REDACTED]` is not a valid cookie header). Headers, cookies, params, and IPs now get realistic, shape-preserving fakes — a JWT stays JWT-shaped, a `k=v; k=v` cookie stays parseable — deterministic per value so an identical real value forges the same fake everywhere.
+- **One unified value tree.** Rather than a per-entry change list, every changeable value (header / cookie / param / body field / server IP) is surfaced as a `RedactionTarget`, deduplicated by value across the whole HAR, grouped into a collapsible tree of `current value → replacement`.
+- **Per-value control with full body-field parity.** Each value can be opted in or out and given a custom replacement. JSON/XML body fields are individually controllable, routed through the same engine override mechanism as paste mode.
+- **Location tracing.** Each value records which entries carry it (method + URL), so a flagged value can be traced back to its requests.
+- **Heuristic refinements.** Cookies are no longer blanket-redacted — benign preference cookies (`color_mode=dark`, `logged_in=yes`) are left alone; only session/identity/tracking cookies or token-shaped values are flagged. URL-typed body fields get userinfo/secret-param redaction instead of whole-link faking, so clean links (`avatar_url`, doc links) pass through untouched.
+
+### Deferred (not in beta)
+
+Streaming JSON parser (Option B) — the 250MB ceiling stands. A "diff vs original" full-document view — the value tree covers review instead. Decoding base64-encoded text bodies. `_initiator.stack` URL handling.
 
 The doc lives so the next person to think about HAR — including future-you — starts with the full picture instead of the optimistic version.

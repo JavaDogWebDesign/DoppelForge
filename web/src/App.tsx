@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { FileText, Files } from "lucide-react";
+import { FileText, Files, Network } from "lucide-react";
 import { loadProviders } from "./providers/loader";
 import {
   loadCustomProviders,
@@ -8,6 +8,7 @@ import {
 import { ProviderSidebar } from "./components/ProviderSidebar";
 import { Workspace } from "./components/Workspace";
 import { BatchWorkspace } from "./components/BatchWorkspace";
+import { HarWorkspace } from "./components/HarWorkspace";
 import { MobileWarning } from "./components/MobileWarning";
 import { CustomProviderModal } from "./components/CustomProviderModal";
 import { useLocalStorageState, boolCodec, stringCodec } from "./hooks/useLocalStorageState";
@@ -17,9 +18,11 @@ import "./App.css";
 const SIDEBAR_STATE_KEY = "doppelforge.sidebar.collapsed";
 const MODE_KEY = "doppelforge.mode";
 
-type Mode = "single" | "batch";
+type Mode = "single" | "batch" | "har";
 
-const modeCodec = stringCodec<Mode>((v): v is Mode => v === "single" || v === "batch");
+const modeCodec = stringCodec<Mode>(
+  (v): v is Mode => v === "single" || v === "batch" || v === "har",
+);
 
 export default function App() {
   const builtInProviders = useMemo(() => loadProviders(), []);
@@ -143,8 +146,18 @@ export default function App() {
             <Files size={12} />
             Batch
           </button>
+          <button
+            role="tab"
+            aria-selected={mode === "har"}
+            className={`mode-tab${mode === "har" ? " active" : ""}`}
+            onClick={() => setMode("har")}
+          >
+            <Network size={12} />
+            HAR
+            <span className="mode-tab-tag">beta</span>
+          </button>
         </div>
-        {mode === "single" ? (
+        {mode === "single" && (
           <Workspace
             provider={selected}
             allProviders={providers}
@@ -153,13 +166,15 @@ export default function App() {
             onResetManualSelection={handleResetManualSelection}
             onDetectedFormatChange={setDetectedFormat}
           />
-        ) : (
+        )}
+        {mode === "batch" && (
           <BatchWorkspace
             provider={selected}
             allProviders={providers}
             onSelectProvider={setSelectedId}
           />
         )}
+        {mode === "har" && <HarWorkspace />}
       </main>
       {customModalOpen && (
         <CustomProviderModal

@@ -2157,6 +2157,18 @@
   border-color: var(--accent);
 }
 
+.mode-tab-tag {
+  margin-left: 5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 16%, transparent);
+}
+
 /* ---------- Batch workspace ---------- */
 .batch-workspace {
   background: var(--bg);
@@ -2697,5 +2709,698 @@
   .custom-modal-overlay {
     align-items: flex-start;
     padding: 32px 8px 16px;
+  }
+}
+
+/* ---------- HAR workspace ---------- */
+.har-workspace {
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Panels keep their natural height — without this, a tall expanded value tree
+   squeezes the category cards and other panels until they vanish. */
+.har-workspace > * {
+  flex-shrink: 0;
+}
+
+.har-intro-title {
+  font-size: 15px;
+  color: var(--text-h);
+  margin: 0 0 4px;
+}
+
+.har-intro-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 640px;
+}
+
+.har-dropzone {
+  padding: 40px 16px;
+}
+
+/* ---------- HAR banners ---------- */
+.har-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.har-banner svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.har-banner-error {
+  color: var(--err);
+  background: color-mix(in srgb, var(--err) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--err) 35%, transparent);
+}
+
+.har-banner-warn {
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+}
+
+.har-rerun-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.har-rerun-btn {
+  flex: 0 0 auto;
+}
+
+.har-error-list {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: 11px;
+}
+
+/* ---------- HAR progress ---------- */
+.har-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.har-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-h);
+}
+
+.har-progress-cancel {
+  margin-left: auto;
+}
+
+@keyframes har-spin {
+  to { transform: rotate(360deg); }
+}
+
+.har-spin {
+  animation: har-spin 900ms linear infinite;
+}
+
+.har-progress-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-pane);
+  overflow: hidden;
+}
+
+.har-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+/* ---------- HAR result ---------- */
+.har-result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.har-result-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.har-result-check {
+  color: var(--ok);
+}
+
+.har-result-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.har-changes-empty {
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* ---------- HAR redaction categories ---------- */
+.har-cats {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-pane);
+  overflow: hidden;
+}
+
+.har-cats-head {
+  padding: 7px 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elev);
+}
+
+.har-cats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  padding: 8px;
+}
+
+@media (max-width: 560px) {
+  .har-cats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.har-cat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-elev);
+  cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+
+.har-cat-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.har-cat-card.on {
+  border-color: var(--accent);
+}
+
+.har-cat-card.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.har-cat-ico {
+  flex: 0 0 auto;
+  color: var(--text-dim);
+}
+
+.har-cat-card.on .har-cat-ico {
+  color: var(--accent);
+}
+
+.har-cat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.har-cat-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.har-cat-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.har-cat-desc {
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+.har-cat-n {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.har-cat-n.on {
+  color: var(--accent);
+}
+
+/* Visually-hidden real checkbox; the switch below mirrors its state. */
+.har-cat-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.har-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  transition: background 120ms, border-color 120ms;
+}
+
+.har-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: transform 120ms, background 120ms;
+}
+
+.har-cat-card.on .har-switch {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.har-cat-card.on .har-switch::after {
+  transform: translateX(14px);
+  background: #fff;
+}
+
+.har-cat-input:focus-visible + .har-switch {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Why-flagged tag on each value row. */
+.har-row-reason {
+  flex: 0 0 auto;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--text-dim) 14%, transparent);
+  white-space: nowrap;
+}
+
+.har-row-reason.flagged {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---------- HAR value tree ---------- */
+.har-tree {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.har-tree-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.har-tree-search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-h);
+  font-size: 12px;
+}
+
+.har-tree-search:focus {
+  outline: none;
+}
+
+.har-tree-clear {
+  padding: 2px;
+  color: var(--text-dim);
+}
+
+.har-sec {
+  border-bottom: 1px solid var(--border);
+}
+
+.har-sec:last-child {
+  border-bottom: none;
+}
+
+.har-sec.off {
+  opacity: 0.5;
+}
+
+.har-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-elev);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-dim);
+}
+
+.har-sec-head:hover {
+  background: var(--accent-soft);
+}
+
+.har-sec-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-h);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex: 0 0 auto;
+}
+
+.har-sec-count {
+  font-size: 10px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 1px 8px;
+  flex: 0 0 auto;
+}
+
+.har-sec-peek {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--mono, ui-monospace, monospace);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.har-cat-disabled {
+  font-size: 10px;
+  font-style: italic;
+  color: var(--warn);
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.har-sec-groups {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.har-sec-more {
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.har-sec-empty {
+  padding: 16px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.har-tree-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.har-tree-foot input {
+  accent-color: var(--accent);
+}
+
+/* ---------- HAR tree: name groups ---------- */
+.har-group-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.har-group-head:hover {
+  background: var(--accent-soft);
+}
+
+.har-group-toggle {
+  display: flex;
+  padding: 1px;
+  color: var(--text-dim);
+}
+
+.har-group-head input {
+  accent-color: var(--accent);
+}
+
+.har-group-name {
+  font-size: 12px;
+  font-family: var(--mono, ui-monospace, monospace);
+  color: var(--text-h);
+}
+
+.har-group-count {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.har-group-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.har-group-children .har-row-wrap {
+  padding-left: 18px;
+}
+
+/* ---------- HAR tree: value rows ---------- */
+.har-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.har-row:hover {
+  background: var(--accent-soft);
+}
+
+.har-row.overridden {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.har-row > input[type="checkbox"] {
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+}
+
+.har-row-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.har-row-name {
+  font-size: 12px;
+  font-family: var(--mono, ui-monospace, monospace);
+  color: var(--text-h);
+  flex: 0 0 auto;
+}
+
+.har-row-type {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.har-row-values {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+  font-size: 11px;
+}
+
+.har-row-orig {
+  color: var(--text-dim);
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+  white-space: nowrap;
+}
+
+/* Struck through only when the value is actually being replaced — a kept
+   value reads as plain text, since it survives into the output as-is. */
+.har-row-orig.struck {
+  text-decoration: line-through;
+}
+
+.har-arrow {
+  color: var(--text-dim);
+  flex: 0 0 auto;
+}
+
+.har-row-new {
+  color: var(--ok);
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+  white-space: nowrap;
+}
+
+.har-row-kept {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* "N uses" drill-in affordance + the entry list it reveals. The whole row is
+   the click target, so this is a plain indicator, not a button. */
+.har-row-uses {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.har-row:hover .har-row-uses,
+.har-row-uses.open {
+  color: var(--accent);
+}
+
+.har-locs {
+  list-style: none;
+  margin: 0;
+  padding: 2px 12px 8px 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.har-loc {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 11px;
+  min-width: 0;
+}
+
+.har-loc-entry {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.har-loc-method {
+  flex: 0 0 auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+
+.har-loc-url {
+  font-family: var(--mono, ui-monospace, monospace);
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.har-loc-more {
+  font-size: 10px;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+.har-row-custom {
+  flex: 0 0 180px;
+  font-size: 11px;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-pane);
+  color: var(--text-h);
+}
+
+.har-row-custom:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.har-row-custom:disabled {
+  opacity: 0.35;
+}
+
+@media (max-width: 768px) {
+  .har-row {
+    flex-wrap: wrap;
+  }
+  .har-row-custom {
+    flex-basis: 100%;
+  }
+  .har-row-orig,
+  .har-row-new {
+    max-width: 200px;
   }
 }

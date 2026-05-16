@@ -9,7 +9,7 @@
     <!-- Primary SEO -->
     <title>About DoppelForge - How it works, security, and how to contribute</title>
     <meta name="description" content="DoppelForge crafts doppelgängers of your API responses - identical structure, safe values. Learn the name's origin, the workshop voice, the security guarantees (CSP-enforced no network egress), and how to add a new provider in a single YAML file." />
-    <meta name="keywords" content="api response doppelganger, api response obfuscator, fake api data, json obfuscator, xml obfuscator, shopify api anonymizer, stripe api obfuscator, llm pii sanitizer, chatgpt safe data, claude safe data, cursor safe data, browser-only privacy tool, synthetic api responses, contribute open source, csp connect-src none" />
+    <meta name="keywords" content="api response doppelganger, api response obfuscator, fake api data, json obfuscator, xml obfuscator, har file obfuscator, har sanitizer, har redaction, browser har redactor, shopify api anonymizer, stripe api obfuscator, llm pii sanitizer, chatgpt safe data, claude safe data, cursor safe data, browser-only privacy tool, synthetic api responses, contribute open source, csp connect-src none" />
     <meta name="author" content="Patrick Seypura" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://doppelforge.com/about" />
@@ -194,6 +194,19 @@
       .feature p {
         margin: 0;
       }
+      .tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #fbbf24;
+        background: rgba(251, 191, 36, 0.14);
+        padding: 2px 7px;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 6px;
+      }
       footer.site {
         max-width: 720px;
         margin: 0 auto;
@@ -286,6 +299,11 @@
       <div class="feature">
         <h3>Batch mode</h3>
         <p>Drop in a folder of JSON files. Pick which fields stay raw and which get transformed. Export the whole set as safe-to-share files - with a single seed reused across files so cross-file IDs stay consistent.</p>
+      </div>
+
+      <div class="feature">
+        <h3>HAR mode <span class="tag">Beta</span></h3>
+        <p>Drop a full HAR capture - the network log your browser's DevTools exports. DoppelForge scans every request and response, flags what's sensitive (credential headers, session cookies, secret query and form params, server IPs, and PII inside JSON/XML bodies), and lays it out as one tree of <em>current value → realistic replacement</em>. Tick what to redact, set custom values, and drill into any value to see which entries carry it. Large captures are processed off the main thread in a Web Worker - still entirely in your browser, nothing uploaded.</p>
       </div>
 
       <div class="feature">
@@ -502,6 +520,25 @@
       <p>
         No cookies. No <code>sessionStorage</code>. No <code>IndexedDB</code>.
         No service worker. No <code>navigator.userAgent</code> sniffing.
+      </p>
+
+      <h2>Why is this free? What's the catch?</h2>
+      <p>
+        There isn't one. I built DoppelForge to speed up my own workflow -
+        I needed to share API responses without leaking customer data, and
+        hand-redacting got old fast. Once the tool existed, sharing it cost
+        nothing.
+      </p>
+      <p>
+        It's a static site on Cloudflare Pages - no servers, no database, no
+        accounts to run. Hosting is effectively free, so there's no bill to
+        cover and no reason to gate it. No ads, no analytics, no upsell, no
+        "pro" tier. The code is MIT licensed; if this site ever disappeared,
+        you could host it yourself in minutes.
+      </p>
+      <p>
+        That's the whole story: a tool I made for myself, shared because it
+        was easy to.
       </p>
 
       <h2 id="contribute">How to contribute</h2>

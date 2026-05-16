@@ -30,6 +30,8 @@ Same shape. Safe values. Counterfeit, with consent.
 
 **Batch mode** — Drop in a folder of JSON files. Pick which fields stay raw and which get transformed. Export the whole set as safe-to-share files, with a single seed reused across files so cross-file IDs stay consistent.
 
+**HAR mode** _(beta)_ — Drop a full HAR capture — the network log your browser's DevTools exports. DoppelForge scans every request and response, flags what's sensitive (credential headers, session cookies, secret query/form params, server IPs, and PII inside JSON/XML bodies), and lays it out as one tree of _current value → realistic replacement_. Tick what to redact, set custom values, and drill into any value to see which entries carry it. Large captures are processed off the main thread in a Web Worker — still entirely in your browser, nothing uploaded.
+
 **Platform-aware** — DoppelForge knows the shape of API responses from Shopify, Stripe, BigCommerce, Piano.io, HubSpot, Braintree, Recharge, Twilio, Auth0, SendGrid, Shippo, Mailchimp, PayPal, Square, Zendesk, Salesforce, and ShipperHQ. It transforms the right fields without breaking the structure.
 
 **Runs in your browser** — Your responses never touch a server. DoppelForge is a static web app — every transformation happens locally, and a strict Content Security Policy stops any rogue dependency from changing that.
