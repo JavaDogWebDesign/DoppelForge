@@ -168,8 +168,9 @@ function hashStr(s: string): string {
   return (h >>> 0).toString(36);
 }
 
-/** Shorten a value for display/transport. */
-function disp(s: string, max = 140): string {
+/** Cap a value for display/transport. 512 is generous enough for the expanded
+ *  detail view to show a value in full while still bounding the payload. */
+function disp(s: string, max = 512): string {
   return s.length > max ? `${s.slice(0, max)}…` : s;
 }
 
@@ -244,6 +245,9 @@ export function bodyIsObfuscatable(
   if (encoding && encoding.trim().toLowerCase() === "base64") return false;
   const mt = mimeType.split(";")[0].trim().toLowerCase();
   if (!mt) return false;
+  // Media types are binary even when the subtype carries a `+xml` / `+json`
+  // suffix — image/svg+xml is an image, not an obfuscatable document.
+  if (/^(image|audio|video|font)\//.test(mt)) return false;
   return (
     mt.includes("json") ||
     mt.includes("xml") ||
@@ -455,6 +459,21 @@ function maybeRedactUrl(holder: Record<string, unknown>, key: string, ctx: Ctx):
   }
 }
 
+/** True for a loopback / link-local / RFC1918 (or IPv6 ULA) address — an
+ *  internal IP that reveals network topology. Public IPs return false. */
+function isPrivateIp(ip: string): boolean {
+  const v = ip.trim().toLowerCase();
+  if (/^10\./.test(v)) return true;
+  if (/^127\./.test(v)) return true;
+  if (/^192\.168\./.test(v)) return true;
+  if (/^169\.254\./.test(v)) return true;
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(v)) return true;
+  if (v === "::1") return true;
+  if (/^fe80:/.test(v)) return true; // IPv6 link-local
+  if (/^f[cd][0-9a-f]{2}:/.test(v)) return true; // IPv6 unique-local
+  return false;
+}
+
 function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): void {
   const { policy } = ctx;
   const request = asRecord(entry.request);
@@ -497,7 +516,10 @@ function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): 
     const real = entry.serverIPAddress;
     const id = targetId("ip", "serverIPAddress", real);
     const rule = ctx.overrides[id];
-    const redact = ctx.policy.ips && (rule ? rule.redact : true);
+    // A public server IP identifies third-party infrastructure (a CDN, an ad
+    // server), not a person — only internal/private IPs are flagged by default.
+    const def = isPrivateIp(real);
+    const redact = ctx.policy.ips && (rule ? rule.redact : def);
     let replacement = real;
     if (redact) {
       replacement = rule?.value || genCached(ctx, "ipv4", real);
@@ -507,8 +529,8 @@ function processEntry(entry: Record<string, unknown>, ctx: Ctx, index: number): 
     ctx.targets.add({
       id, section: "ip", name: "serverIPAddress",
       original: disp(real), replacement: disp(replacement),
-      redact, redactedByDefault: true,
-      reason: "server IP",
+      redact, redactedByDefault: def,
+      reason: def ? "internal server IP" : "public server IP",
     }, loc);
   }
 }

@@ -269,26 +269,7 @@ export function HarWorkspace() {
           />
 
           {state.stats.entryErrors.length > 0 && (
-            <div className="har-banner har-banner-warn" role="status">
-              <AlertTriangle size={14} />
-              <div>
-                <strong>
-                  {state.stats.entryErrors.length} entr
-                  {state.stats.entryErrors.length === 1 ? "y" : "ies"} left
-                  partly unobfuscated:
-                </strong>
-                <ul className="har-error-list">
-                  {state.stats.entryErrors.slice(0, 5).map((e, i) => (
-                    <li key={i}>
-                      Entry #{e.entry}: {e.message}
-                    </li>
-                  ))}
-                  {state.stats.entryErrors.length > 5 && (
-                    <li>…and {state.stats.entryErrors.length - 5} more.</li>
-                  )}
-                </ul>
-              </div>
-            </div>
+            <EntryErrorList errors={state.stats.entryErrors} />
           )}
 
           <div className="har-result-actions">
@@ -303,6 +284,40 @@ export function HarWorkspace() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/** The per-entry "left unobfuscated" warnings — every one matters (each is a
+ *  body that went out untouched), so the full list is reachable, not capped. */
+function EntryErrorList({
+  errors,
+}: {
+  errors: Array<{ entry: number; message: string }>;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const shown = showAll ? errors : errors.slice(0, 5);
+  return (
+    <div className="har-banner har-banner-warn" role="status">
+      <AlertTriangle size={14} />
+      <div className="har-errors">
+        <strong>
+          {errors.length} entr{errors.length === 1 ? "y" : "ies"} left partly
+          unobfuscated:
+        </strong>
+        <ul className="har-error-list">
+          {shown.map((e, i) => (
+            <li key={i}>
+              Entry #{e.entry}: {e.message}
+            </li>
+          ))}
+        </ul>
+        {errors.length > 5 && (
+          <button className="har-error-toggle" onClick={() => setShowAll((v) => !v)}>
+            {showAll ? "Show fewer" : `Show all ${errors.length}`}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

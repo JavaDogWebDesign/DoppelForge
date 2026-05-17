@@ -25,7 +25,7 @@ const KEY_HINTS: Array<[RegExp, SemanticType]> = [
   [/^(?:e_?mail|email_address)$/i, "email"],
   [/^(?:first_name|firstname|given_name)$/i, "firstName"],
   [/^(?:last_name|lastname|surname|family_name)$/i, "lastName"],
-  [/^(?:full_name|fullname|name|customer_name|display_name)$/i, "fullName"],
+  [/^(?:full_name|fullname|customer_name)$/i, "fullName"],
   [/^(?:phone|phone_number|telephone|mobile|cell)$/i, "phone"],
   [/^(?:company|company_name|organization|organisation)$/i, "company"],
   [/^(?:street_?1|street|address_?1|address|line1|street_address)$/i, "street"],
@@ -43,8 +43,36 @@ const KEY_HINTS: Array<[RegExp, SemanticType]> = [
 
 function looksLikeId(value: JsonValue): boolean {
   if (typeof value === "number") return value >= 1000;
-  if (typeof value === "string") return value.length >= 4;
-  return false;
+  if (typeof value !== "string") return false;
+  if (value.length < 4) return false;
+  // A lowercase word, or hyphen/underscore-joined slug ("frequent-contributor",
+  // "active"), is an enum or label — not an opaque identifier. An opaque id
+  // carries digits, mixed case, or a token prefix and falls through to `true`.
+  if (/^[a-z]+(?:[-_][a-z]+)*$/.test(value)) return false;
+  return true;
+}
+
+// User-handle keys — a username / display name always identifies a person, so
+// it's redacted whatever the value shape (unlike a bare `name`, which is too
+// generic to flag unconditionally). Obfuscated as `id` — a shape-preserving
+// scramble — since a handle is not a person's name.
+const HANDLE_KEY_RE =
+  /^(?:username|user_name|screen_?name|display_?name|handle|login|nick(?:name)?|prefixed_?name)$/i;
+
+// A person-name shape: two to four capitalized words.
+const RE_NAME_SHAPE = /^\p{Lu}[\p{L}'.-]*(?: \p{Lu}[\p{L}'.-]*){1,3}$/u;
+
+function looksLikeName(value: JsonValue): boolean {
+  return typeof value === "string" && RE_NAME_SHAPE.test(value.trim());
+}
+
+// A single token carrying an underscore or digit — a handle, not a plain
+// label or dictionary word. Catches a username sitting in a generic `name`
+// field ("ur_mamas_krama") without flagging labels ("50", "Widget").
+function looksLikeHandle(value: JsonValue): boolean {
+  if (typeof value !== "string") return false;
+  const v = value.trim();
+  return v.length >= 5 && !/\s/.test(v) && /[_\d]/.test(v);
 }
 
 function matchHint(
@@ -61,10 +89,22 @@ export function detectGeneric(path: string, value: JsonValue): SemanticType {
   const pathHit = matchHint(PATH_HINTS, path);
   if (pathHit) return pathHit;
 
-  const keyHit = matchHint(KEY_HINTS, pathTail(path));
+  const tail = pathTail(path);
+
+  // A username / display-name field always identifies a person.
+  if (HANDLE_KEY_RE.test(tail)) return "id";
+
+  const keyHit = matchHint(KEY_HINTS, tail);
   if (keyHit) {
     if (keyHit === "id" && !looksLikeId(value)) return "preserve";
     return keyHit;
+  }
+
+  // A bare `name` is too generic to flag on the key alone (room name, product
+  // name…). Flag it only when the value is a person-name shape, or a handle.
+  if (/^name$/i.test(tail)) {
+    if (looksLikeName(value)) return "fullName";
+    if (looksLikeHandle(value)) return "id";
   }
 
   if (typeof value === "string") {

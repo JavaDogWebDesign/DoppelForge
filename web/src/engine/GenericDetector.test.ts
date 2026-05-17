@@ -18,6 +18,30 @@ describe("detectGeneric - key-name hints", () => {
   it("keeps an id-named field with an id-shaped value as id", () => {
     expect(detectGeneric("order.id", 5000)).toBe("id");
     expect(detectGeneric("order.id", "abc123")).toBe("id");
+    expect(detectGeneric("user.id", "t2_20v0t6zvap")).toBe("id");
+  });
+
+  it("treats an id-named field holding a slug/enum value as preserve", () => {
+    // a lowercase hyphenated slug or a plain word is a label, not an identifier
+    expect(detectGeneric("trophy.id", "frequent-contributor")).toBe("preserve");
+    expect(detectGeneric("badge.id", "active")).toBe("preserve");
+  });
+
+  it("flags a bare `name` field only for a person-name or handle value", () => {
+    expect(detectGeneric("user.name", "Jane Doe")).toBe("fullName");
+    // a handle (underscore/digit token) sitting in a generic name field
+    expect(detectGeneric("redditor.name", "ur_mamas_krama")).toBe("id");
+    // a plain label / number is left alone
+    expect(detectGeneric("room.name", "50")).toBe("preserve");
+    expect(detectGeneric("product.name", "Widget")).toBe("preserve");
+  });
+
+  it("always redacts username / display-name / handle fields", () => {
+    expect(detectGeneric("profile.username", "ur_mamas_krama")).toBe("id");
+    expect(detectGeneric("profile.displayName", "ur_mamas_krama")).toBe("id");
+    expect(detectGeneric("x.display_name", "Ada Lovelace")).toBe("id");
+    expect(detectGeneric("user.login", "octocat")).toBe("id");
+    expect(detectGeneric("post.screen_name", "night_owl_2")).toBe("id");
   });
 });
 

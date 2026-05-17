@@ -2722,10 +2722,15 @@
   overflow-y: auto;
 }
 
-/* Panels keep their natural height — without this, a tall expanded value tree
-   squeezes the category cards and other panels until they vanish. */
+/* Each panel: keeps its natural height (without flex-shrink:0 a tall value
+   tree squeezes the others until they vanish), and is capped to a readable
+   column width + centered so the UI doesn't stretch edge-to-edge on a wide
+   monitor. */
 .har-workspace > * {
   flex-shrink: 0;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
 .har-intro-title {
@@ -2785,10 +2790,25 @@
   flex: 0 0 auto;
 }
 
+.har-errors {
+  min-width: 0;
+}
+
 .har-error-list {
   margin: 4px 0 0;
   padding-left: 18px;
   font-size: 11px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.har-error-toggle {
+  margin-top: 6px;
+  font-size: 11px;
+  padding: 2px 8px;
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 35%, transparent);
+  background: transparent;
 }
 
 /* ---------- HAR progress ---------- */
@@ -3270,12 +3290,6 @@
   white-space: nowrap;
 }
 
-/* Struck through only when the value is actually being replaced — a kept
-   value reads as plain text, since it survives into the output as-is. */
-.har-row-orig.struck {
-  text-decoration: line-through;
-}
-
 .har-arrow {
   color: var(--text-dim);
   flex: 0 0 auto;
@@ -3315,10 +3329,90 @@
   color: var(--accent);
 }
 
+/* ---------- HAR value row: expanded detail panel ---------- */
+.har-detail {
+  padding: 8px 12px 10px 34px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border-top: 1px solid var(--border-soft);
+}
+
+.har-detail-vals {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.har-detail-row {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+}
+
+.har-detail-row dt {
+  flex: 0 0 76px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  padding-top: 2px;
+}
+
+.har-detail-row dd {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.har-detail-val {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--text-h);
+  background: var(--bg-pane);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  min-width: 0;
+}
+
+.har-detail-why {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.har-copy {
+  flex: 0 0 auto;
+  display: flex;
+  padding: 3px;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.har-copy:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.har-detail-uses {
+  margin-top: 8px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
 .har-locs {
   list-style: none;
-  margin: 0;
-  padding: 2px 12px 8px 34px;
+  margin: 4px 0 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 3px;

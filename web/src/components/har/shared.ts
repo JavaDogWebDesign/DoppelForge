@@ -46,7 +46,7 @@ export const POLICY_OPTIONS: PolicyOption[] = [
     key: "ips",
     label: "Server IP addresses",
     icon: Server,
-    detects: "Each entry's serverIPAddress",
+    detects: "Internal/private server IPs (public ones aren't flagged)",
   },
 ];
 

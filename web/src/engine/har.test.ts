@@ -123,6 +123,11 @@ describe("bodyIsObfuscatable", () => {
     expect(bodyIsObfuscatable("text/plain", undefined)).toBe(false);
     expect(bodyIsObfuscatable("", undefined)).toBe(false);
   });
+  it("rejects media types even when the subtype carries +xml / +json", () => {
+    // image/svg+xml is an image, not an obfuscatable document.
+    expect(bodyIsObfuscatable("image/svg+xml", undefined)).toBe(false);
+    expect(bodyIsObfuscatable("video/vnd.mpeg.dash.mpd+xml", undefined)).toBe(false);
+  });
   it("rejects base64-encoded bodies regardless of mime", () => {
     expect(bodyIsObfuscatable("application/json", "base64")).toBe(false);
     expect(bodyIsObfuscatable("text/xml", "BASE64")).toBe(false);
@@ -342,12 +347,16 @@ describe("processHar — default redaction", () => {
     expect(stats.headersRedacted).toBe(0);
   });
 
-  it("swaps serverIPAddress for a synthetic IP", () => {
-    const har = makeHar([jsonEntry({ serverIP: "203.0.113.42" })]);
+  it("redacts an internal serverIPAddress, leaves a public one alone", () => {
+    const har = makeHar([
+      jsonEntry({ serverIP: "10.0.4.17" }), // internal — reveals topology
+      jsonEntry({ serverIP: "142.251.45.20" }), // public CDN/ad server — not PII
+    ]);
     const { stats } = processHar(har);
-    const ip = entriesOf(har)[0].serverIPAddress;
-    expect(ip).not.toBe("203.0.113.42");
-    expect(ip).toMatch(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/);
+    const e = entriesOf(har);
+    expect(e[0].serverIPAddress).not.toBe("10.0.4.17");
+    expect(e[0].serverIPAddress).toMatch(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/);
+    expect(e[1].serverIPAddress).toBe("142.251.45.20");
     expect(stats.ipsRedacted).toBe(1);
   });
 
@@ -493,7 +502,7 @@ describe("processHar — target list", () => {
     const har = makeHar([
       jsonEntry({
         reqHeaders: [{ name: "Authorization", value: "Bearer real-token" }],
-        serverIP: "203.0.113.9",
+        serverIP: "10.0.4.9",
       }),
     ]);
     const { targets } = processHar(har);
@@ -505,7 +514,7 @@ describe("processHar — target list", () => {
     expect(auth?.redactedByDefault).toBe(true);
 
     const ip = findTarget(targets, "ip", "serverIPAddress");
-    expect(ip?.original).toBe("203.0.113.9");
+    expect(ip?.original).toBe("10.0.4.9");
     expect(ip?.redact).toBe(true);
   });
 

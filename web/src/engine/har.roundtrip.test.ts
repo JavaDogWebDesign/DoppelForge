@@ -162,7 +162,7 @@ function entry(i: number, extra: Record<string, unknown> = {}): Record<string, u
     },
     cache: {},
     timings: { send: 1.2, wait: 130, receive: 6.3 },
-    serverIPAddress: "203.0.113.42",
+    serverIPAddress: "10.2.3.4",
     connection: "443",
     ...extra,
   };
@@ -278,7 +278,7 @@ describe("HAR round-trip — output stays a valid, importable HAR", () => {
         expect(dump).not.toMatch(/Bearer real\.jwt\.token/);
         expect(dump).not.toMatch(/sk_live_REAL\d/);
         expect(dump).not.toMatch(/real-session-token-\d/);
-        expect(dump).not.toContain("203.0.113.42");
+        expect(dump).not.toContain("10.2.3.4");
       });
     });
   }

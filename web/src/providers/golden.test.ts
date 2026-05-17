@@ -39,7 +39,9 @@ function plantValue(type: string | undefined): JsonValue {
   plantCounter += 1;
   // A nestedJson field must hold a parseable JSON document with something
   // obfuscatable inside, so the engine's recursive walk actually changes it.
-  if (type === "nestedJson") return `{"name":"GOLDENVALUE${plantCounter}Zqx"}`;
+  // An `email` field is unconditionally detected; a `name` field is now
+  // value-shape-gated, so it wouldn't reliably transform a synthetic value.
+  if (type === "nestedJson") return `{"email":"golden${plantCounter}@example.test"}`;
   return `GOLDENVALUE${plantCounter}Zqx`;
 }
 

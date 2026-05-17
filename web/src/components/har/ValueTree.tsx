@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { ChevronRight, ChevronDown, Search, X } from "lucide-react";
+import { ChevronRight, ChevronDown, Search, X, Copy, Check } from "lucide-react";
 import type {
   RedactionTarget,
   TargetSection,
@@ -386,10 +386,7 @@ function TargetRow({
             {target.reason}
           </span>
           <span className="har-row-values">
-            <span
-              className={`har-row-orig${preview !== null ? " struck" : ""}`}
-              title={target.original}
-            >
+            <span className="har-row-orig" title={target.original}>
               {target.original}
             </span>
             {preview !== null ? (
@@ -420,23 +417,75 @@ function TargetRow({
         />
       </div>
       {showWhere && (
-        <ul className="har-locs">
-          {target.locations.map((l, i) => (
-            <li key={i} className="har-loc">
-              <span className="har-loc-entry">entry #{l.entry}</span>
-              {l.method && <span className="har-loc-method">{l.method}</span>}
-              <span className="har-loc-url" title={l.url}>
-                {l.url || "—"}
-              </span>
-            </li>
-          ))}
-          {moreLocs > 0 && (
-            <li className="har-loc-more">
-              +{moreLocs} more occurrence{moreLocs === 1 ? "" : "s"}
-            </li>
-          )}
-        </ul>
+        <div className="har-detail">
+          <dl className="har-detail-vals">
+            <div className="har-detail-row">
+              <dt>Original</dt>
+              <dd>
+                <code className="har-detail-val">{target.original}</code>
+                <CopyButton text={target.original} />
+              </dd>
+            </div>
+            <div className="har-detail-row">
+              <dt>{redact ? "Replacement" : "Output"}</dt>
+              <dd>
+                {redact && preview !== null ? (
+                  <>
+                    <code className="har-detail-val">{preview}</code>
+                    <CopyButton text={preview} />
+                  </>
+                ) : (
+                  <span className="har-row-kept">kept — left as-is</span>
+                )}
+              </dd>
+            </div>
+            <div className="har-detail-row">
+              <dt>Why</dt>
+              <dd className="har-detail-why">{target.reason}</dd>
+            </div>
+          </dl>
+          <div className="har-detail-uses">
+            Used in {target.occurrences} {target.occurrences === 1 ? "place" : "places"}
+          </div>
+          <ul className="har-locs">
+            {target.locations.map((l, i) => (
+              <li key={i} className="har-loc">
+                <span className="har-loc-entry">entry #{l.entry}</span>
+                {l.method && <span className="har-loc-method">{l.method}</span>}
+                <span className="har-loc-url" title={l.url}>
+                  {l.url || "—"}
+                </span>
+              </li>
+            ))}
+            {moreLocs > 0 && (
+              <li className="har-loc-more">
+                +{moreLocs} more occurrence{moreLocs === 1 ? "" : "s"}
+              </li>
+            )}
+          </ul>
+        </div>
       )}
     </div>
+  );
+}
+
+/** Copies a value to the clipboard, with a brief confirmation tick. */
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      className="har-copy"
+      title="Copy"
+      aria-label="Copy value"
+      onClick={(e) => {
+        e.stopPropagation();
+        void navigator.clipboard?.writeText(text).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1200);
+        });
+      }}
+    >
+      {copied ? <Check size={11} /> : <Copy size={11} />}
+    </button>
   );
 }
