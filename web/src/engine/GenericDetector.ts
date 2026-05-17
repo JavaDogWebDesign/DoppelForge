@@ -1,6 +1,17 @@
 import type { SemanticType, JsonValue } from "./types";
 import { pathTail } from "./paths";
 
+// Regional / locale field types. The HAR tool preserves these by default — a
+// country, currency, state or region is coarse, low-PII data that users often
+// need kept intact for API research — while a per-value opt-in still lets any
+// of them be obfuscated (the real generator then forges a like-shaped value).
+export const LOCALE_TYPES: ReadonlySet<SemanticType> = new Set<SemanticType>([
+  "country",
+  "countryCode",
+  "currency",
+  "stateOrProvince",
+]);
+
 const RE_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RE_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const RE_IPV4 = /^(?:\d{1,3}\.){3}\d{1,3}$/;
@@ -9,6 +20,38 @@ const RE_URL = /^https?:\/\/[^\s]+$/i;
 const RE_PHONE = /^\+?[\d\s\-().]{7,}$/;
 const RE_PHONE_HAS_SEPARATOR = /[+\s\-().]/;
 const RE_CREDIT_CARD_LIKE = /^\d{13,19}$/;
+// A JSON Web Token — two or three base64url segments, the header starting with
+// `eyJ` (base64 of `{"`). JWTs routinely carry name / email / id in the clear.
+const RE_JWT = /^eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}(?:\.[A-Za-z0-9_-]+)?$/;
+// A long unbroken hex run — a hash, opaque token, or tracking id. 32+ chars so
+// shorter hex words ("beef", "decade") aren't swept up.
+const RE_LONG_HEX = /^[0-9a-f]{32,}$/i;
+
+// Non-values: a field literally holding a placeholder is never PII, so it is
+// kept verbatim rather than replaced with a fake name / id.
+const PLACEHOLDERS = new Set([
+  "", "n/a", "na", "none", "null", "nil", "undefined", "unknown", "-", "—",
+]);
+function isPlaceholder(value: JsonValue): boolean {
+  return typeof value === "string" && PLACEHOLDERS.has(value.trim().toLowerCase());
+}
+
+// Luhn checksum — every real credit-card number passes it, so requiring it cuts
+// the false positives where an ordinary 13-19 digit id is mistaken for a card.
+function luhnValid(digits: string): boolean {
+  let sum = 0;
+  let double = false;
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let d = digits.charCodeAt(i) - 48;
+    if (double) {
+      d *= 2;
+      if (d > 9) d -= 9;
+    }
+    sum += d;
+    double = !double;
+  }
+  return sum % 10 === 0;
+}
 
 // Path-based hints take precedence over tail-only key hints, for cases where
 // the parent context disambiguates an otherwise-generic key (e.g. "code"
@@ -22,6 +65,12 @@ const PATH_HINTS: Array<[RegExp, SemanticType]> = [
 
 const KEY_HINTS: Array<[RegExp, SemanticType]> = [
   [/^(?:id|customer_id|order_id|user_id|account_id|product_id|variant_id|cart_id|subscription_id|invoice_id|charge_id|transaction_id|payment_id|external_id|merchant_id|tax_id|address_id|company_id|store_id|channel_id|gateway_transaction_id|payment_provider_id|reference_transaction_id|payment_instrument_token)$/i, "id"],
+  // Any `*_id` / `*Id` / `*_ids` / `*_uid` field, plus bare uid/guid/gid — a
+  // catch-all for the long tail of identifier keys the exact list above misses.
+  [/^(?:uid|guid|gid)$|(?:_id|_ids|_uid)$/i, "id"],
+  // Credential-bearing keys — a JWT, token, secret or API key. Obfuscated as
+  // `id` (a shape-preserving scramble) so the value stays token-shaped.
+  [/^(?:jwt|api_?key)$|(?:_token|_secret|_api_?key|_apikey)$/i, "id"],
   [/^(?:e_?mail|email_address)$/i, "email"],
   [/^(?:first_name|firstname|given_name)$/i, "firstName"],
   [/^(?:last_name|lastname|surname|family_name)$/i, "lastName"],
@@ -38,7 +87,10 @@ const KEY_HINTS: Array<[RegExp, SemanticType]> = [
   [/^(?:ip|ip_address|remote_addr)$/i, "ipv4"],
   [/^(?:sku|item_sku|product_sku)$/i, "sku"],
   [/^(?:currency|currency_code|default_currency_code|store_default_currency_code)$/i, "currency"],
-  [/^(?:notes?|comment|comments|message|description)$/i, "shortText"],
+  // `description` is intentionally absent — in an API response it is far more
+  // often product / config copy than free-text PII, so flagging it on the key
+  // alone over-obfuscates. A user opts a specific description in per value.
+  [/^(?:notes?|comment|comments|message)$/i, "shortText"],
 ];
 
 function looksLikeId(value: JsonValue): boolean {
@@ -86,15 +138,21 @@ function matchHint(
 }
 
 export function detectGeneric(path: string, value: JsonValue): SemanticType {
+  // A placeholder value ("N/A", "", "unknown") is never PII whatever the key.
+  if (isPlaceholder(value)) return "preserve";
+
   const pathHit = matchHint(PATH_HINTS, path);
   if (pathHit) return pathHit;
 
   const tail = pathTail(path);
+  // Snake-case the tail so a camelCase / PascalCase key matches the snake_case
+  // hints — `countryCode` and `CountryCode` resolve like `country_code`.
+  const snakeTail = tail.replace(/([a-z0-9])([A-Z])/g, "$1_$2");
 
   // A username / display-name field always identifies a person.
-  if (HANDLE_KEY_RE.test(tail)) return "id";
+  if (HANDLE_KEY_RE.test(tail) || HANDLE_KEY_RE.test(snakeTail)) return "id";
 
-  const keyHit = matchHint(KEY_HINTS, tail);
+  const keyHit = matchHint(KEY_HINTS, tail) ?? matchHint(KEY_HINTS, snakeTail);
   if (keyHit) {
     if (keyHit === "id" && !looksLikeId(value)) return "preserve";
     return keyHit;
@@ -109,11 +167,13 @@ export function detectGeneric(path: string, value: JsonValue): SemanticType {
 
   if (typeof value === "string") {
     if (RE_EMAIL.test(value)) return "email";
+    if (RE_JWT.test(value)) return "id";
     if (RE_UUID.test(value)) return "uuid";
+    if (RE_LONG_HEX.test(value)) return "id";
     if (RE_IPV4.test(value)) return "ipv4";
     if (RE_URL.test(value)) return "url";
     if (RE_ISO_DATE.test(value)) return "isoDate";
-    if (RE_CREDIT_CARD_LIKE.test(value)) return "redact";
+    if (RE_CREDIT_CARD_LIKE.test(value) && luhnValid(value)) return "redact";
     if (RE_PHONE.test(value) && RE_PHONE_HAS_SEPARATOR.test(value)) {
       const digitCount = (value.match(/\d/g) || []).length;
       if (digitCount >= 7 && digitCount <= 15) return "phone";

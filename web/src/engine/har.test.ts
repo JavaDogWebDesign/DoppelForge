@@ -317,6 +317,55 @@ describe("processHar — default redaction", () => {
     expect(stats.paramsRedacted).toBe(0);
   });
 
+  it("keeps the auth scheme word in an Authorization header, fakes only the credential", () => {
+    const real = "Bearer eyJhbGci.cGF5bG9hZA.c2lnbmF0dXJl";
+    const har = makeHar([
+      jsonEntry({ reqHeaders: [{ name: "Authorization", value: real }] }),
+    ]);
+    processHar(har);
+    const auth = entriesOf(har)[0].request.headers[0].value;
+    // `Bearer ` is protocol, not a secret — kept verbatim.
+    expect(auth.startsWith("Bearer ")).toBe(true);
+    // The credential after it is faked, but the value as a whole stays shaped.
+    expect(auth).not.toBe(real);
+    expect(auth.slice("Bearer ".length)).not.toBe(real.slice("Bearer ".length));
+    expect(auth.length).toBe(real.length);
+  });
+
+  it("preserves the keys of a JSON-valued param, faking only the values", () => {
+    // A config blob like WSJ's `custom_variables` — flagged by the token-shaped
+    // `vxid` value; the user wants field names readable, real values gone.
+    const blob = JSON.stringify({
+      articleHeadline: "The Messy Courtroom Drama",
+      corp: ["harvarduniversity"],
+      vxid: "3ced34ac47e2f9c6a53b26566c5d2406",
+      isLoggedIn: true,
+      bucket: 6,
+    });
+    const har = makeHar([
+      jsonEntry({ query: [{ name: "custom_variables", value: blob }] }),
+    ]);
+    const { stats } = processHar(har);
+    const out = entriesOf(har)[0].request.queryString[0].value;
+    const parsed = JSON.parse(out); // output is still valid JSON
+    // Keys and structure intact.
+    expect(Object.keys(parsed)).toEqual([
+      "articleHeadline",
+      "corp",
+      "vxid",
+      "isLoggedIn",
+      "bucket",
+    ]);
+    // String leaves are faked.
+    expect(parsed.articleHeadline).not.toBe("The Messy Courtroom Drama");
+    expect(parsed.corp[0]).not.toBe("harvarduniversity");
+    expect(parsed.vxid).not.toBe("3ced34ac47e2f9c6a53b26566c5d2406");
+    // Non-string leaves are left exactly as-is.
+    expect(parsed.isLoggedIn).toBe(true);
+    expect(parsed.bucket).toBe(6);
+    expect(stats.paramsRedacted).toBe(1);
+  });
+
   it("redacts secrets in redirect URLs — Location header and redirectURL", () => {
     const dirty = "https://app.example.com/cb?code=AUTH_SECRET_9";
     const har = makeHar([
@@ -390,6 +439,41 @@ describe("processHar — default redaction", () => {
     // A URL carrying a secret query param keeps its shape but loses the token.
     expect(out.reset_url).not.toContain("SECRET123456");
     expect(out.reset_url).toContain("app.example.com/reset");
+  });
+
+  it("keeps regional body fields, still obfuscates address PII", () => {
+    const body = JSON.stringify({
+      country: "us",
+      currency: "USD",
+      region: "ny",
+      city: "Boston",
+      email: "real@example.com",
+    });
+    const har = makeHar([jsonEntry({ respBody: body })]);
+    const { targets } = processHar(har);
+    const out = JSON.parse(entriesOf(har)[0].response.content.text);
+    // Regional data is kept verbatim — coarse, often needed for research.
+    expect(out.country).toBe("us");
+    expect(out.currency).toBe("USD");
+    expect(out.region).toBe("ny");
+    // City and email are still obfuscated.
+    expect(out.city).not.toBe("Boston");
+    expect(out.email).not.toBe("real@example.com");
+    // A regional field is listed so it can be opted in, but isn't flagged.
+    const country = findTarget(targets, "body", "country");
+    expect(country?.redactedByDefault).toBe(false);
+    expect(country?.redact).toBe(false);
+    expect(country?.reason).toBe("regional data");
+  });
+
+  it("obfuscates a regional field when opted in, with a like-shaped fake", () => {
+    const body = JSON.stringify({ country: "us" });
+    const har = makeHar([jsonEntry({ respBody: body })]);
+    const id = targetId("body", "country", "us");
+    processHar(har, { overrides: { [id]: { redact: true } } });
+    const out = JSON.parse(entriesOf(har)[0].response.content.text);
+    expect(out.country).not.toBe("us");
+    expect(out.country).toMatch(/^[a-z]{2}$/); // still a 2-letter code
   });
 
   it("skips a base64 binary body", () => {

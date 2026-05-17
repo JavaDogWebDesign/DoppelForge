@@ -66,6 +66,22 @@ describe("GeneratorRegistry.generate - type fidelity", () => {
     expect(new GeneratorRegistry(1).generate("boolean", false)).toBe(true);
   });
 
+  it("forges a country code for a code value, a name for a name value", () => {
+    // A 2-letter `us` must not become a full country name like `Mayotte`.
+    const lower = new GeneratorRegistry(1).generate("country", "us") as string;
+    expect(lower).toMatch(/^[a-z]{2}$/);
+    expect(lower).not.toBe("us");
+    const upper = new GeneratorRegistry(1).generate("country", "US") as string;
+    expect(upper).toMatch(/^[A-Z]{2}$/);
+    const name = new GeneratorRegistry(1).generate("country", "United States") as string;
+    expect(name.length).toBeGreaterThan(3);
+  });
+
+  it("forges a same-width, same-casing currency code", () => {
+    expect(new GeneratorRegistry(1).generate("currency", "USD")).toMatch(/^[A-Z]{3}$/);
+    expect(new GeneratorRegistry(1).generate("currency", "usd")).toMatch(/^[a-z]{3}$/);
+  });
+
   it("returns the original value for preserve and a constant for redact", () => {
     expect(new GeneratorRegistry(1).generate("preserve", "keep-me")).toBe("keep-me");
     expect(new GeneratorRegistry(1).generate("redact", "4111111111111111")).toBe(

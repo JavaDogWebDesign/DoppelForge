@@ -24,6 +24,7 @@ import { ConsistencyCache } from "./Cache";
 import { DEFAULT_SEED, GeneratorRegistry } from "./GeneratorRegistry";
 import { parseInput, serialize } from "./xml";
 import { errMsg } from "../utils/errMsg";
+import { LOCALE_TYPES } from "./GenericDetector";
 import {
   isSecretHeader,
   isSensitiveCookie,
@@ -549,6 +550,58 @@ function shortUrl(url: string): string {
 // and tokens. Redacted by userinfo/secret-param like a request URL, not faked.
 const URL_HEADER_NAMES = new Set(["location", "content-location"]);
 
+// Headers whose value is `<scheme> <credential>` — the scheme word (`Bearer`,
+// `Basic`…) is part of the protocol, not a secret, so it is kept verbatim and
+// only the credential after it is faked.
+const AUTH_HEADER_NAMES = new Set(["authorization", "proxy-authorization"]);
+const AUTH_SCHEME_RE = /^([A-Za-z][\w.+-]*)(\s+)(\S[\s\S]*)$/;
+
+/** Fake an `Authorization`-style header value, keeping its auth scheme word
+ *  (and the gap after it) intact. A value with no scheme prefix is faked
+ *  whole. */
+function fakeAuthHeaderValue(ctx: Ctx, value: string): string {
+  const m = AUTH_SCHEME_RE.exec(value);
+  if (!m) return fakeValue(ctx, value);
+  return m[1] + m[2] + fakeValue(ctx, m[3]);
+}
+
+/**
+ * Fake a query / form param value. When the value is itself a JSON document
+ * (a config blob like `custom_variables`), each string leaf is faked while the
+ * keys and structure are preserved — so the field names stay readable but no
+ * real data survives. Any other value gets a whole-string shape-preserving
+ * fake, exactly as before.
+ */
+function fakeParamValue(ctx: Ctx, value: string): string {
+  const trimmed = value.trim();
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed !== null && typeof parsed === "object") {
+        return JSON.stringify(fakeJsonLeaves(ctx, parsed));
+      }
+    } catch {
+      // Not JSON after all — fall through to the whole-string fake.
+    }
+  }
+  return fakeValue(ctx, value);
+}
+
+/** Recursively fake every non-empty string leaf of a parsed JSON value,
+ *  leaving object keys, numbers, booleans and null untouched. */
+function fakeJsonLeaves(ctx: Ctx, node: unknown): unknown {
+  if (typeof node === "string") return node === "" ? node : fakeValue(ctx, node);
+  if (Array.isArray(node)) return node.map((x) => fakeJsonLeaves(ctx, x));
+  if (node !== null && typeof node === "object") {
+    const out: Record<string, unknown> = {};
+    for (const k of Object.keys(node as Record<string, unknown>)) {
+      out[k] = fakeJsonLeaves(ctx, (node as Record<string, unknown>)[k]);
+    }
+    return out;
+  }
+  return node; // number, boolean, null
+}
+
 /** The out-of-the-box redaction decision for one header/cookie/param value. */
 function defaultRedact(
   section: "header" | "cookie" | "param",
@@ -596,6 +649,10 @@ function redactNameValues(
         replacement = rule.value;
       } else if (isUrlHeader) {
         replacement = redactUrl(value, (v) => fakeValue(ctx, v));
+      } else if (section === "header" && AUTH_HEADER_NAMES.has(name.toLowerCase())) {
+        replacement = fakeAuthHeaderValue(ctx, value);
+      } else if (section === "param") {
+        replacement = fakeParamValue(ctx, value);
       } else {
         replacement = fakeValue(ctx, value);
       }
@@ -675,6 +732,11 @@ function obfuscateBody(
         } else {
           defaultChanged.set(f.path, false);
         }
+      } else if (LOCALE_TYPES.has(f.defaultType)) {
+        // Regional data (country, currency, state/region) is kept by default —
+        // it is coarse and often needed for research; the user opts it in per
+        // value when it isn't.
+        defaultChanged.set(f.path, false);
       } else {
         defaultChanged.set(f.path, !sameValue(f.sampleOriginal, f.sampleFake));
       }
@@ -698,6 +760,9 @@ function obfuscateBody(
         engValues.set(f.path, urlRedacted.get(f.path)!);
       } else if (urlPaths.has(f.path)) {
         // Clean URL: preserve it exactly (the engine would otherwise fake it).
+        engOverrides.set(f.path, false);
+      } else if (LOCALE_TYPES.has(f.defaultType)) {
+        // Regional field with no opt-in override: keep it as-is.
         engOverrides.set(f.path, false);
       }
     }
@@ -752,7 +817,9 @@ function registerBodyTarget(
     ? def
       ? "url with a secret"
       : "public url"
-    : bodyReason(f.effectiveType, def);
+    : LOCALE_TYPES.has(f.defaultType)
+      ? "regional data"
+      : bodyReason(f.effectiveType, def);
   ctx.targets.add({
     id, section: "body", name: f.path,
     original: disp(original), replacement: disp(replacement),

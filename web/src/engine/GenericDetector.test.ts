@@ -36,12 +36,69 @@ describe("detectGeneric - key-name hints", () => {
     expect(detectGeneric("product.name", "Widget")).toBe("preserve");
   });
 
+  it("matches camelCase / PascalCase keys against the snake_case hints", () => {
+    expect(detectGeneric("geo.countryCode", "US")).toBe("countryCode");
+    expect(detectGeneric("geo.CountryCode", "US")).toBe("countryCode");
+    expect(detectGeneric("user.firstName", "Bob")).toBe("firstName");
+    expect(detectGeneric("billing.postalCode", "94016")).toBe("postalCode");
+    expect(detectGeneric("profile.userName", "night_owl_2")).toBe("id");
+  });
+
   it("always redacts username / display-name / handle fields", () => {
     expect(detectGeneric("profile.username", "ur_mamas_krama")).toBe("id");
     expect(detectGeneric("profile.displayName", "ur_mamas_krama")).toBe("id");
     expect(detectGeneric("x.display_name", "Ada Lovelace")).toBe("id");
     expect(detectGeneric("user.login", "octocat")).toBe("id");
     expect(detectGeneric("post.screen_name", "night_owl_2")).toBe("id");
+  });
+});
+
+describe("detectGeneric - identifier and credential keys", () => {
+  it("treats any *_id / *Id / *_ids key as an identifier", () => {
+    expect(detectGeneric("event.entityId", "1457595")).toBe("id");
+    expect(detectGeneric("a.experimentIds", "9300002856528")).toBe("id");
+    expect(detectGeneric("a.layer_id", "rollout-22405")).toBe("id");
+    expect(detectGeneric("a.uid", "3ced34ac47e2f9c6a53b26566c5d2406")).toBe("id");
+    // The id gate still applies — a tiny value under an id key stays preserved.
+    expect(detectGeneric("a.entityId", 7)).toBe("preserve");
+  });
+
+  it("treats jwt / token / secret / api-key keys as identifiers", () => {
+    // id-shaped values (mixed case / digits) so the key rule is what's tested.
+    expect(detectGeneric("auth.jwt", "Hdr9Pay7Sig2")).toBe("id");
+    expect(detectGeneric("x.connectionToken", "7668b16abd4F4f1e")).toBe("id");
+    expect(detectGeneric("x.client_secret", "abc123def456ghi7")).toBe("id");
+    expect(detectGeneric("x.apiKey", "QVJ3LEKkvaE39FLM")).toBe("id");
+  });
+});
+
+describe("detectGeneric - value-shape: tokens and placeholders", () => {
+  it("detects a JWT by value and obfuscates it", () => {
+    const jwt =
+      "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2EuY29tIn0.c2lnbmF0dXJlMQ";
+    expect(detectGeneric("body.tac", jwt)).toBe("id");
+  });
+
+  it("detects a long hex run (hash / tracking id) as an identifier", () => {
+    expect(detectGeneric("evt.vxid", "3ced34ac47e2f9c6a53b26566c5d2406d5d99eab")).toBe("id");
+    // A short hex word is not swept up.
+    expect(detectGeneric("evt.tag", "beef")).toBe("preserve");
+  });
+
+  it("keeps a placeholder value verbatim whatever the key says", () => {
+    expect(detectGeneric("user.first_name", "N/A")).toBe("preserve");
+    expect(detectGeneric("user.last_name", "")).toBe("preserve");
+    expect(detectGeneric("user.email", "unknown")).toBe("preserve");
+  });
+
+  it("redacts a credit card only when it passes the Luhn checksum", () => {
+    // 4111 1111 1111 1111 is a valid test card — passes Luhn.
+    expect(detectGeneric("pay.pan", "4111111111111111")).toBe("redact");
+    // A 13-digit run that fails Luhn is not a card — left as preserve.
+    expect(detectGeneric("a.lotteryRun", "1111111111111")).toBe("preserve");
+    // An id-named field with the same digits resolves as an identifier, not a
+    // card — the key hint wins before the value pattern is ever consulted.
+    expect(detectGeneric("a.experimentId", "9300002856528")).toBe("id");
   });
 });
 
