@@ -102,6 +102,20 @@ describe("detectGeneric - value-shape: tokens and placeholders", () => {
   });
 });
 
+describe("detectGeneric - dates vs birthdates", () => {
+  it("types a plain date value as isoDate", () => {
+    expect(detectGeneric("article.published", "2026-05-16")).toBe("isoDate");
+    expect(detectGeneric("evt.ts", "2026-05-16T07:51:00")).toBe("isoDate");
+  });
+
+  it("types a birthdate key as birthDate, distinct from a plain date", () => {
+    expect(detectGeneric("user.dob", "1990-05-12")).toBe("birthDate");
+    expect(detectGeneric("user.date_of_birth", "1990-05-12")).toBe("birthDate");
+    expect(detectGeneric("user.birthday", "1990-05-12")).toBe("birthDate");
+    expect(detectGeneric("user.dateOfBirth", "1990-05-12")).toBe("birthDate");
+  });
+});
+
 describe("detectGeneric - path hints take precedence over key hints", () => {
   it("disambiguates a generic `code` key by its parent context", () => {
     expect(detectGeneric("payment.cvv_result.code", "M")).toBe("cvvCode");

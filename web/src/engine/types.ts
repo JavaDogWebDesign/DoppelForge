@@ -17,6 +17,7 @@ export type SemanticType =
   | "uuid"
   | "ipv4"
   | "isoDate"
+  | "birthDate"
   | "unixTimestamp"
   | "url"
   | "sku"

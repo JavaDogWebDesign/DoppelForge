@@ -466,6 +466,29 @@ describe("processHar — default redaction", () => {
     expect(country?.reason).toBe("regional data");
   });
 
+  it("keeps plain date body fields but obfuscates a birthdate", () => {
+    const body = JSON.stringify({
+      publishedAt: "2026-05-16T07:51:00.000Z",
+      renewDate: "2026-09-01",
+      dob: "1990-05-12",
+    });
+    const har = makeHar([jsonEntry({ respBody: body })]);
+    const { targets } = processHar(har);
+    const out = JSON.parse(entriesOf(har)[0].response.content.text);
+    // Plain dates are coarse, research-relevant — kept verbatim.
+    expect(out.publishedAt).toBe("2026-05-16T07:51:00.000Z");
+    expect(out.renewDate).toBe("2026-09-01");
+    // A birthdate is real PII — still obfuscated, keeping the date shape.
+    expect(out.dob).not.toBe("1990-05-12");
+    expect(out.dob).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const renew = findTarget(targets, "body", "renewDate");
+    expect(renew?.redactedByDefault).toBe(false);
+    expect(renew?.reason).toBe("date");
+    const dob = findTarget(targets, "body", "dob");
+    expect(dob?.redactedByDefault).toBe(true);
+    expect(dob?.reason).toBe("date of birth");
+  });
+
   it("obfuscates a regional field when opted in, with a like-shaped fake", () => {
     const body = JSON.stringify({ country: "us" });
     const har = makeHar([jsonEntry({ respBody: body })]);

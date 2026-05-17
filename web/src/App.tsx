@@ -154,7 +154,7 @@ export default function App() {
           >
             <Network size={12} />
             HAR
-            <span className="mode-tab-tag">beta</span>
+            <span className="mode-tab-tag">alpha</span>
           </button>
         </div>
         {mode === "single" && (

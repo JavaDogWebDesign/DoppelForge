@@ -33,6 +33,12 @@ import {
   urlHasSecrets,
 } from "./harRedact";
 
+// Body-field types kept verbatim by default — regional data plus plain dates.
+// Each is coarse, low-PII, and usually needed intact for API research; a
+// birthdate is a `birthDate`, not an `isoDate`, so it is deliberately absent
+// and still obfuscated. The user can opt any of these in per value.
+const KEPT_BY_DEFAULT = new Set<string>([...LOCALE_TYPES, "isoDate"]);
+
 /** Which categories of redaction to apply. Master switches above the per-value
  *  tree — a per-value opt-in is ignored if its category is off. */
 export interface RedactionPolicy {
@@ -217,6 +223,7 @@ const BODY_REASON: Record<string, string> = {
   uuid: "UUID",
   ipv4: "IP address",
   isoDate: "date",
+  birthDate: "date of birth",
   unixTimestamp: "timestamp",
   url: "URL",
   sku: "SKU",
@@ -732,10 +739,9 @@ function obfuscateBody(
         } else {
           defaultChanged.set(f.path, false);
         }
-      } else if (LOCALE_TYPES.has(f.defaultType)) {
-        // Regional data (country, currency, state/region) is kept by default —
-        // it is coarse and often needed for research; the user opts it in per
-        // value when it isn't.
+      } else if (KEPT_BY_DEFAULT.has(f.defaultType)) {
+        // Regional data and plain dates are kept by default — coarse and often
+        // needed for research; the user opts them in per value when not.
         defaultChanged.set(f.path, false);
       } else {
         defaultChanged.set(f.path, !sameValue(f.sampleOriginal, f.sampleFake));
@@ -761,8 +767,8 @@ function obfuscateBody(
       } else if (urlPaths.has(f.path)) {
         // Clean URL: preserve it exactly (the engine would otherwise fake it).
         engOverrides.set(f.path, false);
-      } else if (LOCALE_TYPES.has(f.defaultType)) {
-        // Regional field with no opt-in override: keep it as-is.
+      } else if (KEPT_BY_DEFAULT.has(f.defaultType)) {
+        // Regional / date field with no opt-in override: keep it as-is.
         engOverrides.set(f.path, false);
       }
     }
@@ -819,7 +825,9 @@ function registerBodyTarget(
       : "public url"
     : LOCALE_TYPES.has(f.defaultType)
       ? "regional data"
-      : bodyReason(f.effectiveType, def);
+      : f.defaultType === "isoDate"
+        ? "date"
+        : bodyReason(f.effectiveType, def);
   ctx.targets.add({
     id, section: "body", name: f.path,
     original: disp(original), replacement: disp(replacement),

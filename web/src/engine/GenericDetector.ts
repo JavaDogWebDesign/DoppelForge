@@ -84,6 +84,9 @@ const KEY_HINTS: Array<[RegExp, SemanticType]> = [
   [/^(?:zip|zipcode|zip_code|postal_code|postcode)$/i, "postalCode"],
   [/^(?:country|country_name)$/i, "country"],
   [/^(?:country_code|country_iso2|iso_country)$/i, "countryCode"],
+  // A birthdate is real PII — flagged on the key so it is obfuscated even
+  // though plain dates (detected by value) are kept by default.
+  [/^(?:dob|date_of_birth|birth_?date|birthday)$/i, "birthDate"],
   [/^(?:ip|ip_address|remote_addr)$/i, "ipv4"],
   [/^(?:sku|item_sku|product_sku)$/i, "sku"],
   [/^(?:currency|currency_code|default_currency_code|store_default_currency_code)$/i, "currency"],

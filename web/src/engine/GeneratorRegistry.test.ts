@@ -82,6 +82,14 @@ describe("GeneratorRegistry.generate - type fidelity", () => {
     expect(new GeneratorRegistry(1).generate("currency", "usd")).toMatch(/^[a-z]{3}$/);
   });
 
+  it("forges a birthdate, preserving the original's date format", () => {
+    const dateOnly = new GeneratorRegistry(1).generate("birthDate", "1990-05-12");
+    expect(dateOnly).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(dateOnly).not.toBe("1990-05-12");
+    const dateTime = new GeneratorRegistry(1).generate("birthDate", "1990-05-12T00:00:00.000Z");
+    expect(dateTime).toMatch(/^\d{4}-\d{2}-\d{2}T.*Z$/);
+  });
+
   it("returns the original value for preserve and a constant for redact", () => {
     expect(new GeneratorRegistry(1).generate("preserve", "keep-me")).toBe("keep-me");
     expect(new GeneratorRegistry(1).generate("redact", "4111111111111111")).toBe(
