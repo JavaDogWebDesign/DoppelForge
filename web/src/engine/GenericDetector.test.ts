@@ -102,6 +102,14 @@ describe("detectGeneric - value-shape: tokens and placeholders", () => {
   });
 });
 
+describe("detectGeneric - free-text keys", () => {
+  it("no longer flags a generic `message`, still flags comment / notes", () => {
+    expect(detectGeneric("resp.message", "Update succeeded")).toBe("preserve");
+    expect(detectGeneric("ticket.comment", "some text")).toBe("shortText");
+    expect(detectGeneric("ticket.notes", "some text")).toBe("shortText");
+  });
+});
+
 describe("detectGeneric - dates vs birthdates", () => {
   it("types a plain date value as isoDate", () => {
     expect(detectGeneric("article.published", "2026-05-16")).toBe("isoDate");

@@ -90,10 +90,12 @@ const KEY_HINTS: Array<[RegExp, SemanticType]> = [
   [/^(?:ip|ip_address|remote_addr)$/i, "ipv4"],
   [/^(?:sku|item_sku|product_sku)$/i, "sku"],
   [/^(?:currency|currency_code|default_currency_code|store_default_currency_code)$/i, "currency"],
-  // `description` is intentionally absent — in an API response it is far more
-  // often product / config copy than free-text PII, so flagging it on the key
-  // alone over-obfuscates. A user opts a specific description in per value.
-  [/^(?:notes?|comment|comments|message)$/i, "shortText"],
+  // `description` and `message` are intentionally absent — in an API response
+  // they are far more often product / config / status copy than free-text PII,
+  // so flagging them on the key alone over-obfuscates. `notes` / `comment` are
+  // kept since those genuinely tend to hold user-written text. A user opts a
+  // specific description / message in per value.
+  [/^(?:notes?|comment|comments)$/i, "shortText"],
 ];
 
 function looksLikeId(value: JsonValue): boolean {

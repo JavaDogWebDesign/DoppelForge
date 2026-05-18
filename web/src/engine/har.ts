@@ -33,11 +33,12 @@ import {
   urlHasSecrets,
 } from "./harRedact";
 
-// Body-field types kept verbatim by default — regional data plus plain dates.
-// Each is coarse, low-PII, and usually needed intact for API research; a
-// birthdate is a `birthDate`, not an `isoDate`, so it is deliberately absent
-// and still obfuscated. The user can opt any of these in per value.
-const KEPT_BY_DEFAULT = new Set<string>([...LOCALE_TYPES, "isoDate"]);
+// Body-field types kept verbatim by default — regional data, plain dates, and
+// catalog codes (SKUs). Each is coarse, low-PII, and usually needed intact for
+// API research; a birthdate is a `birthDate`, not an `isoDate`, so it is
+// deliberately absent and still obfuscated. The user can opt any of these in
+// per value.
+const KEPT_BY_DEFAULT = new Set<string>([...LOCALE_TYPES, "isoDate", "sku"]);
 
 /** Which categories of redaction to apply. Master switches above the per-value
  *  tree — a per-value opt-in is ignored if its category is off. */
@@ -827,7 +828,9 @@ function registerBodyTarget(
       ? "regional data"
       : f.defaultType === "isoDate"
         ? "date"
-        : bodyReason(f.effectiveType, def);
+        : f.defaultType === "sku"
+          ? "catalog data"
+          : bodyReason(f.effectiveType, def);
   ctx.targets.add({
     id, section: "body", name: f.path,
     original: disp(original), replacement: disp(replacement),

@@ -489,6 +489,25 @@ describe("processHar — default redaction", () => {
     expect(dob?.reason).toBe("date of birth");
   });
 
+  it("keeps sku and generic message fields, still obfuscates a comment", () => {
+    const body = JSON.stringify({
+      sku: "WIDGET-001",
+      message: "Subscription updated successfully",
+      comment: "call me at the office",
+    });
+    const har = makeHar([jsonEntry({ respBody: body })]);
+    const { targets } = processHar(har);
+    const out = JSON.parse(entriesOf(har)[0].response.content.text);
+    // A SKU is catalog data and a generic message is status text — kept.
+    expect(out.sku).toBe("WIDGET-001");
+    expect(out.message).toBe("Subscription updated successfully");
+    // A comment can hold user-written PII — still obfuscated.
+    expect(out.comment).not.toBe("call me at the office");
+    const sku = findTarget(targets, "body", "sku");
+    expect(sku?.redactedByDefault).toBe(false);
+    expect(sku?.reason).toBe("catalog data");
+  });
+
   it("obfuscates a regional field when opted in, with a like-shaped fake", () => {
     const body = JSON.stringify({ country: "us" });
     const har = makeHar([jsonEntry({ respBody: body })]);
