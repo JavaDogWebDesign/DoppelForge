@@ -28,3 +28,6 @@ build/
 *.log
 .cache/
 
+# HAR captures - contain session cookies / auth tokens, never commit
+*.har
+
